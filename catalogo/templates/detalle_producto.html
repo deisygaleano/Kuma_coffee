@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kuma Coffee - Inicio</title>
+  <title>Geisha regional — Kuma Coffee (demo estática)</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/estilos.css'  %}" />
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -15,7 +15,6 @@
 </head>
 
 <body>
-  <!-- Header -->
   <header class="cabecera">
     <div class="cabecera__logo">
       <div class="icono-logo">
@@ -34,7 +33,7 @@
         </span>
       </div>
       <nav class="cabecera__navegacion">
-        <a href="#" class="enlace-navegacion">Inicio</a>
+        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
         <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catalogo</a>
         <a href="#" class="enlace-navegacion">pedidos</a>
       </nav>
@@ -50,46 +49,56 @@
     </div>
   </header>
 
-  
-  <main class="inicio">
-    <div>
-        <h1 class="inicio__titulo">Bienvenido a Kuma Coffee</h1>
-        <p>Kuma Coffee es más que una marca… es una historia que nace entre granos y paciencia.</p>
-        <a class="btn btn-primary" href="">Catalogo</a> 
+  <main class="catalogo-pagina catalogo-pagina--detalle">
+    <div class="catalogo-contenedor">
+      <nav class="catalogo-migas" aria-label="Ruta">
+        <a href="{% url 'catalogo:lista' %}">Catálogo </a>
+        <span aria-hidden="true"> / </span>
+        <span>Geisha regional</span>
+      </nav>
+
+      <article class="producto-detalle">
+        <div class="producto-detalle__media">
+          <img src="{% static 'imagenes/imagen_final.jpeg' %}" alt="" class="producto-detalle__img" />
+        </div>
+        <div class="producto-detalle__info">
+          <p class="catalogo-card__cat">Edición especial</p>
+          <h1 class="producto-detalle__titulo">Geisha regional — Tueste ligero</h1>
+          <p class="producto-detalle__precio">$78000</p>
+          <div class="producto-detalle__desc">
+            <p>Variedad Geisha en perfil floral y té. </p>
+          </div>
+          <div class="producto-detalle__acciones">
+            <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Ver en catálogo </a>
+           
+          </div>
+        </div>
+      </article>
+
+      <section class="catalogo-relacionados" aria-labelledby="rel-titulo">
+        <ul class="catalogo-grid catalogo-grid--compacto">
+          <li class="catalogo-card">
+              <div class="catalogo-card_media"><img src="{% static 'imagenes/imagen_final.jpeg' %}" alt="" class="catalogo-card_img" loading="lazy" /></div>
+              <div class="catalogo-card__body">
+                <h3 class="catalogo-card__nombre">Nariño Washed</h3>
+                <p class="catalogo-card__precio">$42000</p>
+              </div>
+            </a>
+          </li>
+          <li class="catalogo-card">
+              <div class="catalogo-card_media"><div class="catalogo-card_placeholder"></div></div>
+              <div class="catalogo-card__body">
+                <h3 class="catalogo-card__nombre">Huila Honey</h3>
+                <p class="catalogo-card__precio">$45000</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </section>
     </div>
-    <div><img src="{% static 'imagenes/imagen_final.jpeg' %}" class="img_fondo"></div>
-    
   </main>
 
-  <!-- Footer -->
-
-  <!-- <footer class="pie-pagina">
-    <div class="pie-pagina__marca">
-      <span class="pie-pagina__icono" aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"
-            stroke="#2d5a27" stroke-width="2" stroke-linecap="round" />
-          <path d="M12 10v4l2 2" stroke="#2d5a27" stroke-width="2" stroke-linecap="round" />
-        </svg>
-      </span>
-      <span class="pie-pagina__texto-marca">ADiGiT</span>
-    </div>
-    <div class="pie-pagina__legal">
-      <a href="#" class="pie-pagina__enlace">Terminos y condiciones</a>
-      
-      <p class="pie-pagina__copyright">
-        Todos los derechos reservados Adigit-SENA
-      <p class="pie-pagina__copyright">
-        contactanos
-       <p class="pie-pagina__copyright">
-        kucoffee@gmail.com
-       </p>
-      </p>
-      </p>
-    </div>
-  </footer> -->
-  <footer class="footer">
+   <footer class="footer">
   <div class="footer-container">
 
     <!-- About -->
@@ -137,8 +146,6 @@
     © 2026 Kuma Coffee. Todos los derechos reservados
   </div>
 </footer>
-
-  <script src="script.js" defer></script>
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
 </body>
 
