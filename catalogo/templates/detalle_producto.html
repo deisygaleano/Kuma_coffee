@@ -28,7 +28,7 @@
 
       <article class="producto-detalle">
         <div class="producto-detalle__media">
-          <img src="{% static 'imagenes/imagen_final.jpeg' %}" alt="" class="producto-detalle__img" />
+          <img src="{% static 'imagenes/bolsa1.png' %}" alt="" class="producto-detalle__img" />
         </div>
         <div class="producto-detalle__info">
           <p class="catalogo-card__cat">Edición especial</p>
@@ -38,8 +38,17 @@
             <p>Variedad Geisha en perfil floral y té. </p>
           </div>
           <div class="producto-detalle__acciones">
-            <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Ver en catálogo </a>
-           
+            <form method="post" class="producto-detalle__add-form">
+              
+              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+              <input type="hidden" name="producto_id" value="{{ producto.pk }}" />
+              <label class="producto-detalle__qty-label" for="qty-detalle">Cantidad</label>
+              <input type="number" id="qty-detalle" name="cantidad" class="producto-detalle__qty" value="1" min="1"
+                max="99" />
+              <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+            </form>
+            <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}?categoria={{ producto.categoria.slug }}">Más de
+              esta categoría</a>
           </div>
         </div>
       </article>

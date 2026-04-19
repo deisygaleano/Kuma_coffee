@@ -64,16 +64,12 @@ body {
   flex-shrink: 0;
 }
 
-.icono-logo {
-  width: 48px;
-  height: 48px;
-  color: var(--color-text-light);
-}
+
 
 .icono-logo img {
   width: 200px;
-  height: 200px;
-  margin-top: -80px;
+  height: 150px;
+  margin-top: -25px;
   margin-left: -50px;
 }
 
@@ -504,7 +500,7 @@ body {
   }
 }
 .footer {
-  background-color: #4b2e2b;
+  background-color: var(--bg);
   color: #f5e6d3;
   padding: 40px 20px;
   font-family: 'Segoe UI', sans-serif;
@@ -564,7 +560,7 @@ body {
 .socials a {
   display: inline-block;
   margin-right: 10px;
-  background: #6f4e37;
+  background: #161515;
   padding: 8px;
   border-radius: 50%;
   color: white;
@@ -1397,6 +1393,7 @@ body.usuario-modal-abierto {
   color: var(--accent);
   font-weight: 400;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .auth-subtitulo {
@@ -1404,6 +1401,7 @@ body.usuario-modal-abierto {
   font-size: 0.95rem;
   line-height: 1.5;
   margin-bottom: 1.75rem;
+  text-align: center;
 }
 
 .auth-form {
@@ -1475,6 +1473,8 @@ body.usuario-modal-abierto {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  justify-content: center;
+  text-align: center;
 }
 
 .auth-links a,
@@ -1622,4 +1622,15 @@ body.usuario-modal-abierto {
 .auth-footer-text--muted {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.5);
+}
+.auth-logo {
+  text-align: center;
+}
+.auth-logo-img {
+  max-width: 350px;
+  margin:-65px -100px -50px -100px;
+}
+.footer-section img {
+  width: 80px !important;
+  height: 80px;
 }
