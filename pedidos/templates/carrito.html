@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carrito (demostración) — Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <header class="cabecera">
+    <div class="cabecera__logo">
+      <a href="{% url 'inicio' %}" class="icono-logo" aria-label="Inicio Kuma Coffee">
+        <img src="{% static 'imagenes/logo.png' %}" alt="Kuma Coffee">
+      </a>
+    </div>
+
+    <div class="cabecera__busqueda">
+      <form class="catalogo-busqueda-form" method="get" action="{% url 'catalogo:lista' %}" role="search">
+        <div class="input_busqueda">
+          <input type="search" name="q" class="entrada-busqueda" placeholder="Buscar en el catálogo…"
+            aria-label="Buscar productos" />
+          <span class="icono-busqueda" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </span>
+        </div>
+      </form>
+      <nav class="cabecera__navegacion" aria-label="Principal">
+        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
+        <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catálogo</a>
+        <a href="{% url 'pedidos:carrito' %}" class="enlace-navegacion">Carrito</a>
+        
+      </nav>
+    </div>
+
+  </header>
+
+  <main class="catalogo-pagina carrito-pagina">
+    <div class="catalogo-contenedor">
+      <p class="catalogo-demo-badge">Vista estática — datos incrustados en HTML (sin sesión ni base de datos)</p>
+
+      <header class="catalogo-encabezado">
+        <h1 class="catalogo-titulo">Tu carrito</h1>
+        <p class="catalogo-subtitulo">
+          Ejemplo de interfaz con productos de muestra. Para un carrito funcional usa
+          <a href="{% url 'pedidos:carrito' %}">el carrito real</a>.
+        </p>
+      </header>
+
+      <div class="carrito-tabla-wrap">
+        <table class="carrito-tabla">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="carrito-fila">
+              <td class="carrito-fila__producto">
+                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Nariño Washed — Notas a cítricos y panela</span>
+                <p class="carrito-fila__cat">Grano entero</p>
+              </td>
+              <td class="carrito-fila__precio">$42000</td>
+              <td class="carrito-fila__qty">
+                <span class="carrito-cantidad-estatica" aria-label="Cantidad">2</span>
+              </td>
+              <td class="carrito-fila__sub">$84000</td>
+            </tr>
+            <tr class="carrito-fila">
+              <td class="carrito-fila__producto">
+                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Molido espresso — Bolsa 500 g</span>
+                <p class="carrito-fila__cat">Molido</p>
+              </td>
+              <td class="carrito-fila__precio">$38000</td>
+              <td class="carrito-fila__qty">
+                <span class="carrito-cantidad-estatica" aria-label="Cantidad">1</span>
+              </td>
+              <td class="carrito-fila__sub">$38000</td>
+            </tr>
+            <tr class="carrito-fila">
+              <td class="carrito-fila__producto">
+                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Huila Honey — Dulce y balanceado</span>
+                <p class="carrito-fila__cat">Grano entero</p>
+              </td>
+              <td class="carrito-fila__precio">$45000</td>
+              <td class="carrito-fila__qty">
+                <span class="carrito-cantidad-estatica" aria-label="Cantidad">1</span>
+              </td>
+              <td class="carrito-fila__sub">$45000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="carrito-pie carrito-pie--estatico">
+        <div class="carrito-total">
+          <span class="carrito-total__label">Total</span>
+          <span class="carrito-total__valor">$167000</span>
+        </div>
+      </div>
+
+    
+      <div class="carrito-estatico-acciones">
+        <a class="btn btn-primary" href="{% url 'pedidos:carrito' %}">Ir al carrito real</a>
+        <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Seguir comprando</a>
+      </div>
+    </div>
+  </main>
+
+
+
+  <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
