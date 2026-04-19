@@ -15,39 +15,8 @@
 </head>
 
 <body>
-  <header class="cabecera">
-    <div class="cabecera__logo">
-      <div class="icono-logo">
-        <img src="{% static 'imagenes/logoproyecto.png' %}" alt="">
-      </div>
-    </div>
+   {% include 'includes/navbar.html' %}
 
-    <div class="cabecera__busqueda">
-      <div class="input_busqueda">
-        <input type="search" class="entrada-busqueda" aria-label="Buscar café" />
-        <span class="icono-busqueda" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
-        </span>
-      </div>
-      <nav class="cabecera__navegacion">
-        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
-        <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catalogo</a>
-        <a href="#" class="enlace-navegacion">pedidos</a>
-      </nav>
-    </div>
-
-
-
-    <div class="cabecera__usuario">
-      <div class="avatar-usuario" aria-hidden="true">
-        <i class="fa-solid fa-circle-user"></i>
-      </div>
-      <span class="etiqueta-usuario">Usuario</span>
-    </div>
-  </header>
 
   <main class="catalogo-pagina catalogo-pagina--detalle">
     <div class="catalogo-contenedor">
@@ -79,54 +48,8 @@
     </div>
   </main>
 
-   <footer class="footer">
-  <div class="footer-container">
+    {% include 'includes/footer.html' %}
 
-    <!-- About -->
-    <div class="footer-section">
-      <h3>Sobre Kuma Coffee</h3>
-      <p>
-       Kuma Coffee no vende solo café,
-       sino experiencias cuidadas, sabores honestos
-       y una conexión profunda con quienes cultivan cada grano
-      </p>
-      <div class="socials">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
-      </div>
-    </div>
-
-    <!-- Links -->
-    <div class="footer-section">
-      <h3>Link</h3>
-      <ul>
-        <li><a href="#">Catalogo</a></li>
-        <li><a href="#">Favoritos</a></li>
-        <li><a href="#">Pedidos</a></li>
-      
-      </ul>
-    </div>
-
-    <!-- Contact -->
-    <div class="footer-section">
-      <h3>contactanos</h3>
-      <p>📞 3137093748</p>
-      <p>✉ tgaleano882@gmail.com</p>
-    </div>
-     <div class="footer-section">
-      <h3>Contribuyentes</h3>
-      <p><img src="{% static 'imagenes/logosena.jpg'%}" alt=""></p>
-      <p><img src="{% static 'imagenes/adigit.png'%}" alt=""></p>
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-    © 2026 Kuma Coffee. Todos los derechos reservados
-  </div>
-</footer>
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
 </body>
 

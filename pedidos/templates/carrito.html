@@ -15,35 +15,8 @@
 </head>
 
 <body>
-  <header class="cabecera">
-    <div class="cabecera__logo">
-      <a href="{% url 'inicio' %}" class="icono-logo" aria-label="Inicio Kuma Coffee">
-        <img src="{% static 'imagenes/logo.png' %}" alt="Kuma Coffee">
-      </a>
-    </div>
+   {% include 'includes/navbar.html' %}
 
-    <div class="cabecera__busqueda">
-      <form class="catalogo-busqueda-form" method="get" action="{% url 'catalogo:lista' %}" role="search">
-        <div class="input_busqueda">
-          <input type="search" name="q" class="entrada-busqueda" placeholder="Buscar en el catálogo…"
-            aria-label="Buscar productos" />
-          <span class="icono-busqueda" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-          </span>
-        </div>
-      </form>
-      <nav class="cabecera__navegacion" aria-label="Principal">
-        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
-        <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catálogo</a>
-        <a href="{% url 'pedidos:carrito' %}" class="enlace-navegacion">Carrito</a>
-        
-      </nav>
-    </div>
-
-  </header>
 
   <main class="catalogo-pagina carrito-pagina">
     <div class="catalogo-contenedor">
@@ -121,7 +94,7 @@
   </main>
 
 
-
+{% include 'includes/footer.html' %}
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
 </body>
 

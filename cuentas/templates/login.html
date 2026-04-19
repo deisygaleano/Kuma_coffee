@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+<body>
+ <main class="catalogo-pagina auth-pagina">
+    <div class="auth-card">   
+<h1 class="auth-titulo">Iniciar sesión</h1>
+
+
+<form class="auth-form auth-form--solo-lectura" aria-label="Formulario de demostración">
+  <div class="auth-field">
+    <label class="auth-label" for="demo-usuario">Usuario</label>
+    <input id="demo-usuario" type="text" class="auth-input"  readonly />
+  </div>
+  <div class="auth-field">
+    <label class="auth-label" for="demo-clave">Contraseña</label>
+    <input id="demo-clave" type="password" class="auth-input"readonly />
+  </div>
+  <button type="button" class="btn btn-primary auth-submit" disabled>Ingresar</button>
+</form>
+
+
+<ul class="auth-links">
+  <li><a href="{% url 'cuentas:restablecer' %}"> ¿Olvidaste tu contraseña?</a></li>
+  <li><a href="{% url 'cuentas:registro' %}"> Crear cuenta</a></li>
+ 
+</ul>
+    </div>
+    <
+</body>
+</html>

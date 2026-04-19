@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+<body>
+    <main class="catalogo-pagina auth-pagina">
+    <div class="auth-card">
+
+<h1 class="auth-titulo">Crear cuenta</h1>
+
+<form class="auth-form auth-form--solo-lectura" aria-label="Registro de demostración">
+  <div class="auth-field">
+    <label class="auth-label" for="demo-user">Usuario</label>
+    <input id="demo-user" type="text" class="auth-input"  readonly />
+  </div>
+  <div class="auth-field">
+    <label class="auth-label" for="demo-email">Correo electrónico</label>
+    <input id="demo-email" type="email" class="auth-input"  readonly />
+  </div>
+  <div class="auth-field">
+    <label class="auth-label" for="demo-pw1">Contraseña</label>
+    <input id="demo-pw1" type="password" class="auth-input"  readonly />
+    <p class="auth-help">Mínimo 8 caracteres. </p>
+  </div>
+  <div class="auth-field">
+    <label class="auth-label" for="demo-pw2">Confirmar contraseña</label>
+    <input id="demo-pw2" type="password" class="auth-input" readonly />
+  </div>
+  <button type="button" class="btn btn-primary auth-submit" disabled>Registrarme </button>
+</form>
+
+
+
+<p class="auth-footer-text">¿Ya tienes cuenta? <a href="{% url 'cuentas:login' %}">Inicia sesión</a></p>
+</div>
+</main>
+</body>
+</html>

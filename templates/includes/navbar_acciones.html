@@ -1,0 +1,83 @@
+<div class="cabecera__acciones">
+  <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras">
+    <span class="cabecera__carrito-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 6h15l-1.5 9h-12z" />
+        <circle cx="9" cy="20" r="1" />
+        <circle cx="18" cy="20" r="1" />
+        <path d="M6 6 5 3H2" />
+      </svg>
+    </span>
+    <span class="cabecera__carrito-texto">Carrito</span>
+  </a>
+  <div class="cabecera__usuario cabecera__usuario--cuenta">
+    <button type="button" class="cabecera__usuario-trigger" id="usuario-menu-trigger" aria-expanded="false"
+      aria-controls="usuario-menu-modal" aria-haspopup="dialog">
+      <span class="avatar-usuario" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+        </svg>
+      </span>
+      
+    </button>
+
+    <div class="usuario-modal" id="usuario-menu-modal" role="dialog" aria-modal="true"
+      aria-labelledby="usuario-modal-titulo" hidden>
+      <div class="usuario-modal__backdrop" data-cerrar-modal tabindex="-1"></div>
+      <div class="usuario-modal__panel">
+        <button type="button" class="usuario-modal__cerrar" aria-label="Cerrar ventana" data-cerrar-modal>
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Cuenta</h2>
+        <p class="usuario-modal__hint">Inicia sesión o crea una cuenta para guardar tus preferencias.</p>
+        <nav class="usuario-modal__nav" aria-label="Acceso a cuenta">
+          <a href="{% url 'cuentas:login' %}" class="btn btn-primary usuario-modal__link-btn">Acceder</a>
+          <a href="{% url 'cuentas:registro' %}" class="btn btn-ghost usuario-modal__link-btn">Registrarse</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var trigger = document.getElementById('usuario-menu-trigger');
+    var modal = document.getElementById('usuario-menu-modal');
+    if (!trigger || !modal) return;
+
+    function abrir() {
+      modal.removeAttribute('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('usuario-modal-abierto');
+      var cerrarBtn = modal.querySelector('.usuario-modal__cerrar');
+      if (cerrarBtn) cerrarBtn.focus();
+    }
+
+    function cerrar() {
+      modal.setAttribute('hidden', '');
+      trigger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('usuario-modal-abierto');
+      trigger.focus();
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (modal.hasAttribute('hidden')) abrir();
+      else cerrar();
+    });
+
+    modal.querySelectorAll('[data-cerrar-modal]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        cerrar();
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) {
+        cerrar();
+      }
+    });
+  })();
+</script>

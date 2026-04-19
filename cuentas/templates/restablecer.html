@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+<body>
+    <main class="catalogo-pagina auth-pagina">
+    <div class="auth-card">
+<h1 class="auth-titulo">Restablecer contraseña</h1>
+
+<form class="auth-form auth-form--solo-lectura" aria-label="Restablecer contraseña (demo)">
+  <div class="auth-field">
+    <label class="auth-label" for="demo-email-reset">Correo electrónico</label>
+    <input id="demo-email-reset" type="email" class="auth-input" readonly />
+  </div>
+  <button type="button" class="btn btn-primary auth-submit" disabled>Enviar</button>
+</form>
+
+<p class="auth-footer-text">
+  <a href="{% url 'cuentas:login' %}">Volver al inicio de sesión</a> 
+  
+</p>
+</div>
+</main>
+</body>
+</html>
