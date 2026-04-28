@@ -129,4 +129,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Número de WhatsApp del negocio (formato internacional sin + ni espacios)
-KUMA_WHATSAPP = "573108318685"
+KUMA_WHATSAPP = "573137093748"

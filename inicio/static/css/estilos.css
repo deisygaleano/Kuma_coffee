@@ -133,7 +133,7 @@ body {
 .enlace-navegacion {
   color: var(--color-text-navegacion);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   transition: opacity 0.2s;
 }
