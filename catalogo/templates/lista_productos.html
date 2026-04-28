@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Productos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 30px;
+      background: #2a2a2a;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: #11161c;
+      border: 1px solid rgba(212, 160, 23, 0.35);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    .title {
+      margin: 0 0 22px;
+      color: #d4a017;
+      font-family: serif;
+      font-size: 34px;
+      text-align: center;
+    }
+
+    .barra-acciones {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 18px;
+    }
+
+    .tabla-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(212, 160, 23, 0.16);
+      border-radius: 14px;
+      background: #161d24;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .product-table thead {
+      background: #0d1218;
+    }
+
+    .product-table th,
+    .product-table td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #252d36;
+    }
+
+    .product-table th {
+      color: #d4a017;
+      font-size: 14px;
+    }
+
+    .product-table tbody tr:hover {
+      background: #1b232c;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #d4a017;
+      box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.15);
+    }
+
+    .subtotal {
+      color: #f0c85a;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn-agregar {
+      background: #d4a017;
+      color: #000;
+      border: none;
+    }
+
+    .btn-eliminar {
+      background: transparent;
+      color: #d4a017;
+      border: 1px solid #d4a017;
+    }
+
+    .footer-total {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+
+    .total-box {
+      min-width: 260px;
+      background: #0d1218;
+      border: 1px solid rgba(212, 160, 23, 0.25);
+      border-radius: 12px;
+      padding: 16px 18px;
+      text-align: right;
+    }
+
+    .total-box span {
+      display: block;
+      color: #b8b8b8;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .total-box strong {
+      font-size: 24px;
+      color: #d4a017;
+    }
+
+    @media (max-width: 768px) {
+      .panel {
+        padding: 18px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .acciones {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <div class="panel">
+      <h2 class="title">Gestión de Productos</h2>
+
+      <div class="barra-acciones">
+        <button class="btn btn-agregar" type="button" onclick="agregarFila()">Agregar otro producto</button>
+      </div>
+
+      <div class="tabla-wrap">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Categoría</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody id="tabla-body">
+            <tr>
+              <td><input type="text" placeholder="Geisha premium"></td>
+              <td><input type="number" class="precio" placeholder="45000" oninput="calcularFila(this)"></td>
+              <td>
+                <select>
+                  <option>Grano entero</option>
+                  <option>Molido</option>
+                  <option>Edición especial</option>
+                </select>
+              </td>
+              <td><input type="number" class="cantidad" placeholder="1" oninput="calcularFila(this)"></td>
+              <td class="subtotal">$0</td>
+              <td>
+                <div class="acciones">
+                  <button class="btn btn-eliminar" type="button" onclick="eliminarFila(this)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td><input type="text" placeholder="Castillo suave"></td>
+              <td><input type="number" class="precio" placeholder="30000" oninput="calcularFila(this)"></td>
+              <td>
+                <select>
+                  <option>Molido</option>
+                  <option>Grano entero</option>
+                  <option>Edición especial</option>
+                </select>
+              </td>
+              <td><input type="number" class="cantidad" placeholder="2" oninput="calcularFila(this)"></td>
+              <td class="subtotal">$0</td>
+              <td>
+                <div class="acciones">
+                  <button class="btn btn-eliminar" type="button" onclick="eliminarFila(this)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-total">
+        <div class="total-box">
+          <span>Total de la compra</span>
+          <strong id="total-general">$0</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calcularFila(elemento) {
+      const fila = elemento.closest("tr");
+      const precio = parseFloat(fila.querySelector(".precio").value) || 0;
+      const cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
+      const subtotal = precio * cantidad;
+
+      fila.querySelector(".subtotal").textContent = "$" + subtotal.toLocaleString("es-CO");
+      calcularTotal();
+    }
+
+    function calcularTotal() {
+      let total = 0;
+      const filas = document.querySelectorAll("#tabla-body tr");
+
+      filas.forEach(fila => {
+        const precio = parseFloat(fila.querySelector(".precio").value) || 0;
+        const cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
+        total += precio * cantidad;
+      });
+
+      document.getElementById("total-general").textContent = "$" + total.toLocaleString("es-CO");
+    }
+
+    function eliminarFila(boton) {
+      const tabla = document.getElementById("tabla-body");
+      const fila = boton.closest("tr");
+
+      if (tabla.rows.length > 1) {
+        fila.remove();
+      } else {
+        fila.querySelectorAll("input").forEach(input => input.value = "");
+        fila.querySelector(".subtotal").textContent = "$0";
+      }
+
+      calcularTotal();
+    }
+
+    function agregarFila() {
+      const tabla = document.getElementById("tabla-body");
+      const nuevaFila = document.createElement("tr");
+
+      nuevaFila.innerHTML = `
+        <td><input type="text" placeholder="Nuevo producto"></td>
+        <td><input type="number" class="precio" placeholder="0" oninput="calcularFila(this)"></td>
+        <td>
+          <select>
+            <option>Grano entero</option>
+            <option>Molido</option>
+            <option>Edición especial</option>
+          </select>
+        </td>
+        <td><input type="number" class="cantidad" placeholder="1" oninput="calcularFila(this)"></td>
+        <td class="subtotal">$0</td>
+        <td>
+          <div class="acciones">
+            <button class="btn btn-eliminar" type="button" onclick="eliminarFila(this)">Eliminar</button>
+          </div>
+        </td>
+      `;
+
+      tabla.appendChild(nuevaFila);
+    }
+
+    window.onload = calcularTotal;
+  </script>
+
+</body>
+</html>
+
+
+

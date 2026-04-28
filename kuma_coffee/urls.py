@@ -23,7 +23,10 @@ urlpatterns = [
     path('catalogo/', include("catalogo.urls")),
     path('pedidos/', include("pedidos.urls")),
     path('cuentas/', include("cuentas.urls")),
-
-
-
+    path('admin/', admin.site.urls),
+   
 ]
+
+
+
+

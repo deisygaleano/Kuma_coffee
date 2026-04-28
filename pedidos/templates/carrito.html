@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carrito (demostración) — Kuma Coffee</title>
+  <title>Carrito — Kuma Coffee</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,14 +20,9 @@
 
   <main class="catalogo-pagina carrito-pagina">
     <div class="catalogo-contenedor">
-      <p class="catalogo-demo-badge">Vista estática — datos incrustados en HTML (sin sesión ni base de datos)</p>
-
       <header class="catalogo-encabezado">
         <h1 class="catalogo-titulo">Tu carrito</h1>
-        <p class="catalogo-subtitulo">
-          Ejemplo de interfaz con productos de muestra. Para un carrito funcional usa
-          <a href="{% url 'pedidos:carrito' %}">el carrito real</a>.
-        </p>
+        <p class="catalogo-subtitulo">Resumen de productos añadidos al pedido actual.</p>
       </header>
 
       <div class="carrito-tabla-wrap">
@@ -41,39 +36,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="carrito-fila">
-              <td class="carrito-fila__producto">
-                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Nariño Washed — Notas a cítricos y panela</span>
-                <p class="carrito-fila__cat">Grano entero</p>
-              </td>
-              <td class="carrito-fila__precio">$42000</td>
-              <td class="carrito-fila__qty">
-                <span class="carrito-cantidad-estatica" aria-label="Cantidad">2</span>
-              </td>
-              <td class="carrito-fila__sub">$84000</td>
-            </tr>
-            <tr class="carrito-fila">
-              <td class="carrito-fila__producto">
-                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Molido espresso — Bolsa 500 g</span>
-                <p class="carrito-fila__cat">Molido</p>
-              </td>
-              <td class="carrito-fila__precio">$38000</td>
-              <td class="carrito-fila__qty">
-                <span class="carrito-cantidad-estatica" aria-label="Cantidad">1</span>
-              </td>
-              <td class="carrito-fila__sub">$38000</td>
-            </tr>
-            <tr class="carrito-fila">
-              <td class="carrito-fila__producto">
-                <span class="carrito-fila__nombre carrito-fila__nombre--texto">Huila Honey — Dulce y balanceado</span>
-                <p class="carrito-fila__cat">Grano entero</p>
-              </td>
-              <td class="carrito-fila__precio">$45000</td>
-              <td class="carrito-fila__qty">
-                <span class="carrito-cantidad-estatica" aria-label="Cantidad">1</span>
-              </td>
-              <td class="carrito-fila__sub">$45000</td>
-            </tr>
+            {% for linea in lineas %}
+              <tr class="carrito-fila">
+                <td class="carrito-fila__producto">
+                  <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
+                  <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
+                </td>
+                <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
+                <td class="carrito-fila__qty">
+                  <span class="carrito-cantidad-estatica" aria-label="Cantidad">{{ linea.cantidad }}</span>
+                </td>
+                <td class="carrito-fila__sub">${{ linea.subtotal }}</td>
+              </tr>
+            {% empty %}
+              <tr class="carrito-fila">
+                <td colspan="4">Tu carrito está vacío. Agrega productos desde el catálogo.</td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -81,13 +60,11 @@
       <div class="carrito-pie carrito-pie--estatico">
         <div class="carrito-total">
           <span class="carrito-total__label">Total</span>
-          <span class="carrito-total__valor">$167000</span>
+          <span class="carrito-total__valor">${{ pedido.valor }}</span>
         </div>
       </div>
-
-    
       <div class="carrito-estatico-acciones">
-        <a class="btn btn-primary" href="{% url 'pedidos:carrito' %}">Ir al carrito real</a>
+        <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Agregar más productos</a>
         <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Seguir comprando</a>
       </div>
     </div>

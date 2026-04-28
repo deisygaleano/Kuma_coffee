@@ -1,5 +1,5 @@
 <div class="cabecera__acciones">
-  <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras">
+  <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras ({{ carrito_cantidad }} productos)">
     <span class="cabecera__carrito-icon" aria-hidden="true">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round">
@@ -8,6 +8,9 @@
         <circle cx="18" cy="20" r="1" />
         <path d="M6 6 5 3H2" />
       </svg>
+      {% if carrito_cantidad > 0 %}
+        <span class="cabecera__carrito-badge" aria-hidden="true">{{ carrito_cantidad }}</span>
+      {% endif %}
     </span>
     <span class="cabecera__carrito-texto">Carrito</span>
   </a>

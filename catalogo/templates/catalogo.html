@@ -30,95 +30,73 @@
         <aside class="catalogo-sidebar" aria-label="Secciones">
           <h2 class="catalogo-sidebar__titulo">Categorías</h2>
           <ul class="catalogo-filtros">
-            <li><a href="#seccion-grano" class="catalogo-filtro">Grano entero</a></li>
-            <li><a href="#seccion-molido" class="catalogo-filtro">Molido</a></li>
-            <li><a href="#seccion-especial" class="catalogo-filtro">Edición especial</a></li>
+            {% for categoria in categorias %}
+              <li><a href="#cat-{{ categoria.slug }}" class="catalogo-filtro">{{ categoria.nombre }}</a></li>
+            {% empty %}
+              <li><span class="catalogo-filtro">Sin categorías</span></li>
+            {% endfor %}
+            {% if productos_sin_categoria %}
+              <li><a href="#cat-sin-categoria" class="catalogo-filtro">Sin categoría</a></li>
+            {% endif %}
           </ul>
         </aside>
 
         <div class="catalogo-grid-wrap">
-          <section id="seccion-grano" class="catalogo-seccion-estatica" aria-labelledby="titulo-grano">
-            <h2 id="titulo-grano" class="catalogo-seccion-estatica__titulo">Grano entero</h2>
-            <ul class="catalogo-grid">
-              <li class="catalogo-card">
-                <a class="catalogo-card__link" href="{% url 'catalogo:detalle' %}">
-                  <div class="catalogo-card__media">
-                    <img src="{% static 'imagenes/bolsa1.png' %}" alt="" class="catalogo-card__img" loading="lazy" />
-                    <span class="catalogo-card__badge">Destacado</span>
-                  </div>
-                  <div class="catalogo-card__body">
-                    <p class="catalogo-card__cat">Grano entero</p>
-                    <h3 class="catalogo-card__nombre">Nariño Washed — Notas a cítricos y panela</h3>
-                    <p class="catalogo-card__precio">$42000</p>
-                  </div>
-                </a>
-              </li>
-              <li class="catalogo-card">
-                 <a class="catalogo-card__link" href="{% url 'catalogo:detalle' %}">
-                   <div class="catalogo-card__media">
-                    <img src="{% static 'imagenes/bolsa3.png' %}" alt="" class="catalogo-card__img" loading="lazy" />
-                    <span class="catalogo-card__badge">Destacado</span>
-                  </div>
-                  <div class="catalogo-card__body">
-                    <p class="catalogo-card__cat">Grano entero</p>
-                    <h3 class="catalogo-card__nombre">Geisha— Dulce y balanceado</h3>
-                    <p class="catalogo-card__precio">$45000</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </section>
+          {% for categoria in categorias %}
+            <section id="cat-{{ categoria.slug }}" class="catalogo-seccion-estatica">
+              <h2 class="catalogo-seccion-estatica__titulo">{{ categoria.nombre }}</h2>
+              <ul class="catalogo-grid">
+                {% for producto in categoria.productos.all %}
+                  <li class="catalogo-card">
+                    <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
+                      <div class="catalogo-card__media">
+                        <img
+                          src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                          alt="{{ producto.nombre }}"
+                          class="catalogo-card__img"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div class="catalogo-card__body">
+                        <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
+                        <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
+                        <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                      </div>
+                    </a>
+                  </li>
+                {% empty %}
+                  <li>No hay productos en esta categoría.</li>
+                {% endfor %}
+              </ul>
+            </section>
+          {% endfor %}
 
-          <section id="seccion-molido" class="catalogo-seccion-estatica" aria-labelledby="titulo-molido">
-            <h2 id="titulo-molido" class="catalogo-seccion-estatica__titulo">Molido</h2>
-            <ul class="catalogo-grid">
-              <li class="catalogo-card">
-                 <a class="catalogo-card__link" href="{% url 'catalogo:detalle' %}">
-                  <div class="catalogo-card__media">
-                     <img src="{% static 'imagenes/bolsa3.png' %}" alt="" class="catalogo-card__img" loading="lazy" />
-                    <div class="catalogo-card__placeholder" aria-hidden="true"></div>
-                  </div>
-                  <div class="catalogo-card__body">
-                    <p class="catalogo-card__cat">Molido</p>
-                    <h3 class="catalogo-card__nombre">Molido espresso — Bolsa 500 g</h3>
-                    <p class="catalogo-card__precio">$38000</p>
-                  </div>
-                </a>
-              </li>
-              <li class="catalogo-card">
-                 <a class="catalogo-card__link" href="{% url 'catalogo:detalle' %}">
-                  <div class="catalogo-card__media">
-                     <img src="{% static 'imagenes/bolsa1.png' %}" alt="" class="catalogo-card__img" loading="lazy" />
-                    <div class="catalogo-card__placeholder" aria-hidden="true"></div>
-                  </div>
-                  <div class="catalogo-card__body">
-                    <p class="catalogo-card__cat">Molido</p>
-                    <h3 class="catalogo-card__nombre">castilla— Bolsa 500 g</h3>
-                    <p class="catalogo-card__precio">$38000</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </section>
-
-          <section id="seccion-especial" class="catalogo-seccion-estatica" aria-labelledby="titulo-especial">
-            <h2 id="titulo-especial" class="catalogo-seccion-estatica__titulo">Edición especial</h2>
-            <ul class="catalogo-grid">
-              <li class="catalogo-card">
-                 <a class="catalogo-card__link" href="{% url 'catalogo:detalle' %}">
-                  <div class="catalogo-card__media">
-                    <img src="{% static 'imagenes/bolsa2.png' %}" alt="" class="catalogo-card__img" loading="lazy" />
-                    <span class="catalogo-card__badge">Destacado</span>
-                  </div>
-                  <div class="catalogo-card__body">
-                    <p class="catalogo-card__cat">Edición especial</p>
-                    <h3 class="catalogo-card__nombre">Geisha regional — Tueste ligero</h3>
-                    <p class="catalogo-card__precio">$78000</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </section>
+          {% if productos_sin_categoria %}
+            <section id="cat-sin-categoria" class="catalogo-seccion-estatica">
+              <h2 class="catalogo-seccion-estatica__titulo">Sin categoría</h2>
+              <ul class="catalogo-grid">
+                {% for producto in productos_sin_categoria %}
+                  <li class="catalogo-card">
+                    <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
+                      <div class="catalogo-card__media">
+                        <img
+                          src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                          alt="{{ producto.nombre }}"
+                          class="catalogo-card__img"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div class="catalogo-card__body">
+                        <p class="catalogo-card__cat">Sin categoría</p>
+                        <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
+                        <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                      </div>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </section>
+          {% endif %}
         </div>
       </div>
     </div>

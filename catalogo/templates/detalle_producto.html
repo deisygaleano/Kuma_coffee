@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geisha regional — Kuma Coffee (demo estática)</title>
+  <title>{{ producto.nombre }} — Kuma Coffee</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,32 +23,35 @@
       <nav class="catalogo-migas" aria-label="Ruta">
         <a href="{% url 'catalogo:lista' %}">Catálogo </a>
         <span aria-hidden="true"> / </span>
-        <span>Geisha regional</span>
+        <span>{{ producto.nombre }}</span>
       </nav>
 
       <article class="producto-detalle">
         <div class="producto-detalle__media">
-          <img src="{% static 'imagenes/bolsa1.png' %}" alt="" class="producto-detalle__img" />
+          <img
+            src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+            alt="{{ producto.nombre }}"
+            class="producto-detalle__img"
+          />
         </div>
         <div class="producto-detalle__info">
-          <p class="catalogo-card__cat">Edición especial</p>
-          <h1 class="producto-detalle__titulo">Geisha regional — Tueste ligero</h1>
-          <p class="producto-detalle__precio">$78000</p>
+          <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
+          <h1 class="producto-detalle__titulo">{{ producto.nombre }}</h1>
+          <p class="producto-detalle__precio">${{ producto.precio }}</p>
           <div class="producto-detalle__desc">
-            <p>Variedad Geisha en perfil floral y té. </p>
+            <p>{{ producto.descripcion|default:"Producto sin descripción." }}</p>
           </div>
           <div class="producto-detalle__acciones">
-            <form method="post" class="producto-detalle__add-form">
-              
+            <form method="post" action="{% url 'pedidos:agregar' %}" class="producto-detalle__add-form">
+              {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-              <input type="hidden" name="producto_id" value="{{ producto.pk }}" />
+              <input type="hidden" name="producto_id" value="{{ producto.id_producto }}" />
               <label class="producto-detalle__qty-label" for="qty-detalle">Cantidad</label>
               <input type="number" id="qty-detalle" name="cantidad" class="producto-detalle__qty" value="1" min="1"
                 max="99" />
               <button type="submit" class="btn btn-primary">Añadir al carrito</button>
             </form>
-            <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}?categoria={{ producto.categoria.slug }}">Más de
-              esta categoría</a>
+            <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Volver al catálogo</a>
           </div>
         </div>
       </article>
