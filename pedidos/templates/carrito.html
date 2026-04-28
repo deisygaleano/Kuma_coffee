@@ -22,7 +22,7 @@
     <div class="catalogo-contenedor">
       <header class="catalogo-encabezado">
         <h1 class="catalogo-titulo">Tu carrito</h1>
-        <p class="catalogo-subtitulo">Resumen de productos añadidos al pedido actual.</p>
+        <p class="catalogo-subtitulo">Productos añadidos </p>
       </header>
 
       <div class="carrito-tabla-wrap">
@@ -33,6 +33,7 @@
               <th scope="col">Precio unitario</th>
               <th scope="col">Cantidad</th>
               <th scope="col">Subtotal</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -44,13 +45,34 @@
                 </td>
                 <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
                 <td class="carrito-fila__qty">
-                  <span class="carrito-cantidad-estatica" aria-label="Cantidad">{{ linea.cantidad }}</span>
+                  <form method="post" action="{% url 'pedidos:actualizar' linea.id_linea %}" class="carrito-form-qty">
+                    {% csrf_token %}
+                    <input
+                      type="number"
+                      name="cantidad"
+                      value="{{ linea.cantidad }}"
+                      min="1"
+                      class="carrito-input-cantidad"
+                      aria-label="Cantidad de {{ linea.producto.nombre }}"
+                    />
+                    <button type="submit" class="btn btn-ghost btn-sm" title="Actualizar cantidad">
+                      <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                  </form>
                 </td>
                 <td class="carrito-fila__sub">${{ linea.subtotal }}</td>
+                <td class="carrito-fila__acciones">
+                  <form method="post" action="{% url 'pedidos:eliminar' linea.id_linea %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-eliminar-carrito" title="Eliminar producto" aria-label="Eliminar {{ linea.producto.nombre }}">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
               </tr>
             {% empty %}
               <tr class="carrito-fila">
-                <td colspan="4">Tu carrito está vacío. Agrega productos desde el catálogo.</td>
+                <td colspan="5">Tu carrito está vacío. Agrega productos desde el catálogo.</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -65,7 +87,17 @@
       </div>
       <div class="carrito-estatico-acciones">
         <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Agregar más productos</a>
-        <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Seguir comprando</a>
+        {% if whatsapp_url %}
+          <a
+            class="btn btn-whatsapp"
+            href="{{ whatsapp_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fa-brands fa-whatsapp"></i>
+            Hacer pedido
+          </a>
+        {% endif %}
       </div>
     </div>
   </main>

@@ -1,3 +1,5 @@
+from urllib.parse import quote
+from django.conf import settings
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
@@ -78,11 +80,54 @@ def carrito(request):
     pedido = _pedido_borrador(usuario)
     lineas = pedido.lineas.select_related("producto", "producto__categoria")
     _recalcular_totales(pedido)
+    whatsapp_url=_construir_url_whatsapp (lineas,pedido)
     return render(
         request,
         "carrito.html",
         {
             "pedido": pedido,
             "lineas": lineas,
+            "whatsapp_url":whatsapp_url
         },
     )
+
+@require_POST
+def actualizar_cantidad(request, linea_id):
+    usuario = _usuario_actual(request)
+    pedido = _pedido_borrador(usuario)
+    linea = get_object_or_404(LineaPedido, pk=linea_id, pedido=pedido)
+    nueva_cantidad = int(request.POST.get("cantidad", 1))
+    if nueva_cantidad < 1:
+        nueva_cantidad = 1
+    linea.cantidad = nueva_cantidad
+    linea.save(update_fields=["cantidad"])
+    _recalcular_totales(pedido)
+    return redirect("pedidos:carrito")
+
+
+@require_POST
+def eliminar_linea(request, linea_id):
+    usuario = _usuario_actual(request)
+    pedido = _pedido_borrador(usuario)
+    linea = get_object_or_404(LineaPedido, pk=linea_id, pedido=pedido)
+    linea.delete()
+    _recalcular_totales(pedido)
+    return redirect("pedidos:carrito")
+
+def _construir_url_whatsapp(lineas, pedido):
+    numero = getattr(settings, "KUMA_WHATSAPP", "")
+    if not numero or not lineas:
+        return ""
+
+    lineas_lista = list(lineas)
+    items = "\n".join(
+        f"  • {l.producto.nombre} x{l.cantidad} — ${l.subtotal:,}"
+        for l in lineas_lista
+    )
+    mensaje = (
+        "🐻 *Kuma Coffee — Nuevo Pedido*\n\n"
+        f"{items}\n\n"
+        f"*Total: ${pedido.valor:,}*\n\n"
+        "Por favor confirmar disponibilidad. ¡Gracias!"
+    )
+    return f"https://wa.me/{numero}?text={quote(mensaje)}"

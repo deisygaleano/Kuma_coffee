@@ -1634,3 +1634,24 @@ body.usuario-modal-abierto {
   width: 80px !important;
   height: 80px;
 }
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #25d366;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.4rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe5d;
+  transform: translateY(-1px);
+  color: #fff;
+}
