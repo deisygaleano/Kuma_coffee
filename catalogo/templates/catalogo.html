@@ -51,7 +51,7 @@
                     <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                       <div class="catalogo-card__media">
                         <img
-                          src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                          src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
                           alt="{{ producto.nombre }}"
                           class="catalogo-card__img"
                           loading="lazy"
@@ -80,7 +80,7 @@
                     <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                       <div class="catalogo-card__media">
                         <img
-                          src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                          src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
                           alt="{{ producto.nombre }}"
                           class="catalogo-card__img"
                           loading="lazy"

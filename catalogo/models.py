@@ -10,13 +10,51 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
+class Altura(models.Model):
+    id_altura = models.AutoField(primary_key=True)
+    metros = models.CharField(max_length=12, blank=True, null=True)
+    descripcion = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = "altura"
+        ordering = ["metros"]
+
+    def __str__(self):
+        return self.metros or ""
+
+
+class Tostion(models.Model):
+    id_tostion = models.AutoField(primary_key=True)
+    tipo = models.CharField(max_length=20)
+    descripcion = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        db_table = "tostion"
+        ordering = ["tipo"]
+
+    def __str__(self):
+        return self.tipo
 
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=32)
-    altura = models.CharField(max_length=10, blank=True, null=True,db_column='id_altura')
-    tostion = models.CharField(max_length=10, blank=True, null=True,db_column='id_tostion')
+    altura = models.ForeignKey(
+        Altura,
+        models.SET_NULL,
+        db_column="id_altura",
+        blank=True,
+        null=True,
+        related_name="productos",
+    )
+    tostion = models.ForeignKey(
+        Tostion,
+        models.SET_NULL,
+        db_column="id_tostion",
+        blank=True,
+        null=True,
+        related_name="productos",
+    )
     descripcion = models.CharField(max_length=50, blank=True, null=True)
     precio = models.IntegerField(default=0)
     imagen = models.CharField(max_length=255, blank=True, null=True)

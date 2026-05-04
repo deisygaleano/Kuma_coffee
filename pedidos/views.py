@@ -125,7 +125,7 @@ def _construir_url_whatsapp(lineas, pedido):
         for l in lineas_lista
     )
     mensaje = (
-        "🐻 *Kuma Coffee — Nuevo Pedido*\n\n"
+        "✅ *Kuma Coffee — Nuevo Pedido*\n\n"
         f"{items}\n\n"
         f"*Total: ${pedido.valor:,}*\n\n"
         "Por favor confirmar disponibilidad. ¡Gracias!"

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eliminar Producto — Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <style>
+    body { background: #0f1114; color: #f0e6c8; font-family: 'Inter', system-ui, sans-serif;
+           display: flex; flex-direction: column; min-height: 100vh; }
+    .confirm-wrapper {
+      max-width: 420px; margin: 140px auto 60px; padding: 0 1.5rem; text-align: center;
+    }
+    .confirm-panel {
+      background: #1a1a1a;
+      border: 1px solid rgba(201,162,39,.22);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+    }
+    .confirm-panel h2 { color: #c9a227; margin-bottom: .75rem; font-size: 1.4rem; }
+    .confirm-panel p  { color: rgba(240,230,200,.6); font-size: .92rem; margin-bottom: 2rem; }
+    .confirm-actions  { display: flex; gap: 1rem; justify-content: center; }
+    .btn-volver {
+      padding: .6rem 1.4rem; border-radius: 8px;
+      border: 1px solid rgba(201,162,39,.3); color: rgba(240,230,200,.6);
+      text-decoration: none; font-size: .9rem;
+    }
+    .btn-volver:hover { border-color: #c9a227; color: #c9a227; }
+    .btn-confirmar {
+      padding: .6rem 1.4rem; border-radius: 8px;
+      background: #c0392b; border: none; color: #fff;
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+    }
+    .btn-confirmar:hover { background: #e74c3c; }
+  </style>
+</head>
+<body>
+  {% include 'includes/navbar.html' %}
+  <main class="confirm-wrapper">
+    <div class="confirm-panel">
+      <h2>¿Eliminar producto?</h2>
+      <p>¿Seguro que deseas eliminar <strong style="color:#f0e6c8">{{ producto.nombre }}</strong>?<br>Esta acción no se puede deshacer.</p>
+      <div class="confirm-actions">
+        <a href="{% url 'catalogo:lista_productos' %}" class="btn-volver">Cancelar</a>
+        <form method="post" style="margin:0">
+          {% csrf_token %}
+          <button type="submit" class="btn-confirmar">Sí, eliminar</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  {% include 'includes/footer.html' %}
+</body>
+</html>

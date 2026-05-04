@@ -29,7 +29,7 @@
       <article class="producto-detalle">
         <div class="producto-detalle__media">
           <img
-            src="{% if producto.imagen %}{% static producto.imagen %}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+            src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
             alt="{{ producto.nombre }}"
             class="producto-detalle__img"
           />
@@ -38,6 +38,13 @@
           <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
           <h1 class="producto-detalle__titulo">{{ producto.nombre }}</h1>
           <p class="producto-detalle__precio">${{ producto.precio }}</p>
+          {% if producto.altura or producto.tostion %}
+          <p class="catalogo-card__cat" style="margin-top:.35rem">
+            {% if producto.altura %}<span>Altura: {{ producto.altura.metros }}</span>{% endif %}
+            {% if producto.altura and producto.tostion %} · {% endif %}
+            {% if producto.tostion %}<span>Tostión: {{ producto.tostion.tipo }}</span>{% endif %}
+          </p>
+          {% endif %}
           <div class="producto-detalle__desc">
             <p>{{ producto.descripcion|default:"Producto sin descripción." }}</p>
           </div>

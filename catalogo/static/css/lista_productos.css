@@ -1,147 +1,221 @@
-    .panel {
-      background: #11161c;
-      border: 1px solid rgba(212, 160, 23, 0.35);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    :root {
+      --bg-panel:   #1a1a1a;
+      --bg-row:     #222222;
+      --bg-row-alt: #1e1e1e;
+      --border:     rgba(201,162,39,0.18);
+      --gold:       #c9a227;
+      --gold-hover: #e0b830;
+      --red:        #c0392b;
+      --red-hover:  #e74c3c;
+      --text:       #f0e6c8;
+      --muted:      rgba(240,230,200,0.55);
     }
 
-    .title {
-      margin: 0 0 22px;
-      color: #d4a017;
-      font-family: serif;
-      font-size: 34px;
-      text-align: center;
+    body { background: #0f1114; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+
+    .gp-wrapper {
+      max-width: 1200px;
+      margin: 120px auto 60px;
+      padding: 0 1.5rem;
     }
 
-    .barra-acciones {
+    /* ── Encabezado ── */
+    .gp-header {
       display: flex;
-      justify-content: flex-end;
-      margin-bottom: 18px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .gp-header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2rem;
+      color: var(--gold);
+    }
+    .btn-agregar {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: var(--gold);
+      color: #0f1114;
+      font-weight: 700;
+      font-size: .9rem;
+      padding: .6rem 1.3rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-agregar:hover { background: var(--gold-hover); }
+
+    /* ── Mensajes ── */
+    .gp-msg {
+      background: rgba(201,162,39,.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: .75rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: .9rem;
     }
 
-    .tabla-wrap {
-      /* overflow-x: auto; */
-      border: 1px solid rgba(212, 160, 23, 0.16);
+    /* ── Panel tabla ── */
+    .gp-panel {
+      background: var(--bg-panel);
       border-radius: 14px;
-      background: #161d24;
+      border: 1px solid var(--border);
+      overflow: hidden;
     }
 
-    .product-table {
+    .gp-table {
       width: 100%;
       border-collapse: collapse;
     }
-
-    .product-table thead {
-      background: #0d1218;
+    .gp-table thead tr {
+      background: rgba(201,162,39,.08);
+      border-bottom: 2px solid var(--border);
     }
-
-    .product-table th,
-    .product-table td {
-      padding: 14px;
+    .gp-table thead th {
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 1rem 1.1rem;
       text-align: left;
-      border-bottom: 1px solid #252d36;
-    }
-
-    .product-table th {
-      color: #d4a017;
-      font-size: 14px;
-    }
-
-    .product-table tbody tr:hover {
-      background: #1b232c;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      background: #000;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-      outline: none;
-      font-size: 14px;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #d4a017;
-      box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.15);
-    }
-
-    .subtotal {
-      color: #f0c85a;
-      font-weight: bold;
       white-space: nowrap;
     }
+    .gp-table thead th.col-acciones { text-align: center; }
 
-    .acciones {
-      display: flex;
-      gap: 8px;
+    .gp-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+    .gp-table tbody tr:nth-child(odd)  { background: var(--bg-row); }
+    .gp-table tbody tr:nth-child(even) { background: var(--bg-row-alt); }
+    .gp-table tbody tr:hover           { background: rgba(201,162,39,.06); }
+    .gp-table tbody tr:last-child      { border-bottom: none; }
+
+    .gp-table td {
+      padding: .85rem 1.1rem;
+      font-size: .9rem;
+      vertical-align: middle;
     }
 
-    .btn {
-      padding: 10px 14px;
+    /* Columna imagen */
+    .col-img img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
       border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .col-img .sin-img {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.04);
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      font-size: .7rem;
+      text-align: center;
+    }
+
+    /* Nombre / precio / categoría */
+    .td-nombre { font-weight: 600; color: var(--text); max-width: 180px; }
+    .td-precio  { color: var(--gold); font-weight: 700; white-space: nowrap; }
+    .td-cat     { color: var(--muted); font-size: .85rem; }
+    .td-desc    { color: var(--muted); font-size: .82rem; max-width: 200px;
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .td-extras  { color: var(--muted); font-size: .82rem; }
+    .badge-extra {
+      display: inline-block;
+      background: rgba(201,162,39,.12);
+      border: 1px solid rgba(201,162,39,.3);
+      color: var(--gold);
+      border-radius: 20px;
+      padding: .15rem .65rem;
+      font-size: .75rem;
+      margin: .1rem .15rem;
+    }
+
+    /* Acciones */
+    .col-acciones { text-align: center; white-space: nowrap; }
+    .btn-editar, .btn-eliminar {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .42rem .9rem;
+      border-radius: 7px;
+      font-size: .82rem;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .btn-agregar {
-      background: #d4a017;
-      color: #000;
       border: none;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
     }
-
+    .btn-editar:hover, .btn-eliminar:hover { transform: translateY(-1px); }
+    .btn-editar {
+      background: var(--gold);
+      color: #0f1114;
+      margin-right: .4rem;
+    }
+    .btn-editar:hover { background: var(--gold-hover); }
     .btn-eliminar {
       background: transparent;
-      color: #d4a017;
-      border: 1px solid #d4a017;
+      color: var(--red);
+      border: 1px solid var(--red);
     }
+    .btn-eliminar:hover { background: var(--red); color: #fff; }
 
-    .footer-total {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 18px;
+    /* Estado vacío */
+    .gp-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
     }
+    .gp-empty svg { opacity: .4; margin-bottom: 1rem; }
+    .gp-empty p   { font-size: .95rem; }
 
-    .total-box {
-      min-width: 260px;
-      background: #0d1218;
-      border: 1px solid rgba(212, 160, 23, 0.25);
-      border-radius: 12px;
-      padding: 16px 18px;
-      text-align: right;
+    /* Modal confirmación eliminar */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.75);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
     }
-
-    .total-box span {
-      display: block;
-      color: #b8b8b8;
-      font-size: 13px;
-      margin-bottom: 6px;
+    .modal-overlay.activo { display: flex; }
+    .modal-box {
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      text-align: center;
+      max-width: 380px;
+      width: 90%;
     }
-
-    .total-box strong {
-      font-size: 24px;
-      color: #d4a017;
+    .modal-box h3 { color: var(--gold); margin-bottom: .75rem; font-size: 1.2rem; }
+    .modal-box p  { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: 1rem; justify-content: center; }
+    .modal-cancel {
+      padding: .55rem 1.4rem;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .9rem;
     }
+    .modal-cancel:hover { border-color: var(--gold); color: var(--gold); }
 
     @media (max-width: 768px) {
-      .panel {
-        padding: 18px;
-      }
-
-      .title {
-        font-size: 28px;
-      }
-
-      .acciones {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
+      .gp-table thead th.col-extras,
+      .gp-table td.col-extras,
+      .gp-table thead th.col-desc,
+      .gp-table td.col-desc { display: none; }
     }

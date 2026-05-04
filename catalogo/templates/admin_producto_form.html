@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ accion }} Producto — Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-panel: #1a1a1a;
+      --border:   rgba(201,162,39,.22);
+      --gold:     #c9a227;
+      --gold-h:   #e0b830;
+      --text:     #f0e6c8;
+      --muted:    rgba(240,230,200,.55);
+      --input-bg: #111111;
+    }
+
+    body { background: #0f1114; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+
+    .form-wrapper {
+      max-width: 760px;
+      margin: 120px auto 60px;
+      padding: 0 1.5rem;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .82rem; color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--gold); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { opacity: .4; }
+
+    /* Título */
+    .form-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.9rem;
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* Panel */
+    .form-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2.2rem 2.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem 2rem;
+    }
+    .form-grid .span-2 { grid-column: 1 / -1; }
+
+    .form-field { display: flex; flex-direction: column; gap: .45rem; }
+    .form-field label {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .admin-input,
+    .admin-select {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: .65rem .9rem;
+      border-radius: 8px;
+      font-size: .92rem;
+      outline: none;
+      width: 100%;
+      transition: border-color .2s;
+    }
+    .admin-input:focus,
+    .admin-select:focus  { border-color: var(--gold); }
+    .admin-select option { background: #1a1a1a; }
+
+    /* Zona de imagen */
+    .img-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .img-zone:hover { border-color: var(--gold); }
+    .img-zone input[type="file"] { display: none; }
+    .img-zone svg { opacity: .5; }
+    .img-zone p   { font-size: .85rem; color: var(--muted); text-align: center; }
+    .img-zone .btn-seleccionar {
+      background: rgba(201,162,39,.12);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: .45rem 1.1rem;
+      border-radius: 7px;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .img-zone .btn-seleccionar:hover { background: rgba(201,162,39,.25); }
+
+    #preview-container { display: none; text-align: center; }
+    #preview-container img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: contain;
+    }
+    #preview-container .btn-cambiar {
+      margin-top: .6rem;
+      display: inline-block;
+      font-size: .8rem;
+      color: var(--gold);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Imagen actual (edición) */
+    .img-actual { text-align: center; margin-bottom: .75rem; }
+    .img-actual img {
+      max-height: 150px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: contain;
+    }
+    .img-actual p { font-size: .78rem; color: var(--muted); margin-top: .4rem; }
+
+    /* Error de campo */
+    .field-error { color: #e74c3c; font-size: .8rem; margin-top: .2rem; }
+
+    /* Botones del formulario */
+    .form-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: .6rem 1.4rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-cancel:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-guardar {
+      background: var(--gold);
+      color: #0f1114;
+      border: none;
+      padding: .6rem 1.8rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-guardar:hover { background: var(--gold-h); }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-panel { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  {% include 'includes/navbar.html' %}
+
+  <main class="form-wrapper">
+    <nav class="breadcrumb">
+      <a href="{% url 'catalogo:lista_productos' %}">Gestión de Productos</a>
+      <span>/</span>
+      <span>{{ accion }} producto</span>
+    </nav>
+
+    <h1 class="form-title">{{ accion }} producto</h1>
+
+    <div class="form-panel">
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="form-grid">
+
+          <!-- Nombre -->
+          <div class="form-field">
+            <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+            {{ form.nombre }}
+            {% if form.nombre.errors %}<p class="field-error">{{ form.nombre.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Precio -->
+          <div class="form-field">
+            <label for="{{ form.precio.id_for_label }}">{{ form.precio.label }}</label>
+            {{ form.precio }}
+            {% if form.precio.errors %}<p class="field-error">{{ form.precio.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Categoría -->
+          <div class="form-field">
+            <label for="{{ form.categoria.id_for_label }}">{{ form.categoria.label }}</label>
+            {{ form.categoria }}
+            {% if form.categoria.errors %}<p class="field-error">{{ form.categoria.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Slug -->
+          <div class="form-field">
+            <label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
+            {{ form.slug }}
+            {% if form.slug.errors %}<p class="field-error">{{ form.slug.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Altura -->
+          <div class="form-field">
+            <label for="{{ form.altura.id_for_label }}">{{ form.altura.label }}</label>
+            {{ form.altura }}
+            {% if form.altura.errors %}<p class="field-error">{{ form.altura.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Tostión -->
+          <div class="form-field">
+            <label for="{{ form.tostion.id_for_label }}">{{ form.tostion.label }}</label>
+            {{ form.tostion }}
+            {% if form.tostion.errors %}<p class="field-error">{{ form.tostion.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-field span-2">
+            <label for="{{ form.descripcion.id_for_label }}">{{ form.descripcion.label }}</label>
+            {{ form.descripcion }}
+            {% if form.descripcion.errors %}<p class="field-error">{{ form.descripcion.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Imagen -->
+          <div class="form-field span-2">
+            <label>Foto del café</label>
+
+            {% if producto and producto.imagen %}
+            <div class="img-actual">
+              <img src="/media/{{ producto.imagen }}" alt="{{ producto.nombre }}" />
+              <p>Imagen actual — sube una nueva para reemplazarla</p>
+            </div>
+            {% endif %}
+
+            <div class="img-zone" id="imgZone" onclick="document.getElementById('id_imagen_file').click()">
+              <input type="file" name="imagen_file" id="id_imagen_file" accept="image/*" />
+              <svg width="40" height="40" fill="none" stroke="#c9a227" stroke-width="1.5" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p>Arrastra tu imagen aquí o haz clic para seleccionar</p>
+              <span class="btn-seleccionar">Seleccionar archivo</span>
+            </div>
+
+            <div id="preview-container">
+              <img id="preview-img" src="" alt="Vista previa" />
+              <span class="btn-cambiar" onclick="document.getElementById('id_imagen_file').click()">
+                Cambiar imagen
+              </span>
+            </div>
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <div class="form-footer">
+          <a href="{% url 'catalogo:lista_productos' %}" class="btn-cancel">Cancelar</a>
+          <button type="submit" class="btn-guardar">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  {% include 'includes/footer.html' %}
+  <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  <script>
+    const inputFile   = document.getElementById('id_imagen_file');
+    const zone        = document.getElementById('imgZone');
+    const previewBox  = document.getElementById('preview-container');
+    const previewImg  = document.getElementById('preview-img');
+
+    inputFile.addEventListener('change', mostrarPreview);
+
+    // Drag & drop
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = '#c9a227'; });
+    zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.style.borderColor = '';
+      if (e.dataTransfer.files.length) {
+        inputFile.files = e.dataTransfer.files;
+        mostrarPreview();
+      }
+    });
+
+    function mostrarPreview() {
+      const file = inputFile.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        previewImg.src = e.target.result;
+        zone.style.display    = 'none';
+        previewBox.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
