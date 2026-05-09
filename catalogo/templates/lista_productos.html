@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo — Kuma Coffee</title>
+  <title>Catalogo — Kuma Coffee</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="stylesheet" href="{% static 'css/lista_productos.css' %}" />
@@ -20,19 +20,26 @@
 
   <main class="gp-wrapper">
     <div class="gp-header">
-      <h1>Gestión de Productos</h1>
-      <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
-             viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Agregar producto
-      </a>
+      <h1>Gestion de Productos</h1>
+      <div class="gp-actions">
+        <a href="{% url 'catalogo:inventario_productos' %}" class="btn-inventario">
+          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>
+          Inventario
+        </a>
+        <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
+               viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar producto
+        </a>
+      </div>
     </div>
 
     {% if messages %}
       {% for msg in messages %}
         <div class="gp-msg">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-               viewBox="0 0 24 24" style="vertical-align:middle;margin-right:.5rem">
+          <svg class="gp-msg-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
@@ -49,51 +56,39 @@
             <th>Imagen</th>
             <th>Producto</th>
             <th>Precio</th>
-            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Categoria</th>
             <th class="col-extras">Altura</th>
-            <th class="col-extras">Tostión</th>
-            <th class="col-desc">Descripción</th>
+            <th class="col-extras">Tostion</th>
+            <th class="col-desc">Descripcion</th>
             <th class="col-acciones">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {% for p in productos %}
           <tr>
-            <!-- Imagen -->
             <td class="col-img">
               {% if p.imagen %}
                 <img src="{% get_media_prefix %}{{ p.imagen }}" alt="{{ p.nombre }}" />
               {% else %}
                 <div class="sin-img">Sin foto</div>
               {% endif %}
-        
             </td>
-
-            <!-- Nombre -->
             <td class="td-nombre">{{ p.nombre }}</td>
-
-            <!-- Precio -->
             <td class="td-precio">${{ p.precio|floatformat:"0" }}</td>
-
-            <!-- Categoría -->
-            <td class="td-cat">
-              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span style="opacity:.4">—</span>{% endif %}
+            <td>
+              <span class="inv-estado inv-estado-{{ p.estado_inventario }}">{{ p.stock_actual }}</span>
             </td>
-
-            <!-- Altura -->
+            <td class="td-cat">
+              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="texto-tenue">—</span>{% endif %}
+            </td>
             <td class="td-extras col-extras">
               {% if p.altura %}<span class="badge-extra">{{ p.altura.metros }}</span>{% else %}—{% endif %}
             </td>
-
-            <!-- Tostión -->
             <td class="td-extras col-extras">
               {% if p.tostion %}<span class="badge-extra">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
             </td>
-
-            <!-- Descripción -->
             <td class="td-desc col-desc" title="{{ p.descripcion }}">{{ p.descripcion|default:"—" }}</td>
-
-            <!-- Acciones -->
             <td class="col-acciones">
               <a href="{% url 'catalogo:editar_producto' p.id_producto %}" class="btn-editar">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
@@ -101,10 +96,10 @@
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 Editar
               </a>
-            <button type="button" class="btn-eliminar"
+              <button type="button" class="btn-eliminar"
+                      data-eliminar-producto
                       data-pk="{{ p.id_producto }}"
-                      data-nombre="{{ p.nombre }}"
-                      onclick="abrirModal(this.getAttribute('data-pk'), this.getAttribute('data-nombre'))">
+                      data-nombre="{{ p.nombre }}">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
                      viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                   <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
@@ -120,8 +115,8 @@
         <svg width="56" height="56" fill="none" stroke="#c9a227" stroke-width="1.5" viewBox="0 0 24 24">
           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
         </svg>
-        <p>No hay productos registrados aún.</p>
-        <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar" style="margin-top:1rem;display:inline-flex">
+        <p>No hay productos registrados aun.</p>
+        <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar gp-empty-action">
           Agregar el primero
         </a>
       </div>
@@ -129,17 +124,16 @@
     </div>
   </main>
 
-  <!-- Modal de confirmación para eliminar -->
   <div class="modal-overlay" id="modalEliminar">
     <div class="modal-box">
       <h3>¿Eliminar producto?</h3>
-      <p id="modalTexto">Esta acción no se puede deshacer.</p>
+      <p id="modalTexto">Esta accion no se puede deshacer.</p>
       <div class="modal-actions">
-        <button class="modal-cancel" onclick="cerrarModal()">Cancelar</button>
-        <form id="formEliminar" method="post" style="margin:0">
+        <button class="modal-cancel" type="button" data-cerrar-modal>Cancelar</button>
+        <form id="formEliminar" method="post" class="modal-form">
           {% csrf_token %}
-          <button type="submit" class="btn-eliminar" style="border:none;padding:.55rem 1.4rem;font-size:.9rem">
-            Sí, eliminar
+          <button type="submit" class="btn-eliminar btn-eliminar-confirmar">
+            Si, eliminar
           </button>
         </form>
       </div>
@@ -148,23 +142,7 @@
 
   {% include 'includes/footer.html' %}
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
-  <script>
-    function abrirModal(id, nombre) {
-      document.getElementById('modalTexto').textContent =
-        '¿Seguro que deseas eliminar "' + nombre + '"? Esta acción no se puede deshacer.';
-      document.getElementById('formEliminar').action =
-        '/catalogo/admin/productos/' + id + '/eliminar/';
-      document.getElementById('modalEliminar').classList.add('activo');
-    }
-    function cerrarModal() {
-      document.getElementById('modalEliminar').classList.remove('activo');
-    }
-    document.getElementById('modalEliminar').addEventListener('click', function(e) {
-      if (e.target === this) cerrarModal();
-    });
-  </script>
+  <script src="{% static 'js/lista_productos.js' %}" defer></script>
 </body>
 
 </html>
-
-

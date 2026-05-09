@@ -1,0 +1,247 @@
+:root {
+  --bg-panel: #1a1a1a;
+  --border: rgba(201, 162, 39, .22);
+  --gold: #c9a227;
+  --gold-h: #e0b830;
+  --text: #f0e6c8;
+  --muted: rgba(240, 230, 200, .55);
+  --input-bg: #111111;
+}
+
+body {
+  background: #0f1114;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.form-wrapper {
+  max-width: 760px;
+  margin: 120px auto 60px;
+  padding: 0 1.5rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  opacity: .4;
+}
+
+.form-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.9rem;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+
+.form-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2.2rem 2.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2rem;
+}
+
+.form-grid .span-2 {
+  grid-column: 1 / -1;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+.form-field label {
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.admin-input,
+.admin-select {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: .65rem .9rem;
+  border-radius: 8px;
+  font-size: .92rem;
+  outline: none;
+  width: 100%;
+  transition: border-color .2s;
+}
+
+.admin-input:focus,
+.admin-select:focus {
+  border-color: var(--gold);
+}
+
+.admin-select option {
+  background: #1a1a1a;
+}
+
+.img-zone {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+
+.img-zone:hover,
+.img-zone.is-dragover {
+  border-color: var(--gold);
+}
+
+.img-zone input[type="file"] {
+  display: none;
+}
+
+.img-zone svg {
+  opacity: .5;
+}
+
+.img-zone p {
+  font-size: .85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.img-zone .btn-seleccionar {
+  background: rgba(201, 162, 39, .12);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: .45rem 1.1rem;
+  border-radius: 7px;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.img-zone .btn-seleccionar:hover {
+  background: rgba(201, 162, 39, .25);
+}
+
+#preview-container {
+  display: none;
+  text-align: center;
+}
+
+#preview-container img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  object-fit: contain;
+}
+
+#preview-container .btn-cambiar {
+  margin-top: .6rem;
+  display: inline-block;
+  font-size: .8rem;
+  color: var(--gold);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.img-actual {
+  text-align: center;
+  margin-bottom: .75rem;
+}
+
+.img-actual img {
+  max-height: 150px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  object-fit: contain;
+}
+
+.img-actual p {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: .4rem;
+}
+
+.field-error {
+  color: #e74c3c;
+  font-size: .8rem;
+  margin-top: .2rem;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: .6rem 1.4rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+
+.btn-cancel:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-guardar {
+  background: var(--gold);
+  color: #0f1114;
+  border: none;
+  padding: .6rem 1.8rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-guardar:hover {
+  background: var(--gold-h);
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-panel {
+    padding: 1.5rem;
+  }
+}

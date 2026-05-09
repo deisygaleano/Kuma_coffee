@@ -1,3 +1,4 @@
+{% load static %}
 <div class="cabecera__acciones">
   <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras ({{ carrito_cantidad }} productos)">
     <span class="cabecera__carrito-icon" aria-hidden="true">
@@ -14,9 +15,9 @@
     </span>
     <span class="cabecera__carrito-texto">Carrito</span>
   </a>
-  <a href="{% url 'catalogo:lista_productos' %}" class="enlace-navegacion" style="color:#c9a227;font-weight:700;">
+  <a href="{% url 'catalogo:lista_productos' %}" class="enlace-navegacion enlace-admin">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-         style="vertical-align:middle;margin-right:.3rem">
+         class="enlace-admin__icono">
       <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
       <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
     </svg>
@@ -52,43 +53,4 @@
   </div>
 </div>
 
-<script>
-  (function () {
-    var trigger = document.getElementById('usuario-menu-trigger');
-    var modal = document.getElementById('usuario-menu-modal');
-    if (!trigger || !modal) return;
-
-    function abrir() {
-      modal.removeAttribute('hidden');
-      trigger.setAttribute('aria-expanded', 'true');
-      document.body.classList.add('usuario-modal-abierto');
-      var cerrarBtn = modal.querySelector('.usuario-modal__cerrar');
-      if (cerrarBtn) cerrarBtn.focus();
-    }
-
-    function cerrar() {
-      modal.setAttribute('hidden', '');
-      trigger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('usuario-modal-abierto');
-      trigger.focus();
-    }
-
-    trigger.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (modal.hasAttribute('hidden')) abrir();
-      else cerrar();
-    });
-
-    modal.querySelectorAll('[data-cerrar-modal]').forEach(function (el) {
-      el.addEventListener('click', function () {
-        cerrar();
-      });
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) {
-        cerrar();
-      }
-    });
-  })();
-</script>
+<script src="{% static 'js/navbar_acciones.js' %}" defer></script>

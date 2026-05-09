@@ -143,6 +143,16 @@ body {
   text-decoration: underline;
 }
 
+.enlace-admin {
+  color: #c9a227;
+  font-weight: 700;
+}
+
+.enlace-admin__icono {
+  vertical-align: middle;
+  margin-right: .3rem;
+}
+
 /* Usuario */
 .cabecera__usuario {
   display: flex;
@@ -865,6 +875,10 @@ a.icono-logo {
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 1.25rem;
+}
+
+.producto-detalle__extras {
+  margin-top: .35rem;
 }
 
 .producto-detalle__desc {

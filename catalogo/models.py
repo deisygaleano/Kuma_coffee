@@ -57,6 +57,8 @@ class Producto(models.Model):
     )
     descripcion = models.CharField(max_length=50, blank=True, null=True)
     precio = models.IntegerField(default=0)
+    stock = models.PositiveIntegerField(default=0)
+    stock_minimo = models.PositiveIntegerField(default=5)
     imagen = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(max_length=60, unique=True, blank=True, null=True)
     categoria = models.ForeignKey(
@@ -74,4 +76,44 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    @property
+    def stock_actual(self):
+        inventario = getattr(self, "inventario", None)
+        return inventario.stock if inventario else self.stock
+
+    @property
+    def stock_minimo_actual(self):
+        inventario = getattr(self, "inventario", None)
+        return inventario.stock_minimo if inventario else self.stock_minimo
+
+    @property
+    def estado_inventario(self):
+        stock = self.stock_actual
+        stock_minimo = self.stock_minimo_actual
+        if stock == 0:
+            return "agotado"
+        if stock <= stock_minimo:
+            return "bajo"
+        return "disponible"
+
+
+class InventarioProducto(models.Model):
+    id_inventario = models.AutoField(primary_key=True)
+    producto = models.OneToOneField(
+        Producto,
+        models.CASCADE,
+        db_column="id_producto",
+        related_name="inventario",
+    )
+    stock = models.PositiveIntegerField(default=0)
+    stock_minimo = models.PositiveIntegerField(default=5)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "inventario_producto"
+        ordering = ["producto__nombre"]
+
+    def __str__(self):
+        return f"Inventario - {self.producto.nombre}"
 
