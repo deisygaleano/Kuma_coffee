@@ -5,7 +5,9 @@ app_name = 'cuentas'
 urlpatterns = [
     path('login', views.login,name="login"),
     path('registro', views.registro,name="registro"),
-    path('restablcer', views.restablecer,name="restablecer"),
+    path('logout', views.logout,name="logout"),
+    path('restablecer', views.restablecer,name="restablecer"),
+    path('restablcer', views.restablecer,name="restablecer_legacy"),
 
     
 ]

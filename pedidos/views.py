@@ -1,8 +1,10 @@
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 from django.conf import settings
+from django.contrib import messages
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from catalogo.models import Producto
@@ -50,6 +52,12 @@ def _recalcular_totales(pedido):
 
 @require_POST
 def agregar_al_carrito(request):
+    if not request.session.get("usuario_id"):
+        next_url = request.POST.get("next") or reverse("catalogo:lista")
+        login_url = f"{reverse('cuentas:login')}?{urlencode({'next': next_url})}"
+        messages.error(request, "Para agregar productos al carrito debes iniciar sesion.")
+        return redirect(login_url)
+
     producto_id = request.POST.get("producto_id")
     cantidad = int(request.POST.get("cantidad", 1))
     cantidad = max(1, cantidad)

@@ -22,11 +22,13 @@
     <div class="gp-header">
       <h1>Gestion de Productos</h1>
       <div class="gp-actions">
-        <a href="{% url 'catalogo:inventario_productos' %}" class="btn-inventario">
-          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
-               viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>
-          Inventario
-        </a>
+        {% if usuario_es_admin %}
+          <a href="{% url 'catalogo:inventario_productos' %}" class="btn-inventario">
+            <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>
+            Inventario
+          </a>
+        {% endif %}
         <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
                viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>

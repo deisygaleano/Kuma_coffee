@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ProductoForm
 from pathlib import Path
 
+from cuentas.auth_utils import usuario_es_admin
 from .models import InventarioProducto, Producto, Categoria
 
 def lista(request):
@@ -39,8 +40,8 @@ def detalle_producto(request, pk):
 
 
 def lista_productos(request):
-    # if not _es_admin(request):
-    #     return redirect("cuentas:login")
+    if not _es_admin(request):
+        return redirect("cuentas:login")
     productos = Producto.objects.select_related(
         "categoria", "altura", "tostion", "inventario"
     ).order_by("nombre")
@@ -51,8 +52,8 @@ def lista_productos(request):
 
 
 def inventario_productos(request):
-    # if not _es_admin(request):
-    #     return redirect("cuentas:login")
+    if not _es_admin(request):
+        return redirect("cuentas:login")
     if request.method == "POST":
         producto = get_object_or_404(Producto, pk=request.POST.get("producto_id"))
         try:
@@ -109,8 +110,8 @@ def inventario_productos(request):
 
 
 def crear_producto(request):
-    # if not _es_admin(request):
-    #     return redirect("cuentas:login")
+    if not _es_admin(request):
+        return redirect("cuentas:login")
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -128,8 +129,8 @@ def crear_producto(request):
 
 
 def editar_producto(request, pk):
-    # if not _es_admin(request):
-    #     return redirect("cuentas:login")
+    if not _es_admin(request):
+        return redirect("cuentas:login")
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES, instance=producto)
@@ -148,8 +149,8 @@ def editar_producto(request, pk):
 
 
 def eliminar_producto(request, pk):
-    # if not _es_admin(request):
-    #     return redirect("cuentas:login")
+    if not _es_admin(request):
+        return redirect("cuentas:login")
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == "POST":
         nombre = producto.nombre
@@ -192,3 +193,10 @@ def _asegurar_inventario_productos():
         for producto in productos_sin_inventario
     ]
     InventarioProducto.objects.bulk_create(inventarios, ignore_conflicts=True)
+
+
+def _es_admin(request):
+    if usuario_es_admin(request):
+        return True
+    messages.error(request, "Debes iniciar sesion como administrador para acceder a esta seccion.")
+    return False

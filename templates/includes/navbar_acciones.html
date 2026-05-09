@@ -15,14 +15,18 @@
     </span>
     <span class="cabecera__carrito-texto">Carrito</span>
   </a>
-  <a href="{% url 'catalogo:lista_productos' %}" class="enlace-navegacion enlace-admin">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-         class="enlace-admin__icono">
-      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-      <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-    </svg>
-    Admin
-  </a>
+
+  {% if usuario_es_admin %}
+    <a href="{% url 'catalogo:lista_productos' %}" class="enlace-navegacion enlace-admin">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+           class="enlace-admin__icono">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Admin
+    </a>
+  {% endif %}
+
   <div class="cabecera__usuario cabecera__usuario--cuenta">
     <button type="button" class="cabecera__usuario-trigger" id="usuario-menu-trigger" aria-expanded="false"
       aria-controls="usuario-menu-modal" aria-haspopup="dialog">
@@ -32,7 +36,9 @@
           <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
         </svg>
       </span>
-      
+      {% if usuario_actual %}
+        <span class="cabecera__usuario-nombre">{{ usuario_actual.nombre }}</span>
+      {% endif %}
     </button>
 
     <div class="usuario-modal" id="usuario-menu-modal" role="dialog" aria-modal="true"
@@ -42,12 +48,30 @@
         <button type="button" class="usuario-modal__cerrar" aria-label="Cerrar ventana" data-cerrar-modal>
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Cuenta</h2>
-        <p class="usuario-modal__hint">Inicia sesión o crea una cuenta para guardar tus preferencias.</p>
-        <nav class="usuario-modal__nav" aria-label="Acceso a cuenta">
-          <a href="{% url 'cuentas:login' %}" class="btn btn-primary usuario-modal__link-btn">Acceder</a>
-          <a href="{% url 'cuentas:registro' %}" class="btn btn-ghost usuario-modal__link-btn">Registrarse</a>
-        </nav>
+        {% if usuario_actual %}
+          <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Hola, {{ usuario_actual.nombre }}</h2>
+          <dl class="usuario-modal__datos">
+            <div class="usuario-modal__fila">
+              <dt>Correo</dt>
+              <dd>{{ usuario_actual.correo }}</dd>
+            </div>
+            <div class="usuario-modal__fila">
+              <dt>Rol</dt>
+              <dd>{{ usuario_actual.rol|title }}</dd>
+            </div>
+          </dl>
+          <form method="post" action="{% url 'cuentas:logout' %}" class="usuario-modal__logout">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost usuario-modal__btn-salir">Cerrar sesion</button>
+          </form>
+        {% else %}
+          <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Cuenta</h2>
+          <p class="usuario-modal__hint">Inicia sesion o crea una cuenta para guardar tus preferencias.</p>
+          <nav class="usuario-modal__nav" aria-label="Acceso a cuenta">
+            <a href="{% url 'cuentas:login' %}" class="btn btn-primary usuario-modal__link-btn">Acceder</a>
+            <a href="{% url 'cuentas:registro' %}" class="btn btn-ghost usuario-modal__link-btn">Registrarse</a>
+          </nav>
+        {% endif %}
       </div>
     </div>
   </div>
