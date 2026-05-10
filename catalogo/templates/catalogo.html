@@ -25,28 +25,74 @@
           Explora nuestros granos y presentaciones
         </p>
       </header>
+      
+      <form method="get" action="" class="catalogo-busqueda-form">
+        <div class="catalogo-busqueda-wrap">
+          {% if categoria_slug %}
+            <input type="hidden" name="categoria" value="{{ categoria_slug }}" />
+          {% endif %}
+          <input
+            type="search"
+            name="q"
+            value="{{ busqueda }}"
+            placeholder="Buscar por nombre o descripción..."
+            class="catalogo-busqueda-input"
+            autocomplete="off"
+          />
+          <button type="submit" class="btn btn-primary catalogo-busqueda-btn">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          {% if hay_filtros %}
+            <a href="{% url 'catalogo:lista' %}" class="btn btn-ghost catalogo-busqueda-limpiar">
+              Limpiar filtros
+            </a>
+          {% endif %}
+        </div>
+      </form>
 
       <div class="catalogo-layout">
         <aside class="catalogo-sidebar" aria-label="Secciones">
           <h2 class="catalogo-sidebar__titulo">Categorías</h2>
           <ul class="catalogo-filtros">
-            {% for categoria in categorias %}
-              <li><a href="#cat-{{ categoria.slug }}" class="catalogo-filtro">{{ categoria.nombre }}</a></li>
+           <li>
+              <a
+                href="{% url 'catalogo:lista' %}{% if busqueda %}?q={{ busqueda }}{% endif %}"
+                class="catalogo-filtro {% if not categoria_slug %}catalogo-filtro--activo{% endif %}"
+              >Todos</a>
+            </li>
+            {% for cat in categorias %}
+              <li>
+                <a
+                  href="?categoria={{ cat.slug }}{% if busqueda %}&q={{ busqueda }}{% endif %}"
+                  class="catalogo-filtro {% if categoria_slug == cat.slug %}catalogo-filtro--activo{% endif %}"
+                >{{ cat.nombre }}</a>
+              </li>
             {% empty %}
               <li><span class="catalogo-filtro">Sin categorías</span></li>
             {% endfor %}
-            {% if productos_sin_categoria %}
-              <li><a href="#cat-sin-categoria" class="catalogo-filtro">Sin categoría</a></li>
+            {% if tiene_sin_categoria %}
+              <li>
+                <a
+                  href="?categoria=sin-categoria{% if busqueda %}&q={{ busqueda }}{% endif %}"
+                  class="catalogo-filtro {% if categoria_slug == 'sin-categoria' %}catalogo-filtro--activo{% endif %}"
+                >Sin categoría</a>
+              </li>
             {% endif %}
           </ul>
         </aside>
 
+
         <div class="catalogo-grid-wrap">
-          {% for categoria in categorias %}
-            <section id="cat-{{ categoria.slug }}" class="catalogo-seccion-estatica">
-              <h2 class="catalogo-seccion-estatica__titulo">{{ categoria.nombre }}</h2>
+{% if hay_filtros %}
+            <p class="catalogo-filtro-info">
+              {% if busqueda %}Resultados para "<strong>{{ busqueda }}</strong>"{% endif %}
+              {% if categoria_activa %} en <strong>{{ categoria_activa.nombre }}</strong>{% elif categoria_slug == "sin-categoria" %} en <strong>Sin categoría</strong>{% endif %}
+              — {{ productos_filtrados|length }} producto{{ productos_filtrados|length|pluralize:"s" }}
+            </p>
+
+            {% if productos_filtrados %}
               <ul class="catalogo-grid">
-                {% for producto in categoria.productos.all %}
+                {% for producto in productos_filtrados %}
                   <li class="catalogo-card">
                     <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                       <div class="catalogo-card__media">
@@ -58,18 +104,50 @@
                         />
                       </div>
                       <div class="catalogo-card__body">
-                        <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
+                        <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
                         <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
                         <p class="catalogo-card__precio">${{ producto.precio }}</p>
                       </div>
                     </a>
                   </li>
-                {% empty %}
-                  <li>No hay productos en esta categoría.</li>
                 {% endfor %}
               </ul>
-            </section>
-          {% endfor %}
+            {% else %}
+              <div class="catalogo-sin-resultados">
+                <p>No se encontraron productos con estos criterios.</p>
+                <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Ver todos los productos</a>
+              </div>
+            {% endif %}
+
+          {% else %}
+            {% for categoria in categorias_con_productos %}
+              {% if categoria.productos.all %}
+              <section id="cat-{{ categoria.slug }}" class="catalogo-seccion-estatica">
+                <h2 class="catalogo-seccion-estatica__titulo">{{ categoria.nombre }}</h2>
+                <ul class="catalogo-grid">
+                  {% for producto in categoria.productos.all %}
+                    <li class="catalogo-card">
+                      <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
+                        <div class="catalogo-card__media">
+                          <img
+                            src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                            alt="{{ producto.nombre }}"
+                            class="catalogo-card__img"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div class="catalogo-card__body">
+                          <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
+                          <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
+                          <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                        </div>
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </section>
+              {% endif %}
+            {% endfor %}
 
           {% if productos_sin_categoria %}
             <section id="cat-sin-categoria" class="catalogo-seccion-estatica">
@@ -96,6 +174,7 @@
                 {% endfor %}
               </ul>
             </section>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -104,6 +183,8 @@
 
  {% include 'includes/footer.html' %}
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/busqueda.js' %}"></script>
 </body>
 
 </html>
+

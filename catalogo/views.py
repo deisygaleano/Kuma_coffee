@@ -11,11 +11,64 @@ from cuentas.auth_utils import usuario_es_admin
 from .models import InventarioProducto, Producto, Categoria
 
 def lista(request):
-    categorias = Categoria.objects.prefetch_related(
+    busqueda = request.GET.get("q", "").strip()
+    categoria_slug = request.GET.get("categoria", "").strip()
+
+    categorias = list(
+        Categoria.objects.filter(productos__isnull=False)
+        .distinct()
+        .order_by("nombre")
+    )
+    tiene_sin_categoria = Producto.objects.filter(categoria__isnull=True).exists()
+    hay_filtros = bool(busqueda or categoria_slug)
+
+    if hay_filtros:
+        productos = Producto.objects.select_related(
+            "categoria", "altura", "tostion"
+        ).order_by("nombre")
+
+        if busqueda:
+            productos = productos.filter(
+                Q(nombre__icontains=busqueda) | Q(descripcion__icontains=busqueda)
+            )
+
+        if categoria_slug == "sin-categoria":
+            productos = productos.filter(categoria__isnull=True)
+        elif categoria_slug:
+            productos = productos.filter(categoria__slug=categoria_slug)
+
+        # Solo mostrar en el sidebar las categorías que tienen resultados
+        slugs_con_resultados = set(
+            productos.exclude(categoria__isnull=True)
+            .values_list("categoria__slug", flat=True)
+            .distinct()
+        )
+        categorias_sidebar = [c for c in categorias if c.slug in slugs_con_resultados]
+        tiene_sin_categoria_sidebar = productos.filter(categoria__isnull=True).exists()
+
+        categoria_activa = next(
+            (c for c in categorias if c.slug == categoria_slug), None
+        )
+
+        return render(
+            request,
+            "catalogo.html",
+            {
+                "categorias": categorias_sidebar,
+                "tiene_sin_categoria": tiene_sin_categoria_sidebar,
+                "productos_filtrados": productos,
+                "busqueda": busqueda,
+                "categoria_slug": categoria_slug,
+                "categoria_activa": categoria_activa,
+                "hay_filtros": True,
+            },
+        )
+
+    categorias_con_productos = Categoria.objects.prefetch_related(
         "productos",
         "productos__altura",
         "productos__tostion",
-    ).all()
+    ).order_by("nombre")
     productos_sin_categoria = (
         Producto.objects.filter(categoria__isnull=True)
         .select_related("altura", "tostion")
@@ -25,10 +78,14 @@ def lista(request):
         "catalogo.html",
         {
             "categorias": categorias,
+            "tiene_sin_categoria": tiene_sin_categoria,
+            "categorias_con_productos": categorias_con_productos,
             "productos_sin_categoria": productos_sin_categoria,
+            "busqueda": "",
+            "categoria_slug": "",
+            "hay_filtros": False,
         },
     )
-
 
 def detalle_producto(request, pk):
     producto = get_object_or_404(
