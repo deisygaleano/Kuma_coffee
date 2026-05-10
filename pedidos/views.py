@@ -5,10 +5,12 @@ from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from catalogo.models import Producto
 from cuentas.models import Usuario
+from cuentas.auth_utils import es_admin
 from .models import LineaPedido, Pedido
 
 def _usuario_actual(request):
@@ -88,7 +90,7 @@ def carrito(request):
     pedido = _pedido_borrador(usuario)
     lineas = pedido.lineas.select_related("producto", "producto__categoria")
     _recalcular_totales(pedido)
-    whatsapp_url=_construir_url_whatsapp (lineas,pedido)
+    whatsapp_url=_construir_url_whatsapp (lineas,pedido,usuario)
     return render(
         request,
         "carrito.html",
@@ -122,7 +124,60 @@ def eliminar_linea(request, linea_id):
     _recalcular_totales(pedido)
     return redirect("pedidos:carrito")
 
-def _construir_url_whatsapp(lineas, pedido):
+@require_POST
+def confirmar_pedido(request):
+    if not request.session.get("usuario_id"):
+        messages.error(request, "Debes iniciar sesión para confirmar un pedido.")
+        return redirect("cuentas:login")
+
+    usuario = _usuario_actual(request)
+
+    if es_admin(usuario):
+        messages.error(request, "Los administradores no pueden realizar pedidos.")
+        return redirect("pedidos:carrito")
+    pedido = Pedido.objects.filter(usuario=usuario, estado="borrador").first()
+
+    if not pedido or not pedido.lineas.exists():
+        messages.error(request, "Tu carrito está vacío.")
+        return redirect("pedidos:carrito")
+
+    lineas = pedido.lineas.select_related("producto")
+    whatsapp_url = _construir_url_whatsapp(lineas, pedido, usuario)
+
+    pedido.estado = "confirmado"
+    pedido.fecha_pedido = timezone.now()
+    pedido.save(update_fields=["estado", "fecha_pedido"])
+
+    messages.success(request, f"¡Pedido #{pedido.id_pedido} confirmado! Puedes verlo en tu historial.")
+
+    if whatsapp_url:
+        request.session["whatsapp_pendiente"] = whatsapp_url
+
+    return redirect("pedidos:historial")
+
+
+def historial_pedidos(request):
+    if not request.session.get("usuario_id"):
+        messages.error(request, "Debes iniciar sesión para ver tu historial de pedidos.")
+        return redirect("cuentas:login")
+
+    usuario = _usuario_actual(request)
+    pedidos = (
+        Pedido.objects
+        .filter(usuario=usuario)
+        .exclude(estado="borrador")
+        .prefetch_related("lineas__producto", "lineas__producto__categoria")
+        .order_by("-fecha_pedido")
+    )
+    whatsapp_pendiente = request.session.pop("whatsapp_pendiente", None)
+    return render(request, "historial.html", {
+        "pedidos": pedidos,
+        "usuario": usuario,
+        "whatsapp_pendiente": whatsapp_pendiente,
+    })
+
+
+def _construir_url_whatsapp(lineas, pedido, usuario=None):
     numero = getattr(settings, "KUMA_WHATSAPP", "")
     if not numero or not lineas:
         return ""
@@ -132,8 +187,20 @@ def _construir_url_whatsapp(lineas, pedido):
         f"  • {l.producto.nombre} x{l.cantidad} — ${l.subtotal:,}"
         for l in lineas_lista
     )
+
+    cliente_info = ""
+    if usuario and usuario.correo != "invitado@kuma.local":
+        nombre_completo = f"{usuario.nombre} {usuario.apellido or ''}".strip()
+        cliente_info = f"👤 *Cliente:* {nombre_completo}\n"
+        if usuario.correo:
+            cliente_info += f"📧 *Correo:* {usuario.correo}\n"
+        if usuario.telefono:
+            cliente_info += f"📞 *Teléfono:* {usuario.telefono}\n"
+        cliente_info += "\n"
+
     mensaje = (
         "✅ *Kuma Coffee — Nuevo Pedido*\n\n"
+        f"{cliente_info}"
         f"{items}\n\n"
         f"*Total: ${pedido.valor:,}*\n\n"
         "Por favor confirmar disponibilidad. ¡Gracias!"

@@ -40,8 +40,18 @@
             {% for linea in lineas %}
               <tr class="carrito-fila">
                 <td class="carrito-fila__producto">
-                  <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
-                  <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
+                 <div class="catalogo-card__media carrito-fila__media">
+                    <img
+                      src="{% if linea.producto.imagen %}{% get_media_prefix %}{{ linea.producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                      alt="{{ linea.producto.nombre }}"
+                      class="catalogo-card__img"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div>
+                    <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
+                    <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
+                  </div>
                 </td>
                 <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
                 <td class="carrito-fila__qty">
@@ -87,16 +97,15 @@
       </div>
       <div class="carrito-estatico-acciones">
         <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Agregar más productos</a>
-        {% if whatsapp_url %}
-          <a
-            class="btn btn-whatsapp"
-            href="{{ whatsapp_url }}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fa-brands fa-whatsapp"></i>
-            Hacer pedido
-          </a>
+        {% if lineas and not usuario_es_admin %}
+        <a class="btn btn-ghost" href="{% url 'pedidos:historial' %}">Mis pedidos</a>
+          <form method="post" action="{% url 'pedidos:confirmar' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-whatsapp">
+              <i class="fa-brands fa-whatsapp"></i>
+              Confirmar y enviar por WhatsApp
+            </button>
+          </form>
         {% endif %}
       </div>
     </div>

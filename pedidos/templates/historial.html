@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Pedidos — Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  {% include 'includes/navbar.html' %}
+
+  <main class="catalogo-pagina ">
+    <div class="catalogo-contenedor">
+      <header class="catalogo-encabezado">
+        <h1 class="catalogo-titulo">Mis Pedidos</h1>
+        <p class="catalogo-subtitulo">Historial de pedidos de {{ usuario.nombre }} {{ usuario.apellido }}</p>
+      </header>
+
+      {% if messages %}
+        <div class="historial-mensajes">
+          {% for message in messages %}
+            <p class="mensaje mensaje--{{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if pedidos %}
+        <div class="historial-lista">
+          {% for pedido in pedidos %}
+            <div class="historial-tarjeta">
+              <div class="historial-tarjeta__encabezado">
+                <div class="historial-tarjeta__info">
+                  <span class="historial-tarjeta__numero">Pedido #{{ pedido.id_pedido }}</span>
+                  {% if pedido.fecha_pedido %}
+                    <span class="historial-tarjeta__fecha">
+                      {{ pedido.fecha_pedido|date:"d/m/Y" }} a las {{ pedido.fecha_pedido|time:"H:i" }}
+                    </span>
+                  {% endif %}
+                </div>
+                <span class="historial-tarjeta__estado historial-tarjeta__estado--{{ pedido.estado }}">
+                  {{ pedido.estado|title }}
+                </span>
+              </div>
+
+              <table class="carrito-tabla historial-tabla">
+                <thead>
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio unitario</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for linea in pedido.lineas.all %}
+                    <tr class="carrito-fila">
+                      <td class="carrito-fila__producto">
+                        <div class="catalogo-card__media carrito-fila__media">
+                          <img
+                            src="{% if linea.producto.imagen %}{% get_media_prefix %}{{ linea.producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                            alt="{{ linea.producto.nombre }}"
+                            class="catalogo-card__img"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div>
+                          <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
+                          <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
+                        </div>
+                      </td>
+                      <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
+                      <td class="carrito-fila__qty">{{ linea.cantidad }}</td>
+                      <td class="carrito-fila__sub">${{ linea.subtotal }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <div class="historial-tarjeta__pie">
+                <div class="carrito-total">
+                  <span class="carrito-total__label">Total del pedido</span>
+                  <span class="carrito-total__valor">${{ pedido.valor }}</span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="historial-vacio">
+          <p class="historial-vacio__texto">Aún no tienes pedidos confirmados.</p>
+          <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Ver catálogo</a>
+        </div>
+      {% endif %}
+
+      <div class="carrito-estatico-acciones" style="margin-top: 2rem;">
+        <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Seguir comprando</a>
+        <a href="{% url 'pedidos:carrito' %}" class="btn btn-ghost">Ver carrito</a>
+      </div>
+    </div>
+  </main>
+
+  {% include 'includes/footer.html' %}
+  <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  {% if whatsapp_pendiente %}
+  <script>
+    window.open("{{ whatsapp_pendiente }}", "_blank", "noopener,noreferrer");
+  </script>
+  {% endif %}
+</body>
+
+</html>

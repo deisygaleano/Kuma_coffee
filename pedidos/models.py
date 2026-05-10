@@ -8,6 +8,7 @@ class Pedido(models.Model):
     cantidad = models.IntegerField(default=0)
     valor = models.IntegerField(default=0)
     estado = models.CharField(max_length=20, default="borrador")
+    fecha_pedido= models.DateTimeField(null=True, blank=True)
     usuario = models.ForeignKey(
         Usuario,
         models.CASCADE,
