@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sobre Nosotros — Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+
+  {% include 'includes/navbar.html' %}
+
+  <!-- ── Hero ── -->
+  <section class="sn-hero">
+    <div class="sn-hero__overlay"></div>
+    <div class="sn-hero__contenido">
+      <span class="inicio__badge">Nuestra historia</span>
+      <h1 class="sn-hero__titulo">Del campo colombiano<br>a tu taza</h1>
+      <p class="sn-hero__subtitulo">
+        Kuma Coffee nació para acortar la distancia entre el caficultor y el consumidor,
+        devolviendo dignidad al trabajo de quienes cultivan uno de los mejores cafés del mundo.
+      </p>
+    </div>
+    <img
+      src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&auto=format&fit=crop&q=80"
+      alt="Caficultor colombiano en su finca"
+      class="sn-hero__img"
+    />
+  </section>
+
+  <!-- ── Misión ── -->
+  <section class="sn-seccion sn-mision">
+    <div class="sn-contenedor sn-mision__grid">
+      <div class="sn-mision__texto">
+        <h2 class="sn-titulo-seccion">¿Quiénes somos?</h2>
+        <p class="sn-parrafo">
+          Somos una plataforma de comercio electrónico colombiana fundada en 2022 con una misión
+          clara: <strong>conectar directamente al pequeño caficultor con el consumidor final</strong>,
+          eliminando intermediarios que históricamente han reducido los ingresos de los agricultores.
+        </p>
+        <p class="sn-parrafo">
+          Nuestro nombre, <em>Kuma</em>, hace referencia al oso de anteojos (Tremarctos ornatus),
+          guardián natural de los ecosistemas cafeteros de los Andes colombianos. Así como él
+          protege la biodiversidad de la montaña, nosotros protegemos el sustento de las familias
+          que cultivan café de especialidad en altitudes superiores a los 1 500 metros sobre el nivel del mar.
+        </p>
+        <p class="sn-parrafo">
+          Trabajamos con más de <strong>120 familias caficultoras</strong> en los departamentos de
+          Huila, Nariño, Cauca y Antioquia, garantizando un precio justo que supera en al menos
+          30 % el precio convencional del mercado.
+        </p>
+      </div>
+      <div class="sn-mision__imagen-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=700&auto=format&fit=crop&q=80"
+          alt="Caficultor revisando granos de café"
+          class="sn-mision__imagen"
+        />
+        <div class="sn-mision__badge-flotante">
+          <span class="sn-mision__badge-num">120+</span>
+          <span class="sn-mision__badge-txt">familias caficultoras aliadas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Cifras clave ── -->
+  <section class="sn-cifras">
+    <div class="sn-contenedor sn-cifras__grid">
+      <div class="sn-cifra">
+        <span class="sn-cifra__num">120+</span>
+        <span class="sn-cifra__label">Familias caficultoras</span>
+      </div>
+      <div class="sn-cifra">
+        <span class="sn-cifra__num">4</span>
+        <span class="sn-cifra__label">Departamentos de origen</span>
+      </div>
+      <div class="sn-cifra">
+        <span class="sn-cifra__num">+30%</span>
+        <span class="sn-cifra__label">Precio justo sobre el mercado</span>
+      </div>
+      <div class="sn-cifra">
+        <span class="sn-cifra__num">1 500m</span>
+        <span class="sn-cifra__label">Altitud mínima de cultivo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Valores ── -->
+  <section class="sn-seccion">
+    <div class="sn-contenedor">
+      <h2 class="sn-titulo-seccion sn-titulo-seccion--centro">Nuestros valores</h2>
+      <p class="sn-subtitulo-seccion">Principios que guían cada decisión que tomamos</p>
+
+      <div class="sn-valores__grid">
+
+        <div class="sn-valor-card">
+          <div class="sn-valor-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 3v1m0 16v1M4.22 4.22l.71.71M18.36 18.36l.71.71M3 12H2m20 0h-1
+                M4.93 19.07l.71-.71M18.36 5.64l.71-.71M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7z" />
+            </svg>
+          </div>
+          <h3 class="sn-valor-card__titulo">Transparencia radical</h3>
+          <p class="sn-valor-card__texto">
+            Publicamos el precio pagado a cada productor en nuestra plataforma. El consumidor
+            sabe exactamente cuánto recibe el caficultor por cada kilogramo vendido.
+          </p>
+        </div>
+
+        <div class="sn-valor-card">
+          <div class="sn-valor-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87
+                m6 5.87v-4a4 4 0 1 0-8 0v4m4-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+            </svg>
+          </div>
+          <h3 class="sn-valor-card__titulo">Comercio justo</h3>
+          <p class="sn-valor-card__texto">
+            Negociamos contratos de largo plazo con los productores, ofreciendo estabilidad
+            económica y eliminando la incertidumbre del precio volátil del mercado internacional.
+          </p>
+        </div>
+
+        <div class="sn-valor-card">
+          <div class="sn-valor-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3.055 11H5a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2 2 2 0 0 1 2 2v2.945
+                M8 3.935V5.5A2.5 2.5 0 0 0 10.5 8h.5a2 2 0 0 1 2 2 2 2 0 1 0 4 0
+                2 2 0 0 1 2-2h1.064M15 20.488V18a2 2 0 0 1 2-2h3.064
+                M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+          </div>
+          <h3 class="sn-valor-card__titulo">Sostenibilidad ambiental</h3>
+          <p class="sn-valor-card__texto">
+            Solo trabajamos con fincas que practican agricultura sostenible: sombra biodiversa,
+            compostaje, manejo integrado de plagas y cero uso de agroquímicos prohibidos.
+          </p>
+        </div>
+
+        <div class="sn-valor-card">
+          <div class="sn-valor-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+          </div>
+          <h3 class="sn-valor-card__titulo">Calidad de especialidad</h3>
+          <p class="sn-valor-card__texto">
+            Todo nuestro café es catado y puntuado por Q-Graders certificados. Solo publicamos
+            lotes que superan los 82 puntos SCA, garantizando una experiencia sensorial excepcional.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Regiones de origen ── -->
+  <section class="sn-seccion sn-regiones">
+    <div class="sn-contenedor">
+      <h2 class="sn-titulo-seccion sn-titulo-seccion--centro">Regiones de origen</h2>
+      <p class="sn-subtitulo-seccion">Cada taza cuenta la historia de su terroir colombiano</p>
+
+      <div class="sn-regiones__grid">
+
+        <div class="sn-region-card">
+          <img
+            src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&auto=format&fit=crop&q=80"
+            alt="Montañas de Huila, Colombia"
+            class="sn-region-card__img"
+          />
+          <div class="sn-region-card__cuerpo">
+            <h3 class="sn-region-card__titulo">Huila</h3>
+            <p class="sn-region-card__texto">
+              El corazón cafetero de Colombia. Perfiles frutales brillantes con notas de maracuyá,
+              durazno y panela. Altitudes entre 1 600 y 2 100 m s. n. m.
+            </p>
+          </div>
+        </div>
+
+        <div class="sn-region-card">
+          <img
+            src="https://images.unsplash.com/photo-1599413987323-b2b8c0d7d9c8?w=600&auto=format&fit=crop&q=80"
+            alt="Paisaje de Nariño, Colombia"
+            class="sn-region-card__img"
+          />
+          <div class="sn-region-card__cuerpo">
+            <h3 class="sn-region-card__titulo">Nariño</h3>
+            <p class="sn-region-card__texto">
+              El café más alto de Colombia. Acidez brillante, cuerpo sedoso y notas florales
+              de jazmín y bergamota. Cultivado entre 2 000 y 2 300 m s. n. m.
+            </p>
+          </div>
+        </div>
+
+        <div class="sn-region-card">
+          <img
+            src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=600&auto=format&fit=crop&q=80"
+            alt="Verdes montañas del Cauca"
+            class="sn-region-card__img"
+          />
+          <div class="sn-region-card__cuerpo">
+            <h3 class="sn-region-card__titulo">Cauca</h3>
+            <p class="sn-region-card__texto">
+              Dulzura equilibrada con acidez cítrica y cuerpo medio. Notas de ciruela,
+              cacao y caramelo que deleitan tanto al experto como al aficionado.
+            </p>
+          </div>
+        </div>
+
+        <div class="sn-region-card">
+          <img
+            src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&auto=format&fit=crop&q=80"
+            alt="Finca cafetera en Antioquia"
+            class="sn-region-card__img"
+          />
+          <div class="sn-region-card__cuerpo">
+            <h3 class="sn-region-card__titulo">Antioquia</h3>
+            <p class="sn-region-card__texto">
+              Café de tradición centenaria. Cuerpo robusto, acidez balanceada y retrogusto
+              largo con toques de nuez, chocolate oscuro y miel de caña.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Proceso ── -->
+  <section class="sn-seccion sn-proceso">
+    <div class="sn-contenedor">
+      <h2 class="sn-titulo-seccion sn-titulo-seccion--centro">Cómo funciona</h2>
+      <p class="sn-subtitulo-seccion">De la finca a tu puerta en cuatro pasos</p>
+
+      <ol class="sn-pasos">
+        <li class="sn-paso">
+          <div class="sn-paso__num">01</div>
+          <div class="sn-paso__contenido">
+            <h3 class="sn-paso__titulo">Selección en campo</h3>
+            <p class="sn-paso__texto">
+              Nuestro equipo visita las fincas aliadas, evalúa prácticas agrícolas y realiza
+              una pre-cata para confirmar la calidad del lote antes de la cosecha.
+            </p>
+          </div>
+        </li>
+        <li class="sn-paso">
+          <div class="sn-paso__num">02</div>
+          <div class="sn-paso__contenido">
+            <h3 class="sn-paso__titulo">Procesado y beneficio</h3>
+            <p class="sn-paso__texto">
+              El productor procesa el café (lavado, natural o honey) según su tradición y el
+              perfil que mejor expresa su terroir, bajo nuestra asesoría técnica gratuita.
+            </p>
+          </div>
+        </li>
+        <li class="sn-paso">
+          <div class="sn-paso__num">03</div>
+          <div class="sn-paso__contenido">
+            <h3 class="sn-paso__titulo">Tostado artesanal</h3>
+            <p class="sn-paso__texto">
+              Tostamos en lotes pequeños en Bogotá, a las 24–72 horas después de que recibes
+              tu pedido, asegurando máxima frescura y preservación de los aromas.
+            </p>
+          </div>
+        </li>
+        <li class="sn-paso">
+          <div class="sn-paso__num">04</div>
+          <div class="sn-paso__contenido">
+            <h3 class="sn-paso__titulo">Entrega a domicilio</h3>
+            <p class="sn-paso__texto">
+              Despachamos a todo Colombia en empaques biodegradables con válvula desgasificadora,
+              para que el café llegue en su punto óptimo de consumo.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── CTA final ── -->
+  <section class="sn-cta">
+    <div class="sn-contenedor sn-cta__inner">
+      <h2 class="sn-cta__titulo">Prueba el café que transforma vidas</h2>
+      <p class="sn-cta__texto">
+        Cada compra que haces en Kuma Coffee financia directamente el bienestar de una familia
+        caficultora colombiana. Buen café con propósito real.
+      </p>
+      <div class="sn-cta__acciones">
+        <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Explorar catálogo</a>
+        <a href="{% url 'inicio' %}" class="btn btn-ghost">Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+  {% include 'includes/footer.html' %}
+
+  <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

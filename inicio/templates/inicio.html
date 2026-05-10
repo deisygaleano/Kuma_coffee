@@ -20,19 +20,117 @@
   {% include 'includes/navbar.html' %}
 
   
-  <main class="inicio">
-    <div>
-        <h1 class="inicio__titulo">Bienvenido a kuma  Coffee</h1>
-        <p>Kuma Coffee es más que una marca… es una historia que nace entre granos y paciencia.</p>
-         
+ <main class="inicio">
+    <div class="inicio__texto">
+      <span class="inicio__badge">Café de especialidad</span>
+      <h1 class="inicio__titulo">Bienvenido a Kuma Coffee</h1>
+      <p class="inicio__descripcion">Kuma Coffee es más que una marca… es una historia que nace entre granos y paciencia.</p>
+      <div class="inicio__acciones">
+        <a href="{% url 'catalogo:lista' %}" class="btn btn-primary">Ver catálogo</a>
+        <a href="{% url 'sobre_nosotros' %}" class="btn btn-ghost">Sobre nosotros</a>
+      </div>
     </div>
-    <div><img src="{% static 'imagenes/imagen_final.jpeg' %}" class="img_fondo"></div>
-    
+
+    <!-- Mini slider del proceso del café -->
+    <div class="hero-slider" id="heroSlider" aria-label="Proceso del café">
+      <ul class="hero-slider__pista" id="heroSliderPista">
+        <li class="hero-slider__item">
+          <img
+            src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&auto=format&fit=crop&q=80"
+            alt="Cultivo del café"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Cultivo</span>
+        </li>
+        <li class="hero-slider__item">
+          <img
+            src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?w=800&auto=format&fit=crop&q=80"
+            alt="Proceso y secado del café"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Proceso</span>
+        </li>
+        <li class="hero-slider__item">
+          <img
+            src="https://images.unsplash.com/photo-1559525839-8f275eef1163?w=800&auto=format&fit=crop&q=80"
+            alt="Tostado del café"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Tostado</span>
+        </li>
+        <li class="hero-slider__item">
+          <img
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop&q=80"
+            alt="Preparación del café"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Preparación</span>
+        </li>
+      </ul>
+      <!-- Puntos de navegación del hero -->
+      <div class="hero-slider__puntos" aria-hidden="true">
+        <button class="hero-slider__punto hero-slider__punto--activo" data-hidx="0" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="1" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="2" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="3" type="button"></button>
+      </div>
+    </div>
   </main>
+
+  {% if productos_destacados %}
+  <section class="slider-seccion">
+    <div class="slider-encabezado">
+      <h2 class="slider-titulo">Productos destacados</h2>
+      <a href="{% url 'catalogo:lista' %}" class="slider-ver-todos">Ver catálogo completo →</a>
+    </div>
+
+    <div class="slider-contenedor" aria-label="Productos destacados">
+      <button class="slider-btn slider-btn--prev" aria-label="Anterior" type="button">&#8249;</button>
+
+      <div class="slider-pista-wrap">
+        <ul class="slider-pista" id="sliderPista">
+          {% for producto in productos_destacados %}
+          <li class="slider-item">
+            <div class="slider-card">
+              <div class="slider-card__media">
+                <img
+                  src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
+                  alt="{{ producto.nombre }}"
+                  class="slider-card__img"
+                  loading="lazy"
+                />
+              </div>
+              <div class="slider-card__body">
+                <p class="slider-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
+                <h3 class="slider-card__nombre">{{ producto.nombre }}</h3>
+                <p class="slider-card__precio">${{ producto.precio }}</p>
+              </div>
+              <div class="slider-card__footer">
+                <a href="{% url 'catalogo:detalle' producto.id_producto %}" class="btn btn-primary slider-card__btn">
+                  Ver producto
+                </a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <button class="slider-btn slider-btn--next" aria-label="Siguiente" type="button">&#8250;</button>
+    </div>
+
+    <div class="slider-puntos" id="sliderPuntos" aria-hidden="true">
+      {% for producto in productos_destacados %}
+      <button class="slider-punto {% if forloop.first %}slider-punto--activo{% endif %}" data-idx="{{ forloop.counter0 }}" type="button" aria-label="Ir a producto {{ forloop.counter }}"></button>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
   {% include 'includes/footer.html' %}
 
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/inicio.js' %}"></script>
 </body>
 
 </html>

@@ -80,7 +80,7 @@ def agregar_al_carrito(request):
         linea.save(update_fields=["cantidad", "precio_unitario"])
 
     _recalcular_totales(pedido)
-    return redirect(request.POST.get("next") or "pedidos:carrito")
+    return redirect("pedidos:carrito")
 
 
 def carrito(request):
