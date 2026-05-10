@@ -6,8 +6,10 @@ class Usuario(models.Model):
     apellido = models.CharField(max_length=32, blank=True, null=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
     correo = models.EmailField(max_length=32)
-    password = models.CharField(max_length=255, db_column="contraseña")
+    password = models.CharField(max_length=255, db_column="contraseña",blank=True, null=True)
     rol = models.CharField(max_length=20, default="cliente")
+    google_id= models.CharField(max_length=128, blank=True, null=True,unique=True)
+
 
     class Meta:
         db_table = "usuario"

@@ -135,3 +135,40 @@ class RestablecerPasswordForm(AuthBaseForm):
                 self.add_error("password", error)
 
         return cleaned_data
+
+class CambiarPasswordForm(AuthBaseForm):
+    password_actual = forms.CharField(
+        label="Contrasena actual",
+        max_length=128,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
+    )
+    password_nueva = forms.CharField(
+        label="Nueva contrasena",
+        max_length=128,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
+    password_nueva_confirm = forms.CharField(
+        label="Confirmar nueva contrasena",
+        max_length=128,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._aplicar_clase()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password_nueva = cleaned_data.get("password_nueva")
+        password_nueva_confirm = cleaned_data.get("password_nueva_confirm")
+
+        if password_nueva and password_nueva_confirm and password_nueva != password_nueva_confirm:
+            self.add_error("password_nueva_confirm", "Las contrasenas no coinciden.")
+
+        if password_nueva:
+            try:
+                validate_password(password_nueva)
+            except ValidationError as error:
+                self.add_error("password_nueva", error)
+
+        return cleaned_data

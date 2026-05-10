@@ -97,8 +97,10 @@
       </div>
       <div class="carrito-estatico-acciones">
         <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Agregar más productos</a>
-        {% if lineas and not usuario_es_admin %}
+         {% if not usuario_es_admin %}
         <a class="btn btn-ghost" href="{% url 'pedidos:historial' %}">Mis pedidos</a>
+          {% endif %}
+        {% if lineas and not usuario_es_admin %}
           <form method="post" action="{% url 'pedidos:confirmar' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-whatsapp">

@@ -130,3 +130,20 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 # Número de WhatsApp del negocio (formato internacional sin + ni espacios)
 KUMA_WHATSAPP = "573137093748"
+
+GOOGLE_OAUTH_CLIENT_ID = "817212507228-0teg21qvcr2km36nfkfch8if42hb0on3.apps.googleusercontent.com"
+GOOGLE_OAUTH_CLIENT_SECRET = "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"
+# ── Google OAuth 2.0 ──────────────────────────────────────────────────────────
+# Obtén estas credenciales en: https://console.cloud.google.com/apis/credentials
+# En producción usa variables de entorno en lugar de hardcodear los valores.
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", GOOGLE_OAUTH_CLIENT_ID)
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", GOOGLE_OAUTH_CLIENT_SECRET)
+GOOGLE_REDIRECT_URI = os.environ.get(
+    "GOOGLE_REDIRECT_URI",
+    "http://localhost:8000/cuentas/google/callback",
+)
+
+# Permite OAuth sobre HTTP en desarrollo (no usar en producción)
+if DEBUG:
+    os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
+    
