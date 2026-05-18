@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inventario — Kuma Coffee</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="stylesheet" href="{% static 'css/lista_productos.css' %}" />
   <link rel="stylesheet" href="{% static 'css/inventario.css' %}?v=20260507" />
@@ -27,10 +27,10 @@
         <p class="inv-subtitle">Controla existencias, alerta de stock bajo y actualiza unidades desde una sola tabla.</p>
       </div>
       <div class="gp-actions">
-        <a href="{% url 'catalogo:lista_productos' %}" class="btn-secundario">
+        <a href="{% url 'catalogo:lista' %}" class="btn-secundario">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
                viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-          Productos
+          Catalogo
         </a>
         <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -108,11 +108,14 @@
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Categoria</th>
-            <th>Estado</th>
-            <th>Stock actual</th>
-            <th>Stock minimo</th>
-            <th>Actualizado</th>
+            <th style="text-align:center">Categoria</th>
+            <th style="text-align:center">Estado</th>
+            <th style="text-align:center">Stock</th>
+            <th style="text-align:center">Stock minimo</th>
+            <th style="text-align:center" class="col-extras">Altura</th>
+            <th style="text-align:center" class="col-extras">Tostion</th>
+            <th class="col-desc">Descripcion</th>
+            <th style="text-align:center">Actualizado</th>
             <th class="col-acciones">Accion</th>
           </tr>
         </thead>
@@ -128,7 +131,7 @@
                 {% endif %}
                 <div>
                   <strong>{{ p.nombre }}</strong>
-                  <span>${{ p.precio|floatformat:"0" }}</span>
+                  <span>${{ p.precio|peso_co }}</span>
                 </div>
               </div>
             </td>
@@ -146,19 +149,16 @@
                 {% endif %}
               </span>
             </td>
-              <td>
-                <label class="inv-campo-numero">
-                  <span>Actual</span>
-                  <input form="inventario-form-{{ p.id_producto }}" type="number" name="stock" min="0" value="{{ p.stock_actual }}" />
-                </label>
+              <td class="td-stock" style="text-align:center">{{ p.stock_actual }}</td>
+              <td class="td-stock" style="text-align:center">{{ p.stock_minimo_actual }}</td>
+              <td class="td-extras col-extras" style="text-align:center">
+                {% if p.altura %}<span class="badge-extra">{{ p.altura.metros }}</span>{% else %}—{% endif %}
               </td>
-              <td>
-                <label class="inv-campo-numero">
-                  <span>Minimo</span>
-                  <input form="inventario-form-{{ p.id_producto }}" type="number" name="stock_minimo" min="0" value="{{ p.stock_minimo_actual }}" />
-                </label>
+              <td class="td-extras col-extras" style="text-align:center">
+                {% if p.tostion %}<span class="badge-extra">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
               </td>
-              <td class="inv-fecha">
+              <td class="td-desc col-desc" title="{{ p.descripcion }}">{{ p.descripcion|default:"—" }}</td>
+              <td class="inv-fecha" style="text-align:center">
                 {% if p.inventario %}
                   {{ p.inventario.fecha_actualizacion|date:"d/m/Y H:i" }}
                 {% else %}
@@ -166,11 +166,19 @@
                 {% endif %}
               </td>
               <td class="col-acciones">
-                <form id="inventario-form-{{ p.id_producto }}" class="inv-row-form" method="post">
-                  {% csrf_token %}
-                  <input type="hidden" name="producto_id" value="{{ p.id_producto }}" />
-                  <button type="submit" class="btn-guardar-mini">Guardar</button>
-                </form>
+                <a href="{% url 'catalogo:editar_producto' p.id_producto %}" class="btn-editar" title="Editar">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                       viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </a>
+                <button type="button" class="btn-eliminar" title="Eliminar"
+                        data-eliminar-producto
+                        data-pk="{{ p.id_producto }}"
+                        data-nombre="{{ p.nombre }}">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                       viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                </button>
               </td>
           </tr>
           {% endfor %}
@@ -187,8 +195,25 @@
     </div>
   </main>
 
+  <div class="modal-overlay" id="modalEliminar">
+    <div class="modal-box">
+      <h3>¿Eliminar producto?</h3>
+      <p id="modalTexto">Esta accion no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="modal-cancel" type="button" data-cerrar-modal>Cancelar</button>
+        <form id="formEliminar" method="post" class="modal-form">
+          {% csrf_token %}
+          <button type="submit" class="btn-eliminar btn-eliminar-confirmar">
+            Si, eliminar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   {% include 'includes/footer.html' %}
-  
+  <script src="{% static 'js/lista_productos.js' %}" defer></script>
+
 </body>
 
 </html>

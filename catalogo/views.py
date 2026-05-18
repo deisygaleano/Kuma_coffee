@@ -24,7 +24,7 @@ def lista(request):
 
     if hay_filtros:
         productos = Producto.objects.select_related(
-            "categoria", "altura", "tostion"
+            "categoria", "altura", "tostion", "inventario"
         ).order_by("nombre")
 
         if busqueda:
@@ -68,10 +68,11 @@ def lista(request):
         "productos",
         "productos__altura",
         "productos__tostion",
+        "productos__inventario",
     ).order_by("nombre")
     productos_sin_categoria = (
         Producto.objects.filter(categoria__isnull=True)
-        .select_related("altura", "tostion")
+        .select_related("altura", "tostion", "inventario")
     )
     return render(
         request,
@@ -87,9 +88,10 @@ def lista(request):
         },
     )
 
+
 def detalle_producto(request, pk):
     producto = get_object_or_404(
-        Producto.objects.select_related("categoria", "altura", "tostion"),
+        Producto.objects.select_related("categoria", "altura", "tostion", "inventario"),
         pk=pk,
     )
     return render(request, "detalle_producto.html", {"producto": producto})
@@ -97,15 +99,7 @@ def detalle_producto(request, pk):
 
 
 def lista_productos(request):
-    if not _es_admin(request):
-        return redirect("cuentas:login")
-    productos = Producto.objects.select_related(
-        "categoria", "altura", "tostion", "inventario"
-    ).order_by("nombre")
-    return render(request, "lista_productos.html", {
-        "productos": productos,
-        
-    })
+    return redirect("catalogo:inventario_productos")
 
 
 def inventario_productos(request):
@@ -132,7 +126,7 @@ def inventario_productos(request):
         return redirect("catalogo:inventario_productos")
 
     _asegurar_inventario_productos()
-    productos = Producto.objects.select_related("categoria", "inventario").order_by("nombre")
+    productos = Producto.objects.select_related("categoria", "inventario", "altura", "tostion").order_by("nombre")
     busqueda = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "").strip()
 
@@ -179,7 +173,7 @@ def crear_producto(request):
             producto.save()
             _guardar_inventario_desde_form(producto, form)
             messages.success(request, f'Producto "{producto.nombre}" creado correctamente.')
-            return redirect("catalogo:lista_productos")
+            return redirect("catalogo:inventario_productos")
     else:
         form = ProductoForm()
     return render(request, "admin_producto_form.html", {"form": form, "accion": "Agregar"})
@@ -199,7 +193,7 @@ def editar_producto(request, pk):
             prod.save()
             _guardar_inventario_desde_form(prod, form)
             messages.success(request, f'Producto "{prod.nombre}" actualizado correctamente.')
-            return redirect("catalogo:lista_productos")
+            return redirect("catalogo:inventario_productos")
     else:
         form = ProductoForm(instance=producto)
     return render(request, "admin_producto_form.html", {"form": form, "accion": "Editar", "producto": producto})
@@ -213,7 +207,7 @@ def eliminar_producto(request, pk):
         nombre = producto.nombre
         producto.delete()
         messages.success(request, f'Producto "{nombre}" eliminado.')
-        return redirect("catalogo:lista_productos")
+        return redirect("catalogo:inventario_productos")
     return render(request, "confirmar_eliminar.html", {"producto": producto})
 
 def _guardar_imagen(archivo):
@@ -257,3 +251,4 @@ def _es_admin(request):
         return True
     messages.error(request, "Debes iniciar sesion como administrador para acceder a esta seccion.")
     return False
+

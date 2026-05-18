@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kuma Coffee - Inicio</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css'  %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,7 +36,7 @@
       <ul class="hero-slider__pista" id="heroSliderPista">
         <li class="hero-slider__item">
           <img
-            src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&auto=format&fit=crop&q=80"
+            src="{% static 'imagenes/cultivo.jpeg' %}"
             alt="Cultivo del café"
             class="hero-slider__img"
           />
@@ -44,35 +44,63 @@
         </li>
         <li class="hero-slider__item">
           <img
-            src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?w=800&auto=format&fit=crop&q=80"
-            alt="Proceso y secado del café"
+           src="{% static 'imagenes/lavado.jpeg' %}"
+            alt="lavado del cafe"
             class="hero-slider__img"
           />
-          <span class="hero-slider__etiqueta">Proceso</span>
+          <span class="hero-slider__etiqueta">Lavado</span>
         </li>
         <li class="hero-slider__item">
           <img
-            src="https://images.unsplash.com/photo-1559525839-8f275eef1163?w=800&auto=format&fit=crop&q=80"
-            alt="Tostado del café"
+            src="{% static 'imagenes/secado.jpeg' %}"
+            alt="Secado del cafe"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Secado</span>
+        </li>
+        <li class="hero-slider__item">
+          <img
+            src="{% static 'imagenes/almendra.jpeg' %}"
+            alt="Almendra de cafe"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Almendra</span>
+        </li>
+        <li class="hero-slider__item">
+          <img
+            src="{% static 'imagenes/tostado.png' %}"
+            alt="Cafe tostado"
             class="hero-slider__img"
           />
           <span class="hero-slider__etiqueta">Tostado</span>
         </li>
-        <li class="hero-slider__item">
+         <li class="hero-slider__item">
           <img
-            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop&q=80"
+            src="{% static 'imagenes/presentaciones.jpeg' %}"
+            alt="PresentacionesSSS"
+            class="hero-slider__img"
+          />
+          <span class="hero-slider__etiqueta">Variedad de presentaciones</span>
+        </li>
+         <li class="hero-slider__item">
+          <img
+            src="{% static 'imagenes/especial.jpg' %}"
             alt="Preparación del café"
             class="hero-slider__img"
           />
           <span class="hero-slider__etiqueta">Preparación</span>
         </li>
       </ul>
+      
       <!-- Puntos de navegación del hero -->
       <div class="hero-slider__puntos" aria-hidden="true">
         <button class="hero-slider__punto hero-slider__punto--activo" data-hidx="0" type="button"></button>
         <button class="hero-slider__punto" data-hidx="1" type="button"></button>
         <button class="hero-slider__punto" data-hidx="2" type="button"></button>
         <button class="hero-slider__punto" data-hidx="3" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="4" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="5" type="button"></button>
+        <button class="hero-slider__punto" data-hidx="6" type="button"></button>
       </div>
     </div>
   </main>
@@ -103,7 +131,12 @@
               <div class="slider-card__body">
                 <p class="slider-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
                 <h3 class="slider-card__nombre">{{ producto.nombre }}</h3>
-                <p class="slider-card__precio">${{ producto.precio }}</p>
+                <p class="slider-card__precio">${{ producto.precio|peso_co }}</p>
+                <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
+                  {% if producto.estado_inventario == "disponible" %}Disponible
+                  {% elif producto.estado_inventario == "bajo" %}Stock bajo
+                  {% else %}Agotado{% endif %}
+                </span>
               </div>
               <div class="slider-card__footer">
                 <a href="{% url 'catalogo:detalle' producto.id_producto %}" class="btn btn-primary slider-card__btn">

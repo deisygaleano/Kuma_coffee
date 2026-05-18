@@ -22,7 +22,7 @@ def inicio(request):
     if not qs.exists():
         qs = (
             Producto.objects
-            .select_related("categoria")
+            .select_related("categoria",'inventario')
             .order_by("nombre")
         )
     return render(request, "inicio.html", {"productos_destacados": qs})

@@ -31,10 +31,14 @@
     <button type="button" class="cabecera__usuario-trigger" id="usuario-menu-trigger" aria-expanded="false"
       aria-controls="usuario-menu-modal" aria-haspopup="dialog">
       <span class="avatar-usuario" aria-hidden="true">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="8" r="4" />
-          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-        </svg>
+        {% if usuario_actual %}
+          {{ usuario_iniciales }}
+        {% else %}
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+          </svg>
+        {% endif %}
       </span>
       {% if usuario_actual %}
         <span class="cabecera__usuario-nombre">{{ usuario_actual.nombre }}</span>

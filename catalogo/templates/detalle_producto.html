@@ -38,6 +38,11 @@
           <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
           <h1 class="producto-detalle__titulo">{{ producto.nombre }}</h1>
           <p class="producto-detalle__precio">${{ producto.precio }}</p>
+           <span class="stock-badge stock-badge--{{ producto.estado_inventario }} stock-badge--lg">
+            {% if producto.estado_inventario == "disponible" %}Disponible
+            {% elif producto.estado_inventario == "bajo" %}Stock bajo
+            {% else %}Agotado{% endif %}
+          </span>
           {% if producto.altura or producto.tostion %}
           <p class="catalogo-card__cat producto-detalle__extras">
             {% if producto.altura %}<span>Altura: {{ producto.altura.metros }}</span>{% endif %}

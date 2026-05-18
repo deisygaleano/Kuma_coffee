@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo — Kuma Coffee</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -106,7 +106,12 @@
                       <div class="catalogo-card__body">
                         <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
                         <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
-                        <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                        <p class="catalogo-card__precio">${{ producto.precio|peso_co }}</p>
+                        <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
+                          {% if producto.estado_inventario == "disponible" %}Disponible
+                          {% elif producto.estado_inventario == "bajo" %}Stock bajo
+                          {% else %}Agotado{% endif %}
+                        </span>
                       </div>
                     </a>
                   </li>
@@ -140,6 +145,11 @@
                           <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
                           <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
                           <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                           <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
+                            {% if producto.estado_inventario == "disponible" %}Disponible
+                            {% elif producto.estado_inventario == "bajo" %}Stock bajo
+                            {% else %}Agotado{% endif %}
+                          </span>
                         </div>
                       </a>
                     </li>
@@ -168,6 +178,11 @@
                         <p class="catalogo-card__cat">Sin categoría</p>
                         <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
                         <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                         <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
+                            {% if producto.estado_inventario == "disponible" %}Disponible
+                            {% elif producto.estado_inventario == "bajo" %}Stock bajo
+                            {% else %}Agotado{% endif %}
+                          </span>
                       </div>
                     </a>
                   </li>

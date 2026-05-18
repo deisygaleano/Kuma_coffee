@@ -280,7 +280,7 @@
 
 .inventario-body .inv-table {
   width: 100%;
-  min-width: 1060px;
+  min-width: 0;
   border-collapse: collapse;
 }
 
@@ -289,18 +289,18 @@
 }
 
 .inventario-body .inv-table th {
-  padding: 1rem 1.15rem;
+  padding: .65rem .75rem;
   color: var(--inv-gold);
-  font-size: .74rem;
+  font-size: .72rem;
   font-weight: 900;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .inventario-body .inv-table td {
-  padding: 1rem 1.15rem;
+  padding: .65rem .75rem;
   border-top: 1px solid rgba(201, 162, 39, .16);
   color: var(--inv-text);
   vertical-align: middle;
@@ -321,16 +321,16 @@
 
 .inventario-body .inv-producto {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: center;
-  gap: .85rem;
-  min-width: 260px;
+  gap: .6rem;
+  min-width: 180px;
 }
 
 .inventario-body .inv-producto img,
 .inventario-body .inv-sin-img {
-  width: 58px;
-  height: 58px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(201, 162, 39, .28);
   border-radius: 8px;
   object-fit: cover;
@@ -349,10 +349,10 @@
 
 .inventario-body .inv-producto strong {
   display: block;
-  max-width: 230px;
+  max-width: 160px;
   overflow: hidden;
   color: #fff;
-  font-size: .98rem;
+  font-size: .88rem;
   font-weight: 900;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -375,15 +375,25 @@
   font-weight: 700;
 }
 
+.inventario-body .td-desc {
+  max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--inv-muted);
+  font-size: .84rem;
+  cursor: help;
+}
+
 .inventario-body .inv-estado {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 104px;
-  min-height: 32px;
-  padding: 0 .75rem;
+  min-width: 72px;
+  min-height: 26px;
+  padding: 0 .55rem;
   border-radius: 999px;
-  font-size: .76rem;
+  font-size: .7rem;
   font-weight: 900;
   white-space: nowrap;
 }
@@ -453,6 +463,45 @@
 .inventario-body .col-acciones {
   text-align: center;
   white-space: nowrap;
+}
+
+.inventario-body .btn-editar,
+.inventario-body .btn-eliminar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s, transform .1s;
+  vertical-align: middle;
+}
+
+.inventario-body .btn-editar {
+  background: var(--inv-gold);
+  color: #101010;
+  margin-right: .35rem;
+}
+
+.inventario-body .btn-editar:hover {
+  background: var(--inv-gold-2);
+  transform: translateY(-1px);
+}
+
+.inventario-body .btn-eliminar {
+  background: transparent;
+  color: var(--inv-red);
+  border: 1px solid var(--inv-red);
+}
+
+.inventario-body .btn-eliminar:hover {
+  background: var(--inv-red);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .inventario-body .gp-empty {

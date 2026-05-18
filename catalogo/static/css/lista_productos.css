@@ -1,4 +1,4 @@
-    :root {
+        :root {
       --bg-panel:   #1a1a1a;
       --bg-row:     #222222;
       --bg-row-alt: #1e1e1e;
@@ -471,7 +471,7 @@
     }
 
     .inv-table {
-      min-width: 980px;
+      min-width: 0;
     }
 
     .inv-table thead th {
