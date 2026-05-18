@@ -7,6 +7,31 @@ from django.core.exceptions import ValidationError
 from .models import Usuario
 
 
+class FotoUsuarioForm(forms.Form):
+    foto = forms.FileField(
+        label="Foto de perfil",
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                "accept": "image/jpeg,image/png,image/webp",
+                "class": "usuario-modal__file-input",
+            }
+        ),
+    )
+
+    def clean_foto(self):
+        foto = self.cleaned_data["foto"]
+        tipos_permitidos = {"image/jpeg", "image/png", "image/webp"}
+
+        if foto.content_type not in tipos_permitidos:
+            raise forms.ValidationError("Sube una imagen JPG, PNG o WEBP.")
+
+        if foto.size > 2 * 1024 * 1024:
+            raise forms.ValidationError("La imagen no debe superar 2 MB.")
+
+        return foto
+
+
 class AuthBaseForm(forms.Form):
     def _aplicar_clase(self):
         for field in self.fields.values():

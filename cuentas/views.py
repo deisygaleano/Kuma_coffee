@@ -13,12 +13,24 @@ from django.views.decorators.http import require_POST
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 
-from .forms import CambiarPasswordForm, LoginForm, RegistroForm, RestablecerPasswordForm
+from .forms import CambiarPasswordForm, FotoUsuarioForm, LoginForm, RegistroForm, RestablecerPasswordForm
 from .models import Usuario
 
 _GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/v2/auth"
 _GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 _GOOGLE_SCOPES = "openid email profile"
+
+
+def _redirect_seguro(request):
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or ""
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+    return redirect("catalogo:lista")
+
+
+def _eliminar_archivo_foto(usuario):
+    if usuario.foto:
+        usuario.foto.delete(save=False)
 
 
 def _pkce_pair():
@@ -102,6 +114,38 @@ def cambiar_password(request):
             return redirect("catalogo:lista")
 
     return render(request, "cambiar_password.html", {"form": form})
+
+
+@require_POST
+def actualizar_foto(request):
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
+        messages.error(request, "Debes iniciar sesion para actualizar tu foto.")
+        return redirect("cuentas:login")
+
+    usuario = Usuario.objects.filter(pk=usuario_id).first()
+    if not usuario:
+        request.session.pop("usuario_id", None)
+        messages.error(request, "La sesion no es valida. Inicia sesion de nuevo.")
+        return redirect("cuentas:login")
+
+    if request.POST.get("accion") == "eliminar":
+        _eliminar_archivo_foto(usuario)
+        usuario.foto = None
+        usuario.save(update_fields=["foto"])
+        messages.success(request, "Foto de perfil eliminada.")
+        return _redirect_seguro(request)
+
+    form = FotoUsuarioForm(request.POST, request.FILES)
+    if form.is_valid():
+        _eliminar_archivo_foto(usuario)
+        usuario.foto = form.cleaned_data["foto"]
+        usuario.save(update_fields=["foto"])
+        messages.success(request, "Foto de perfil actualizada.")
+    else:
+        messages.error(request, form.errors.get("foto", ["No se pudo actualizar la foto."])[0])
+
+    return _redirect_seguro(request)
 
 
 @require_POST

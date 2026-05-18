@@ -9,6 +9,7 @@ urlpatterns = [
     path('restablecer', views.restablecer, name="restablecer"),
     path('restablcer', views.restablecer, name="restablecer_legacy"),
     path('cambiar-password', views.cambiar_password, name="cambiar_password"),
+    path('actualizar-foto', views.actualizar_foto, name="actualizar_foto"),
     path('google/login', views.google_login, name="google_login"),
     path('google/callback', views.google_callback, name="google_callback"),   
 ]

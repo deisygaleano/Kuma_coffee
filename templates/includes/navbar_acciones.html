@@ -31,7 +31,9 @@
     <button type="button" class="cabecera__usuario-trigger" id="usuario-menu-trigger" aria-expanded="false"
       aria-controls="usuario-menu-modal" aria-haspopup="dialog">
       <span class="avatar-usuario" aria-hidden="true">
-        {% if usuario_actual %}
+        {% if usuario_actual and usuario_actual.foto %}
+          <img src="{{ usuario_actual.foto.url }}" alt="" class="avatar-usuario__img" />
+        {% elif usuario_actual %}
           {{ usuario_iniciales }}
         {% else %}
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,6 +56,32 @@
         </button>
         {% if usuario_actual %}
           <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Hola, {{ usuario_actual.nombre }}</h2>
+          <div class="usuario-modal__foto">
+            <div class="usuario-modal__avatar" aria-hidden="true">
+              {% if usuario_actual.foto %}
+                <img src="{{ usuario_actual.foto.url }}" alt="" class="usuario-modal__avatar-img" />
+              {% else %}
+                {{ usuario_iniciales }}
+              {% endif %}
+            </div>
+            <form method="post" action="{% url 'cuentas:actualizar_foto' %}" enctype="multipart/form-data" class="usuario-modal__foto-form">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+              <label class="btn btn-ghost usuario-modal__foto-label" for="usuario-foto-input">
+                {% if usuario_actual.foto %}Cambiar foto{% else %}Agregar foto{% endif %}
+              </label>
+              <input id="usuario-foto-input" class="usuario-modal__file-input" type="file" name="foto" accept="image/jpeg,image/png,image/webp" required />
+              <button type="submit" class="btn btn-primary usuario-modal__foto-btn">Guardar foto</button>
+            </form>
+            {% if usuario_actual.foto %}
+              <form method="post" action="{% url 'cuentas:actualizar_foto' %}" class="usuario-modal__foto-form">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                <input type="hidden" name="accion" value="eliminar" />
+                <button type="submit" class="btn btn-ghost usuario-modal__foto-btn">Eliminar foto</button>
+              </form>
+            {% endif %}
+          </div>
           <dl class="usuario-modal__datos">
             <div class="usuario-modal__fila">
               <dt>Correo</dt>

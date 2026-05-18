@@ -183,6 +183,13 @@ body {
   height: 24px;
 }
 
+.avatar-usuario__img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .etiqueta-usuario {
   font-size: 0.75rem;
   color: var(--color-text-muted);
@@ -1551,6 +1558,61 @@ body.usuario-modal-abierto {
   font-weight: 400;
   color: var(--accent);
   margin: 0 2rem 1.25rem 0;
+}
+
+.usuario-modal__foto {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  margin: 0 0 1.25rem;
+  padding: 0 0 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.usuario-modal__avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(201, 162, 39, 0.18);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.usuario-modal__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.usuario-modal__foto-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.usuario-modal__foto-label,
+.usuario-modal__foto-btn {
+  min-height: 2.35rem;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.84rem;
+}
+
+.usuario-modal__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .usuario-modal__datos {
