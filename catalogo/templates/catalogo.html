@@ -144,7 +144,7 @@
                         <div class="catalogo-card__body">
                           <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
                           <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
-                          <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                          <p class="catalogo-card__precio">${{ producto.precio|peso_co }}</p>
                            <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
                             {% if producto.estado_inventario == "disponible" %}Disponible
                             {% elif producto.estado_inventario == "bajo" %}Stock bajo
@@ -177,7 +177,7 @@
                       <div class="catalogo-card__body">
                         <p class="catalogo-card__cat">Sin categoría</p>
                         <h3 class="catalogo-card__nombre">{{ producto.nombre }}</h3>
-                        <p class="catalogo-card__precio">${{ producto.precio }}</p>
+                        <p class="catalogo-card__precio">${{ producto.precio|peso_co }}</p>
                          <span class="stock-badge stock-badge--{{ producto.estado_inventario }}">
                             {% if producto.estado_inventario == "disponible" %}Disponible
                             {% elif producto.estado_inventario == "bajo" %}Stock bajo

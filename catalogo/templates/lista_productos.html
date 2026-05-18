@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catalogo — Kuma Coffee</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="stylesheet" href="{% static 'css/lista_productos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -77,7 +77,7 @@
               {% endif %}
             </td>
             <td class="td-nombre">{{ p.nombre }}</td>
-            <td class="td-precio">${{ p.precio|floatformat:"0" }}</td>
+            <td class="td-precio">${{ p.precio|peso_co }}</td>
             <td>
               <span class="inv-estado inv-estado-{{ p.estado_inventario }}">{{ p.stock_actual }}</span>
             </td>
