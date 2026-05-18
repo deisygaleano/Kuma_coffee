@@ -114,6 +114,11 @@
                         </span>
                       </div>
                     </a>
+                    <div class="catalogo-card__footer">
+                      <a href="{% url 'catalogo:detalle' producto.id_producto %}" class="btn btn-primary catalogo-card__btn">
+                        Ver producto
+                      </a>
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
@@ -152,6 +157,11 @@
                           </span>
                         </div>
                       </a>
+                      <div class="catalogo-card__footer">
+                        <a href="{% url 'catalogo:detalle' producto.id_producto %}" class="btn btn-primary catalogo-card__btn">
+                          Ver producto
+                        </a>
+                      </div>
                     </li>
                   {% endfor %}
                 </ul>
@@ -185,6 +195,11 @@
                           </span>
                       </div>
                     </a>
+                    <div class="catalogo-card__footer">
+                      <a href="{% url 'catalogo:detalle' producto.id_producto %}" class="btn btn-primary catalogo-card__btn">
+                        Ver producto
+                      </a>
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
