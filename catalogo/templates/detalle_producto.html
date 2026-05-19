@@ -59,8 +59,14 @@
               <input type="hidden" name="next" value="{{ request.get_full_path }}" />
               <input type="hidden" name="producto_id" value="{{ producto.id_producto }}" />
               <label class="producto-detalle__qty-label" for="qty-detalle">Cantidad</label>
-              <input type="number" id="qty-detalle" name="cantidad" class="producto-detalle__qty" value="1" min="1"
-                max="99" />
+              <div class="cantidad-control">
+                <input type="number" id="qty-detalle" name="cantidad" class="producto-detalle__qty cantidad-control__input" value="1" min="1"
+                  max="99" />
+                <div class="cantidad-control__botones">
+                  <button type="button" class="cantidad-control__btn cantidad-control__btn--arriba" data-cantidad-btn="sumar" aria-label="Sumar cantidad">▲</button>
+                  <button type="button" class="cantidad-control__btn cantidad-control__btn--abajo" data-cantidad-btn="restar" aria-label="Restar cantidad">▼</button>
+                </div>
+              </div>
               <button type="submit" class="btn btn-primary">Añadir al carrito</button>
             </form>
             <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Volver al catálogo</a>
@@ -76,6 +82,7 @@
     {% include 'includes/footer.html' %}
 
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/cantidad_control.js' %}" defer></script>
 </body>
 
 </html>

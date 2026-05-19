@@ -1288,14 +1288,68 @@ a.icono-logo {
   font-size: 0.9rem;
 }
 
+.cantidad-control {
+  display: inline-grid;
+  grid-template-columns: 4rem 1.55rem;
+  align-items: stretch;
+  height: 54px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.cantidad-control__botones {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  border-left: 1px solid rgba(201, 162, 39, 0.3);
+}
+
+.cantidad-control__btn {
+  width: 1.55rem;
+  height: 100%;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.52rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cantidad-control__btn--arriba {
+  border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+}
+
+.cantidad-control__btn:hover,
+.cantidad-control__btn:focus-visible {
+  background: rgba(201, 162, 39, 0.18);
+  color: var(--accent);
+  outline: none;
+}
+
+.cantidad-control__input {
+  border-radius: 0;
+  border: none;
+  text-align: left;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.cantidad-control__input::-webkit-outer-spin-button,
+.cantidad-control__input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 .producto-detalle__qty {
   width: 4rem;
-  height: 44px;
-  border-radius: var(--radius-search);
-  border: 1px solid rgba(201, 162, 39, 0.4);
-  background: rgba(0, 0, 0, 0.35);
+  height: 54px;
+  background: transparent;
   color: #fff;
-  padding: 0 0.5rem;
+  padding: 0 0.7rem;
   font-size: 1rem;
 }
 
@@ -1374,13 +1428,25 @@ a.icono-logo {
 }
 
 .carrito-input-cantidad {
-  width: 4rem;
+  width: 3.6rem;
   height: 40px;
-  border-radius: 8px;
-  border: 1px solid rgba(201, 162, 39, 0.35);
-  background: rgba(0, 0, 0, 0.35);
+  background: transparent;
   color: #fff;
-  padding: 0 0.5rem;
+  padding: 0 0.6rem;
+}
+
+.cantidad-control--carrito {
+  height: 40px;
+  grid-template-columns: 3.6rem 1.35rem;
+  border-radius: 8px;
+}
+
+.cantidad-control--carrito .cantidad-control__btn {
+  width: 1.35rem;
+}
+
+.cantidad-control--carrito .carrito-input-cantidad {
+  width: 3.6rem;
 }
 
 .btn-eliminar-carrito {

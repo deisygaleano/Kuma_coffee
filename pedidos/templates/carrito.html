@@ -57,14 +57,20 @@
                 <td class="carrito-fila__qty">
                   <form method="post" action="{% url 'pedidos:actualizar' linea.id_linea %}" class="carrito-form-qty">
                     {% csrf_token %}
-                    <input
-                      type="number"
-                      name="cantidad"
-                      value="{{ linea.cantidad }}"
-                      min="1"
-                      class="carrito-input-cantidad"
-                      aria-label="Cantidad de {{ linea.producto.nombre }}"
-                    />
+                    <div class="cantidad-control cantidad-control--carrito">
+                      <input
+                        type="number"
+                        name="cantidad"
+                        value="{{ linea.cantidad }}"
+                        min="1"
+                        class="carrito-input-cantidad cantidad-control__input"
+                        aria-label="Cantidad de {{ linea.producto.nombre }}"
+                      />
+                      <div class="cantidad-control__botones">
+                        <button type="button" class="cantidad-control__btn cantidad-control__btn--arriba" data-cantidad-btn="sumar" aria-label="Sumar cantidad de {{ linea.producto.nombre }}">▲</button>
+                        <button type="button" class="cantidad-control__btn cantidad-control__btn--abajo" data-cantidad-btn="restar" aria-label="Restar cantidad de {{ linea.producto.nombre }}">▼</button>
+                      </div>
+                    </div>
                     <button type="submit" class="btn btn-ghost btn-sm" title="Actualizar cantidad">
                       <i class="fa-solid fa-rotate-right"></i>
                     </button>
@@ -116,6 +122,7 @@
 
 {% include 'includes/footer.html' %}
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/cantidad_control.js' %}" defer></script>
 </body>
 
 </html>
