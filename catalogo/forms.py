@@ -39,7 +39,13 @@ class ProductoForm(forms.ModelForm):
             "categoria": forms.Select(attrs={"class": "admin-select"}),
             "altura": forms.Select(attrs={"class": "admin-select"}),
             "tostion": forms.Select(attrs={"class": "admin-select"}),
-            "descripcion": forms.TextInput(attrs={"class": "admin-input"}),
+            "descripcion": forms.Textarea(
+                attrs={
+                    "class": "admin-input admin-input--textarea",
+                    "rows": 7,
+                    "placeholder": "Escribe una descripcion amplia del producto...",
+                }
+            ),
             "slug": forms.TextInput(attrs={"class": "admin-input"}),
         }
         labels = {

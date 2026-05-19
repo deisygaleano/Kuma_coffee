@@ -98,6 +98,12 @@ body {
   border-color: var(--gold);
 }
 
+.admin-input--textarea {
+  min-height: 160px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
 .admin-select option {
   background: #1a1a1a;
 }

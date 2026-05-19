@@ -55,7 +55,7 @@ class Producto(models.Model):
         null=True,
         related_name="productos",
     )
-    descripcion = models.CharField(max_length=50, blank=True, null=True)
+    descripcion = models.TextField(blank=True, null=True)
     precio = models.IntegerField(default=0)
     stock = models.PositiveIntegerField(default=0)
     stock_minimo = models.PositiveIntegerField(default=5)
