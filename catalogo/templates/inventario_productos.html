@@ -152,10 +152,10 @@
               <td class="td-stock" style="text-align:center">{{ p.stock_actual }}</td>
               <td class="td-stock" style="text-align:center">{{ p.stock_minimo_actual }}</td>
               <td class="td-extras col-extras" style="text-align:center">
-                {% if p.altura %}<span class="badge-extra">{{ p.altura.metros }}</span>{% else %}—{% endif %}
+                {% if p.altura %}<span class="inv-texto-tabla">{{ p.altura.metros }}</span>{% else %}—{% endif %}
               </td>
               <td class="td-extras col-extras" style="text-align:center">
-                {% if p.tostion %}<span class="badge-extra">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
+                {% if p.tostion %}<span class="inv-texto-tabla">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
               </td>
               <td class="td-desc col-desc" title="{{ p.descripcion }}">{{ p.descripcion|default:"—" }}</td>
               <td class="inv-fecha" style="text-align:center">

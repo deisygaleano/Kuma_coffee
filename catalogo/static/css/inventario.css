@@ -385,6 +385,13 @@
   cursor: help;
 }
 
+.inventario-body .td-extras,
+.inventario-body .inv-texto-tabla {
+  color: var(--inv-muted);
+  font-size: .84rem;
+  font-weight: 700;
+}
+
 .inventario-body .inv-estado {
   display: inline-flex;
   align-items: center;
@@ -502,6 +509,26 @@
   background: var(--inv-red);
   color: #fff;
   transform: translateY(-1px);
+}
+
+.inventario-body .modal-actions {
+  align-items: center;
+}
+
+.inventario-body .modal-form {
+  display: inline-flex;
+}
+
+.inventario-body .btn-eliminar-confirmar {
+  width: auto;
+  min-width: 130px;
+  height: auto;
+  min-height: 42px;
+  padding: .55rem 1.4rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  font-size: .9rem;
+  font-weight: 700;
 }
 
 .inventario-body .gp-empty {

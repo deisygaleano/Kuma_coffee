@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mis Pedidos — Kuma Coffee</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,9 +76,9 @@
                           <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
                         </div>
                       </td>
-                      <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
+                      <td class="carrito-fila__precio">${{ linea.precio_unitario|peso_co }}</td>
                       <td class="carrito-fila__qty">{{ linea.cantidad }}</td>
-                      <td class="carrito-fila__sub">${{ linea.subtotal }}</td>
+                      <td class="carrito-fila__sub">${{ linea.subtotal|peso_co }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -87,12 +87,53 @@
               <div class="historial-tarjeta__pie">
                 <div class="carrito-total">
                   <span class="carrito-total__label">Total del pedido</span>
-                  <span class="carrito-total__valor">${{ pedido.valor }}</span>
+                  <span class="carrito-total__valor">${{ pedido.valor|peso_co }}</span>
                 </div>
               </div>
             </div>
           {% endfor %}
         </div>
+        {% if page_obj.has_other_pages %}
+          <nav class="historial-paginacion" aria-label="Paginacion de pedidos">
+            {% if page_obj.has_previous %}
+              <a class="historial-paginacion__enlace" href="?page={{ page_obj.previous_page_number }}" aria-label="Pagina anterior">
+                <span aria-hidden="true">&lsaquo;</span>
+                <span>Anterior</span>
+              </a>
+            {% else %}
+              <span class="historial-paginacion__enlace historial-paginacion__enlace--disabled">
+                <span aria-hidden="true">&lsaquo;</span>
+                <span>Anterior</span>
+              </span>
+            {% endif %}
+
+            <div class="historial-paginacion__numeros">
+              {% for numero in numeros_pagina %}
+                {% if numero %}
+                  {% if numero == page_obj.number %}
+                    <span class="historial-paginacion__numero historial-paginacion__numero--activo" aria-current="page">{{ numero }}</span>
+                  {% else %}
+                    <a class="historial-paginacion__numero" href="?page={{ numero }}">{{ numero }}</a>
+                  {% endif %}
+                {% else %}
+                  <span class="historial-paginacion__puntos" aria-hidden="true">...</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+              <a class="historial-paginacion__enlace" href="?page={{ page_obj.next_page_number }}" aria-label="Pagina siguiente">
+                <span>Siguiente</span>
+                <span aria-hidden="true">&rsaquo;</span>
+              </a>
+            {% else %}
+              <span class="historial-paginacion__enlace historial-paginacion__enlace--disabled">
+                <span>Siguiente</span>
+                <span aria-hidden="true">&rsaquo;</span>
+              </span>
+            {% endif %}
+          </nav>
+        {% endif %}
       {% else %}
         <div class="historial-vacio">
           <p class="historial-vacio__texto">Aún no tienes pedidos confirmados.</p>

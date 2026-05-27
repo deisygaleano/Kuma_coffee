@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Carrito — Kuma Coffee</title>
-  {% load static %}
+  {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -53,7 +53,7 @@
                     <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
                   </div>
                 </td>
-                <td class="carrito-fila__precio">${{ linea.precio_unitario }}</td>
+                <td class="carrito-fila__precio">${{ linea.precio_unitario|peso_co }}</td>
                 <td class="carrito-fila__qty">
                   <form method="post" action="{% url 'pedidos:actualizar' linea.id_linea %}" class="carrito-form-qty">
                     {% csrf_token %}
@@ -76,7 +76,7 @@
                     </button>
                   </form>
                 </td>
-                <td class="carrito-fila__sub">${{ linea.subtotal }}</td>
+                <td class="carrito-fila__sub">${{ linea.subtotal|peso_co }}</td>
                 <td class="carrito-fila__acciones">
                   <form method="post" action="{% url 'pedidos:eliminar' linea.id_linea %}">
                     {% csrf_token %}
@@ -98,7 +98,7 @@
       <div class="carrito-pie carrito-pie--estatico">
         <div class="carrito-total">
           <span class="carrito-total__label">Total</span>
-          <span class="carrito-total__valor">${{ pedido.valor }}</span>
+          <span class="carrito-total__valor">${{ pedido.valor|peso_co }}</span>
         </div>
       </div>
       <div class="carrito-estatico-acciones">
@@ -111,7 +111,7 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-whatsapp">
               <i class="fa-brands fa-whatsapp"></i>
-              Confirmar y enviar por WhatsApp
+              confirmar y enviar  por WhatsApp
             </button>
           </form>
         {% endif %}

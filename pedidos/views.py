@@ -1,6 +1,7 @@
 from urllib.parse import quote, urlencode
 from django.conf import settings
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
@@ -169,12 +170,34 @@ def historial_pedidos(request):
         .prefetch_related("lineas__producto", "lineas__producto__categoria")
         .order_by("-fecha_pedido")
     )
+    paginador = Paginator(pedidos, 4)
+    pedidos_pagina = paginador.get_page(request.GET.get("page"))
+    numeros_pagina = _rango_paginacion(pedidos_pagina.number, paginador.num_pages)
     whatsapp_pendiente = request.session.pop("whatsapp_pendiente", None)
     return render(request, "historial.html", {
-        "pedidos": pedidos,
+        "pedidos": pedidos_pagina,
+        "page_obj": pedidos_pagina,
+        "numeros_pagina": numeros_pagina,
         "usuario": usuario,
         "whatsapp_pendiente": whatsapp_pendiente,
     })
+
+
+def _rango_paginacion(actual, total):
+    if total <= 7:
+        return range(1, total + 1)
+
+    paginas = {1, total, actual - 1, actual, actual + 1}
+    paginas = sorted(pagina for pagina in paginas if 1 <= pagina <= total)
+
+    rango = []
+    anterior = None
+    for pagina in paginas:
+        if anterior and pagina - anterior > 1:
+            rango.append(None)
+        rango.append(pagina)
+        anterior = pagina
+    return rango
 
 
 def _construir_url_whatsapp(lineas, pedido, usuario=None):
