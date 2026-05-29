@@ -8,6 +8,7 @@ from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from google.auth.transport import requests as google_requests
@@ -19,6 +20,7 @@ from .models import Usuario
 _GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/v2/auth"
 _GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 _GOOGLE_SCOPES = "openid email profile"
+_GOOGLE_FLOW_SESSION_KEY = "google_oauth_flows"
 
 
 def _redirect_seguro(request):
@@ -42,15 +44,68 @@ def _pkce_pair():
     return verifier, challenge
 
 
+def _google_redirect_uri(request):
+    configured_uri = getattr(django_settings, "GOOGLE_REDIRECT_URI", "")
+    if configured_uri:
+        return configured_uri
+    return request.build_absolute_uri(reverse("cuentas:google_callback"))
+
+
+def _google_login_host_canonico(request):
+    configured_uri = getattr(django_settings, "GOOGLE_REDIRECT_URI", "")
+    if not configured_uri:
+        return None
+
+    parsed_redirect = urllib.parse.urlparse(configured_uri)
+    if not parsed_redirect.netloc or parsed_redirect.netloc == request.get_host():
+        return None
+
+    next_url = request.GET.get("next") or ""
+    query = urllib.parse.urlencode({"next": next_url}) if next_url else ""
+    path = reverse("cuentas:google_login")
+    return urllib.parse.urlunparse(
+        (
+            parsed_redirect.scheme or request.scheme,
+            parsed_redirect.netloc,
+            path,
+            "",
+            query,
+            "",
+        )
+    )
+
+
+def _guardar_google_flow(request, state, code_verifier, redirect_uri, next_url=""):
+    flows = request.session.get(_GOOGLE_FLOW_SESSION_KEY, {})
+    flows[state] = {
+        "code_verifier": code_verifier,
+        "redirect_uri": redirect_uri,
+        "next": next_url,
+    }
+
+    # Evita que la sesion crezca indefinidamente si el usuario intenta varias veces.
+    if len(flows) > 5:
+        for old_state in list(flows.keys())[:-5]:
+            flows.pop(old_state, None)
+
+    request.session[_GOOGLE_FLOW_SESSION_KEY] = flows
+    request.session["google_oauth_state"] = state
+    request.session["google_code_verifier"] = code_verifier
+
+
 def login(request):
     form = LoginForm(request.POST or None)
     next_url = request.POST.get("next") or request.GET.get("next") or ""
     if request.method == "POST" and form.is_valid():
         correo = form.cleaned_data["correo"]
         password = form.cleaned_data["password"]
-        usuario = Usuario.objects.filter(correo=correo).first()
+        usuarios = Usuario.objects.filter(correo__iexact=correo).order_by("-password", "id_usuario")
+        usuario = next(
+            (usuario for usuario in usuarios if usuario.password and check_password(password, usuario.password)),
+            None,
+        )
 
-        if usuario and check_password(password, usuario.password):
+        if usuario:
             request.session["usuario_id"] = usuario.id_usuario
             messages.success(request, f"Bienvenido, {usuario.nombre}.")
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
@@ -83,9 +138,10 @@ def registro(request):
 def restablecer(request):
     form = RestablecerPasswordForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        usuario = Usuario.objects.get(correo=form.cleaned_data["correo"])
-        usuario.password = make_password(form.cleaned_data["password"])
-        usuario.save(update_fields=["password"])
+        correo = form.cleaned_data["correo"]
+        password_hash = make_password(form.cleaned_data["password"])
+        usuarios = Usuario.objects.filter(correo__iexact=correo)
+        usuarios.update(correo=correo, password=password_hash)
         messages.success(request, "Contrasena actualizada correctamente. Inicia sesion.")
         return redirect("cuentas:login")
 
@@ -103,9 +159,13 @@ def cambiar_password(request):
         request.session.pop("usuario_id", None)
         return redirect("cuentas:login")
 
-    form = CambiarPasswordForm(request.POST or None)
+    require_current_password = bool(usuario.password)
+    form = CambiarPasswordForm(
+        request.POST or None,
+        require_current_password=require_current_password,
+    )
     if request.method == "POST" and form.is_valid():
-        if not check_password(form.cleaned_data["password_actual"], usuario.password):
+        if require_current_password and not check_password(form.cleaned_data["password_actual"], usuario.password):
             form.add_error("password_actual", "La contrasena actual es incorrecta.")
         else:
             usuario.password = make_password(form.cleaned_data["password_nueva"])
@@ -156,12 +216,18 @@ def logout(request):
 
 
 def google_login(request):
+    canonical_login_url = _google_login_host_canonico(request)
+    if canonical_login_url:
+        return redirect(canonical_login_url)
+
     code_verifier, code_challenge = _pkce_pair()
     state = secrets.token_urlsafe(32)
+    redirect_uri = _google_redirect_uri(request)
+    next_url = request.GET.get("next") or ""
 
     params = {
         "client_id": django_settings.GOOGLE_CLIENT_ID,
-        "redirect_uri": django_settings.GOOGLE_REDIRECT_URI,
+        "redirect_uri": redirect_uri,
         "response_type": "code",
         "scope": _GOOGLE_SCOPES,
         "state": state,
@@ -170,20 +236,26 @@ def google_login(request):
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
     }
-    request.session["google_oauth_state"] = state
-    request.session["google_code_verifier"] = code_verifier
+    _guardar_google_flow(request, state, code_verifier, redirect_uri, next_url)
     return redirect(f"{_GOOGLE_AUTH_URI}?{urllib.parse.urlencode(params)}")
 
 
 def google_callback(request):
-    state_session = request.session.get("google_oauth_state")
     state_param = request.GET.get("state")
     code = request.GET.get("code")
-    code_verifier = request.session.get("google_code_verifier")
+    flows = request.session.get(_GOOGLE_FLOW_SESSION_KEY, {})
+    flow = flows.pop(state_param, None) if state_param else None
+    if state_param and _GOOGLE_FLOW_SESSION_KEY in request.session:
+        request.session[_GOOGLE_FLOW_SESSION_KEY] = flows
+        request.session.modified = True
 
-    if not state_session or state_session != state_param or not code:
+    if not flow or not code:
         messages.error(request, "Sesion OAuth invalida. Intenta de nuevo.")
         return redirect("cuentas:login")
+
+    code_verifier = flow.get("code_verifier")
+    redirect_uri = flow.get("redirect_uri") or _google_redirect_uri(request)
+    next_url = flow.get("next") or ""
 
     try:
         token_resp = http_requests.post(
@@ -194,7 +266,7 @@ def google_callback(request):
                 "code": code,
                 "code_verifier": code_verifier,
                 "grant_type": "authorization_code",
-                "redirect_uri": django_settings.GOOGLE_REDIRECT_URI,
+                "redirect_uri": redirect_uri,
             },
             timeout=10,
         )
@@ -212,16 +284,24 @@ def google_callback(request):
         return redirect("cuentas:login")
 
     google_sub = id_info.get("sub")
-    email = id_info.get("email", "")
+    email = (id_info.get("email") or "").strip().lower()
     nombre = id_info.get("given_name") or email.split("@")[0]
     apellido = id_info.get("family_name") or None
 
+    if not google_sub or not email:
+        messages.error(request, "Google no entrego la informacion necesaria para iniciar sesion.")
+        return redirect("cuentas:login")
+
     usuario = Usuario.objects.filter(google_id=google_sub).first()
     if not usuario:
-        usuario = Usuario.objects.filter(correo=email).first()
+        usuario = Usuario.objects.filter(correo__iexact=email).first()
         if usuario:
-            usuario.google_id = google_sub
-            usuario.save(update_fields=["google_id"])
+            if usuario.google_id and usuario.google_id != google_sub:
+                messages.error(request, "Este correo ya esta vinculado a otra cuenta de Google.")
+                return redirect("cuentas:login")
+            if not usuario.google_id:
+                usuario.google_id = google_sub
+                usuario.save(update_fields=["google_id"])
         else:
             usuario = Usuario.objects.create(
                 nombre=nombre,
@@ -234,4 +314,6 @@ def google_callback(request):
 
     request.session["usuario_id"] = usuario.id_usuario
     messages.success(request, f"Bienvenido, {usuario.nombre}.")
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
     return redirect("catalogo:lista")

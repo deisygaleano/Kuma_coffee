@@ -42,7 +42,7 @@ class AuthBaseForm(forms.Form):
 class LoginForm(AuthBaseForm):
     correo = forms.EmailField(
         label="Correo",
-        max_length=32,
+        max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
     password = forms.CharField(
@@ -64,7 +64,7 @@ class RegistroForm(AuthBaseForm):
     apellido = forms.CharField(label="Apellido", min_length=2, max_length=32, required=False)
     correo = forms.EmailField(
         label="Correo electronico",
-        max_length=32,
+        max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
     telefono = forms.CharField(label="Telefono", max_length=20, required=False)
@@ -91,7 +91,7 @@ class RegistroForm(AuthBaseForm):
 
     def clean_correo(self):
         correo = self.cleaned_data["correo"].strip().lower()
-        if Usuario.objects.filter(correo=correo).exists():
+        if Usuario.objects.filter(correo__iexact=correo).exists():
             raise forms.ValidationError("Ya existe una cuenta con ese correo.")
         return correo
 
@@ -121,7 +121,7 @@ class RegistroForm(AuthBaseForm):
 class RestablecerPasswordForm(AuthBaseForm):
     correo = forms.EmailField(
         label="Correo electronico",
-        max_length=32,
+        max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
     password = forms.CharField(
@@ -141,7 +141,7 @@ class RestablecerPasswordForm(AuthBaseForm):
 
     def clean_correo(self):
         correo = self.cleaned_data["correo"].strip().lower()
-        if not Usuario.objects.filter(correo=correo).exists():
+        if not Usuario.objects.filter(correo__iexact=correo).exists():
             raise forms.ValidationError("No existe una cuenta registrada con ese correo.")
         return correo
 
@@ -178,8 +178,12 @@ class CambiarPasswordForm(AuthBaseForm):
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, require_current_password=True, **kwargs):
+        self.require_current_password = require_current_password
         super().__init__(*args, **kwargs)
+        self.fields["password_actual"].required = require_current_password
+        if not require_current_password:
+            self.fields["password_actual"].help_text = "No necesitas contrasena actual para configurar tu primera contrasena."
         self._aplicar_clase()
 
     def clean(self):

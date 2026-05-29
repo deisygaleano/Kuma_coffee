@@ -54,7 +54,7 @@
         <div class="auth-field">
           <label class="auth-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
           {{ form.password }}
-          <p class="auth-help">Minimo 8 caracteres, no solo numeros y evita contrasenas comunes.</p>
+          <p class="auth-help">Minimo 8 caracteres con mayusculas, minusculas, numeros y caracteres especiales.</p>
           {{ form.password.errors }}
         </div>
         <div class="auth-field">
@@ -68,5 +68,6 @@
       <p class="auth-footer-text">Ya tienes cuenta? <a href="{% url 'cuentas:login' %}">Inicia sesion</a></p>
     </div>
   </main>
+  <script src="{% static 'js/auth_password_toggle.js' %}"></script>
 </body>
 </html>
