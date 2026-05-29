@@ -11,6 +11,14 @@
       <nav class="cabecera__navegacion">
        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
         <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catalogo</a>
+        <!-- <a href="{% url 'manual_usuario' %}" class="enlace-navegacion enlace-ayuda">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.1 9a3 3 0 1 1 4.8 2.4c-.9.6-1.4 1.1-1.4 2.1"/>
+            <path d="M12 17h.01"/>
+          </svg>
+          Ayuda
+        </a> -->
 
         
         
@@ -19,3 +27,11 @@
 {% include 'includes/navbar_acciones.html' %}
 
   </header>
+  <a href="{% url 'manual_usuario' %}" class="boton-ayuda-flotante" aria-label="Abrir manual de usuario" title="Manual de usuario">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.1 9a3 3 0 1 1 4.8 2.4c-.9.6-1.4 1.1-1.4 2.1"/>
+      <path d="M12 17h.01"/>
+    </svg>
+    <span>Ayuda</span>
+  </a>

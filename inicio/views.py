@@ -7,6 +7,10 @@ def sobre_nosotros(request):
     return render(request, "sobre_nosotros.html")
 
 
+def manual_usuario(request):
+    return render(request, "manual_usuario.html")
+
+
 def inicio(request):
     # Todos los productos disponibles (sin límite), mostrados de 3 en 3 en el slider
     qs = (

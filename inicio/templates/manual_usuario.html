@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual de usuario - Kuma Coffee</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  {% include 'includes/navbar.html' %}
+  <br><br>
+ <h1 style="text-align: center;">Proximamente guia de ayuda</h1>
+  <main class="manual-pagina">
+    <!-- <section class="manual-hero">
+      <div class="manual-hero__contenido">
+        <span class="manual-badge">Centro de ayuda</span>
+        <h1 class="manual-titulo">Manual de usuario Kuma Coffee</h1>
+        <p class="manual-descripcion">
+          Guia breve para registrarse, iniciar sesion, consultar productos, comprar, revisar pedidos y administrar el catalogo.
+        </p>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-portada.svg' %}" alt="Vista general del sistema Kuma Coffee" class="manual-hero__img" />
+    </section>
+
+    <section class="manual-indice" aria-label="Indice del manual">
+      <a href="#cuenta">Cuenta</a>
+      <a href="#catalogo">Catalogo</a>
+      <a href="#compra">Compra</a>
+      <a href="#pedidos">Pedidos</a>
+      <a href="#perfil">Perfil</a>
+      <a href="#admin">Administrador</a>
+    </section>
+
+    <section class="manual-seccion" id="cuenta">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Paso 1</span>
+        <h2>Crear cuenta o iniciar sesion</h2>
+        <p>Desde el icono de usuario puedes acceder con correo y contrasena o usar Google. Si ya tienes una cuenta con el mismo correo, Google se vincula a ese usuario.</p>
+        <ol class="manual-lista">
+          <li>Presiona el icono de usuario en la cabecera.</li>
+          <li>Selecciona Acceder o Registrarse.</li>
+          <li>Completa los campos requeridos y confirma la accion.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-cuenta.svg' %}" alt="Pantalla de acceso y registro" class="manual-imagen" />
+    </section>
+
+    <section class="manual-seccion manual-seccion--invertida" id="catalogo">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Paso 2</span>
+        <h2>Explorar el catalogo</h2>
+        <p>En Catalogo puedes revisar productos disponibles, buscar por nombre o descripcion y filtrar por categoria.</p>
+        <ol class="manual-lista">
+          <li>Entra a Catalogo desde el menu principal.</li>
+          <li>Usa la barra de busqueda o selecciona una categoria.</li>
+          <li>Abre un producto para consultar su detalle.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-catalogo.svg' %}" alt="Catalogo con buscador, categorias y productos" class="manual-imagen" />
+    </section>
+
+    <section class="manual-seccion" id="compra">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Paso 3</span>
+        <h2>Agregar productos al carrito</h2>
+        <p>En el detalle del producto puedes revisar precio, disponibilidad y seleccionar la cantidad antes de agregarlo al carrito.</p>
+        <ol class="manual-lista">
+          <li>Abre el producto que deseas comprar.</li>
+          <li>Elige la cantidad disponible.</li>
+          <li>Presiona Agregar al carrito.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-producto.svg' %}" alt="Detalle de producto y control de cantidad" class="manual-imagen" />
+    </section>
+
+    <section class="manual-seccion manual-seccion--invertida" id="pedidos">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Paso 4</span>
+        <h2>Confirmar compra y consultar pedidos</h2>
+        <p>El carrito resume los productos elegidos. Desde alli puedes ajustar cantidades, finalizar el pedido y luego consultar el historial.</p>
+        <ol class="manual-lista">
+          <li>Abre Carrito desde la cabecera.</li>
+          <li>Verifica productos, cantidades y total.</li>
+          <li>Finaliza el pedido y revisa Mis Pedidos desde tu perfil.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-carrito.svg' %}" alt="Carrito de compras e historial de pedidos" class="manual-imagen" />
+    </section>
+
+    <section class="manual-seccion" id="perfil">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Paso 5</span>
+        <h2>Gestionar perfil y contrasena</h2>
+        <p>El menu de usuario permite actualizar la foto de perfil, ver datos de la cuenta, cambiar contrasena y cerrar sesion.</p>
+        <ol class="manual-lista">
+          <li>Abre el menu de usuario.</li>
+          <li>Agrega o cambia tu foto si lo deseas.</li>
+          <li>Usa Cambiar contrasena para actualizar tus credenciales.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-perfil.svg' %}" alt="Menu de usuario con datos de perfil" class="manual-imagen" />
+    </section>
+
+    <section class="manual-seccion manual-seccion--invertida" id="admin">
+      <div class="manual-seccion__texto">
+        <span class="manual-paso">Administrador</span>
+        <h2>Administrar productos e inventario</h2>
+        <p>Los usuarios administradores tienen acceso a opciones para crear, editar y eliminar productos, ademas de controlar el inventario.</p>
+        <ol class="manual-lista">
+          <li>Inicia sesion con una cuenta administradora.</li>
+          <li>Presiona Admin en la cabecera.</li>
+          <li>Gestiona productos, imagenes, precios, categorias y stock.</li>
+        </ol>
+      </div>
+      <img src="{% static 'imagenes/manual/manual-admin.svg' %}" alt="Panel de administracion de productos" class="manual-imagen" />
+    </section>
+
+    <section class="manual-notas">
+      <h2>Recomendaciones de uso</h2>
+      <div class="manual-notas__grid">
+        <article>
+          <h3>Contrasenas seguras</h3>
+          <p>Usa minimo 8 caracteres con mayusculas, minusculas, numeros y caracteres especiales.</p>
+        </article>
+        <article>
+          <h3>Sesion con Google</h3>
+          <p>Si tu correo ya existe, puedes iniciar sesion con Google y se usara la misma cuenta.</p>
+        </article>
+        <article>
+          <h3>Carrito</h3>
+          <p>Antes de finalizar, revisa cantidades y disponibilidad para evitar cambios inesperados.</p>
+        </article>
+      </div>
+    </section> -->
+    <h1>Proximamente guia de ayuda</h1>
+  </main>
+
+  {% include 'includes/footer.html' %}
+</body>
+
+</html>

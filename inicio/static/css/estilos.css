@@ -1905,6 +1905,203 @@ body.usuario-modal-abierto {
   justify-content: center;
 }
 
+/* ===== Manual de usuario ===== */
+.enlace-ayuda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.boton-ayuda-flotante {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--color-oro, #c9a227);
+  color: #17100b;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34);
+}
+
+.boton-ayuda-flotante:hover {
+  transform: translateY(-2px);
+}
+
+.manual-pagina {
+  min-height: 100vh;
+  padding: 3rem clamp(1rem, 4vw, 4rem) 4rem;
+  background:
+    linear-gradient(180deg, rgba(24, 16, 10, 0.96), rgba(12, 8, 5, 0.98)),
+    url("../imagenes/fondo pagina.jpeg") center/cover fixed;
+  color: #fff;
+}
+
+.manual-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.82fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto 2rem;
+}
+
+.manual-badge,
+.manual-paso {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 0 0.85rem;
+  border: 1px solid rgba(201, 162, 39, 0.42);
+  border-radius: 999px;
+  background: rgba(201, 162, 39, 0.12);
+  color: #f4d36f;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.manual-titulo {
+  margin: 1rem 0 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.manual-descripcion {
+  max-width: 680px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.manual-hero__img,
+.manual-imagen {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(201, 162, 39, 0.32);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+}
+
+.manual-indice {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  max-width: 1180px;
+  margin: 0 auto 2rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(201, 162, 39, 0.24);
+  border-radius: 16px;
+  background: rgba(18, 12, 8, 0.88);
+  backdrop-filter: blur(14px);
+}
+
+.manual-indice a {
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.84);
+  text-decoration: none;
+}
+
+.manual-indice a:hover {
+  color: #17100b;
+  background: #c9a227;
+}
+
+.manual-seccion {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.25rem);
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto 2rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 22px;
+  background: rgba(31, 20, 13, 0.78);
+}
+
+.manual-seccion--invertida .manual-seccion__texto {
+  order: 2;
+}
+
+.manual-seccion h2,
+.manual-notas h2 {
+  margin: 1rem 0 0.75rem;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  letter-spacing: 0;
+}
+
+.manual-seccion p,
+.manual-lista,
+.manual-notas p {
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
+}
+
+.manual-lista {
+  margin: 1rem 0 0;
+  padding-left: 1.35rem;
+}
+
+.manual-lista li + li {
+  margin-top: 0.45rem;
+}
+
+.manual-notas {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border-radius: 22px;
+  background: rgba(18, 12, 8, 0.72);
+  border: 1px solid rgba(201, 162, 39, 0.22);
+}
+
+.manual-notas__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.manual-notas article {
+  min-height: 148px;
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.manual-notas h3 {
+  margin-bottom: 0.5rem;
+  color: #f4d36f;
+}
+
+@media (max-width: 860px) {
+  .manual-hero,
+  .manual-seccion,
+  .manual-notas__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manual-seccion--invertida .manual-seccion__texto {
+    order: 0;
+  }
+
+  .manual-indice {
+    position: static;
+  }
+}
+
 .auth-links {
   list-style: none;
   margin: 1.5rem 0 0;
