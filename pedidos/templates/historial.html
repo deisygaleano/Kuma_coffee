@@ -81,6 +81,9 @@
                   <span class="carrito-total__label">Total del pedido</span>
                   <span class="carrito-total__valor">${{ pedido.valor|peso_co }}</span>
                 </div>
+                <a href="{% url 'pedidos:factura' pedido.id_pedido %}" class="btn btn-ghost historial-factura-btn">
+                  Descargar factura PDF
+                </a>
               </div>
             </div>
           {% endfor %}
@@ -144,7 +147,7 @@
   <script src="https://kit.fontawesome.com/977132abff.js" crossorigin="anonymous"></script>
   {% if whatsapp_pendiente %}
   <script>
-    window.open("{{ whatsapp_pendiente }}", "_blank", "noopener,noreferrer");
+    window.open("{{ whatsapp_pendiente|escapejs }}", "_blank", "noopener,noreferrer");
   </script>
   {% endif %}
 </body>

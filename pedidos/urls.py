@@ -9,6 +9,5 @@ urlpatterns = [
     path('eliminar/<int:linea_id>/', views.eliminar_linea, name="eliminar"),
     path('confirmar/', views.confirmar_pedido, name="confirmar"),
     path('historial/', views.historial_pedidos, name="historial"),
-
-    
+    path('factura/<int:pk>/', views.descargar_factura, name="factura"),
 ]

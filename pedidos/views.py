@@ -1,20 +1,25 @@
-from urllib.parse import quote, urlencode
+from urllib.parse import urlencode
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
+from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from catalogo.inventario import StockInsuficienteError, descontar_stock_lineas, stock_disponible
 from catalogo.models import Producto
-from cuentas.models import Usuario
 from cuentas.auth_utils import es_admin
+from cuentas.models import Usuario
+
+from .factura import generar_factura_pdf
 from .models import LineaPedido, Pedido
+from .whatsapp import construir_url_whatsapp
 
 def _usuario_actual(request):
     usuario_id = request.session.get("usuario_id")
@@ -126,14 +131,12 @@ def carrito(request):
         "producto", "producto__categoria", "producto__inventario"
     )
     _recalcular_totales(pedido)
-    whatsapp_url=_construir_url_whatsapp (lineas,pedido,usuario)
     return render(
         request,
         "carrito.html",
         {
             "pedido": pedido,
             "lineas": lineas,
-            "whatsapp_url":whatsapp_url
         },
     )
 
@@ -191,7 +194,6 @@ def confirmar_pedido(request):
     lineas = list(
         pedido.lineas.select_related("producto", "producto__inventario")
     )
-    whatsapp_url = _construir_url_whatsapp(lineas, pedido, usuario)
 
     try:
         with transaction.atomic():
@@ -207,7 +209,12 @@ def confirmar_pedido(request):
         )
         return redirect("pedidos:carrito")
 
-    messages.success(request, f"¡Pedido #{pedido.id_pedido} confirmado! Puedes verlo en tu historial.")
+    whatsapp_url = construir_url_whatsapp(lineas, pedido, usuario)
+
+    messages.success(
+        request,
+        f"¡Pedido #{pedido.id_pedido} confirmado! Se abrirá WhatsApp con el detalle de tu pedido.",
+    )
 
     if whatsapp_url:
         request.session["whatsapp_pendiente"] = whatsapp_url
@@ -232,13 +239,45 @@ def historial_pedidos(request):
     pedidos_pagina = paginador.get_page(request.GET.get("page"))
     numeros_pagina = _rango_paginacion(pedidos_pagina.number, paginador.num_pages)
     whatsapp_pendiente = request.session.pop("whatsapp_pendiente", None)
-    return render(request, "historial.html", {
-        "pedidos": pedidos_pagina,
-        "page_obj": pedidos_pagina,
-        "numeros_pagina": numeros_pagina,
-        "usuario": usuario,
-        "whatsapp_pendiente": whatsapp_pendiente,
-    })
+    return render(
+        request,
+        "historial.html",
+        {
+            "pedidos": pedidos_pagina,
+            "page_obj": pedidos_pagina,
+            "numeros_pagina": numeros_pagina,
+            "usuario": usuario,
+            "whatsapp_pendiente": whatsapp_pendiente,
+        },
+    )
+
+
+@require_GET
+def descargar_factura(request, pk):
+    if not request.session.get("usuario_id"):
+        messages.error(request, "Debes iniciar sesión para descargar la factura.", extra_tags="auth")
+        return redirect("cuentas:login")
+
+    usuario = _usuario_actual(request)
+    pedido = get_object_or_404(
+        Pedido.objects.prefetch_related("lineas__producto"),
+        pk=pk,
+        usuario=usuario,
+    )
+    if pedido.estado == "borrador":
+        raise Http404
+
+    try:
+        ruta = generar_factura_pdf(pedido, usuario)
+    except Exception as exc:
+        raise Http404 from exc
+
+    return FileResponse(
+        ruta.open("rb"),
+        as_attachment=True,
+        filename=f"factura_pedido_{pedido.id_pedido}.pdf",
+        content_type="application/pdf",
+    )
 
 
 def _rango_paginacion(actual, total):
@@ -258,32 +297,3 @@ def _rango_paginacion(actual, total):
     return rango
 
 
-def _construir_url_whatsapp(lineas, pedido, usuario=None):
-    numero = getattr(settings, "KUMA_WHATSAPP", "")
-    if not numero or not lineas:
-        return ""
-
-    lineas_lista = list(lineas)
-    items = "\n".join(
-        f"  • {l.producto.nombre} x{l.cantidad} — ${l.subtotal:,}"
-        for l in lineas_lista
-    )
-
-    cliente_info = ""
-    if usuario and usuario.correo != "invitado@kuma.local":
-        nombre_completo = f"{usuario.nombre} {usuario.apellido or ''}".strip()
-        cliente_info = f"👤 *Cliente:* {nombre_completo}\n"
-        if usuario.correo:
-            cliente_info += f"📧 *Correo:* {usuario.correo}\n"
-        if usuario.telefono:
-            cliente_info += f"📞 *Teléfono:* {usuario.telefono}\n"
-        cliente_info += "\n"
-
-    mensaje = (
-        "✅ *Kuma Coffee — Nuevo Pedido*\n\n"
-        f"{cliente_info}"
-        f"{items}\n\n"
-        f"*Total: ${pedido.valor:,}*\n\n"
-        "Por favor confirmar disponibilidad. ¡Gracias!"
-    )
-    return f"https://wa.me/{numero}?text={quote(mensaje)}"

@@ -2947,7 +2947,14 @@ body.usuario-modal-abierto {
   padding: 1rem 1.5rem;
   border-top: 1px solid rgba(var(--gold-rgb), 0.15);
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.historial-factura-btn {
+  white-space: nowrap;
 }
 
 .historial-paginacion {
