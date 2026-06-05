@@ -183,14 +183,20 @@ def registro(request):
 
 
 def restablecer(request):
+    if request.method == "GET":
+        _limpiar_mensajes(request)
+
     form = RestablecerPasswordForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         correo = form.cleaned_data["correo"]
         password_hash = make_password(form.cleaned_data["password"])
         usuarios = Usuario.objects.filter(correo__iexact=correo)
         usuarios.update(correo=correo, password=password_hash)
-        messages.success(request, "Nueva contraseña correcta", extra_tags="login")
-        return redirect("cuentas:login")
+        usuario = Usuario.objects.filter(correo__iexact=correo).order_by("-password", "id_usuario").first()
+        if usuario:
+            request.session["usuario_id"] = usuario.id_usuario
+            messages.success(request, f"Bienvenido, {usuario.nombre}.")
+        return redirect("inicio")
 
     return render(request, "restablecer.html", {"form": form})
 
