@@ -1,0 +1,14 @@
+{% if mensajes_login %}
+  <div class="mensajes-flash-contenedor mensajes-flash-contenedor--auth" role="status" aria-live="polite" data-mensajes-flash>
+    <ul class="mensajes-flash">
+      {% for msg in mensajes_login %}
+        <li
+          class="mensajes-flash__item {% if 'success' in msg.tags %}mensajes-flash__item--success{% elif 'error' in msg.tags %}mensajes-flash__item--error{% else %}mensajes-flash__item--info{% endif %}"
+          data-mensaje-flash
+        >
+          {{ msg }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

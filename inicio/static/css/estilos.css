@@ -1287,33 +1287,65 @@ a.icono-logo {
   border: 0;
 }
 
+.mensajes-flash-contenedor {
+  position: fixed;
+  top: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  width: min(92vw, 32rem);
+  pointer-events: none;
+}
+
+.mensajes-flash-contenedor--auth {
+  position: static;
+  transform: none;
+  width: 100%;
+  margin-bottom: 1rem;
+  pointer-events: auto;
+}
+
 .mensajes-flash {
   list-style: none;
-  margin: 0 0 1.25rem;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .mensajes-flash__item {
   padding: 0.75rem 1rem;
   border-radius: var(--radius);
-  margin-bottom: 0.5rem;
   font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mensajes-flash__item--oculto {
+  opacity: 0;
+  transform: translateY(-0.35rem);
 }
 
 .mensajes-flash__item--success {
   background: rgba(45, 90, 39, 0.35);
   border: 1px solid rgba(var(--gold-rgb), 0.4);
   color: #e8f5e4;
+  pointer-events: auto;
 }
 
 .mensajes-flash__item--error {
   background: rgba(120, 40, 40, 0.4);
   border: 1px solid rgba(255, 120, 120, 0.35);
   color: #ffe0e0;
+  pointer-events: auto;
 }
 
 .mensajes-flash__item--info {
   background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--color-text-muted);
+  pointer-events: auto;
 }
 
 .catalogo-card__footer {

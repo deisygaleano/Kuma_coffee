@@ -17,13 +17,8 @@
       </div>
       <h1 class="auth-titulo">Iniciar sesión</h1>
 
-      {% if messages %}
-        {% for msg in messages %}
-          <div class="auth-alert auth-alert--{{ msg.tags }}" role="alert">
-            {{ msg }}
-          </div>
-        {% endfor %}
-      {% endif %}
+      {% include 'includes/mensajes_login.html' %}
+      {% include 'includes/mensajes_flash.html' %}
 
       {% if form.non_field_errors %}
         <ul class="auth-form__errors auth-form__errors--global">
@@ -73,6 +68,7 @@
       </ul>
     </div>
   </main>
+  <script src="{% static 'js/mensajes_flash.js' %}" defer></script>
   <script src="{% static 'js/auth_password_toggle.js' %}"></script>
 </body>
 </html>

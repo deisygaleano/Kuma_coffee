@@ -1,0 +1,16 @@
+{% for msg in messages %}
+  {% if forloop.first %}
+    <div class="mensajes-flash-contenedor" role="status" aria-live="polite" data-mensajes-flash>
+      <ul class="mensajes-flash">
+  {% endif %}
+        <li
+          class="mensajes-flash__item {% if 'success' in msg.tags %}mensajes-flash__item--success{% elif 'error' in msg.tags %}mensajes-flash__item--error{% else %}mensajes-flash__item--info{% endif %}"
+          data-mensaje-flash
+        >
+          {{ msg }}
+        </li>
+  {% if forloop.last %}
+      </ul>
+    </div>
+  {% endif %}
+{% endfor %}

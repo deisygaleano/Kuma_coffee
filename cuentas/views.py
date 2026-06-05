@@ -32,14 +32,19 @@ def _limpiar_mensajes(request):
         pass
 
 
-def _filtrar_mensajes_para_login(request):
+def _mensajes_para_login(request):
     storage = messages.get_messages(request)
-    conservados = []
+    vistos = set()
+    visibles = []
     for msg in storage:
-        if set(msg.tags.split()) & _TAGS_MENSAJE_LOGIN:
-            conservados.append((msg.level, msg.message, msg.tags))
-    for level, message, tags in conservados:
-        messages.add_message(request, level, message, extra_tags=tags)
+        if not set(msg.tags.split()) & _TAGS_MENSAJE_LOGIN:
+            continue
+        clave = (msg.level, msg.message)
+        if clave in vistos:
+            continue
+        vistos.add(clave)
+        visibles.append(msg)
+    return visibles
 
 
 def _redirect_seguro(request):
@@ -139,8 +144,11 @@ def _guardar_google_flow(request, state, code_verifier, redirect_uri, next_url="
 
 
 def login(request):
+    mensajes_login = []
     if request.method == "GET":
-        _filtrar_mensajes_para_login(request)
+        mensajes_login = _mensajes_para_login(request)
+    elif request.method == "POST":
+        _limpiar_mensajes(request)
 
     form = LoginForm(request.POST or None)
     next_url = request.POST.get("next") or request.GET.get("next") or ""
@@ -162,10 +170,17 @@ def login(request):
 
         messages.error(request, "Credenciales inválidas.")
 
-    return render(request, "login.html", {"form": form, "next": next_url})
+    return render(
+        request,
+        "login.html",
+        {"form": form, "next": next_url, "mensajes_login": mensajes_login},
+    )
 
 
 def registro(request):
+    if request.method == "GET":
+        _limpiar_mensajes(request)
+
     form = RegistroForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         usuario = Usuario.objects.create(

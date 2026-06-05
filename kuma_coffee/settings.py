@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'kuma_coffee.middleware.DescartarMensajesNoMostradosMiddleware',
 ]
 
 ROOT_URLCONF = 'kuma_coffee.urls'

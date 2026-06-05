@@ -762,6 +762,24 @@
   color: #3d7a52;
 }
 
+[data-theme="light"] .mensajes-flash__item--success {
+  background: rgba(66, 130, 90, 0.14);
+  border: 1px solid rgba(66, 130, 90, 0.35);
+  color: #3d7a52;
+}
+
+[data-theme="light"] .mensajes-flash__item--error {
+  background: rgba(180, 70, 60, 0.12);
+  border: 1px solid rgba(180, 70, 60, 0.35);
+  color: #8f3a32;
+}
+
+[data-theme="light"] .mensajes-flash__item--info {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(61, 52, 40, 0.12);
+  color: var(--text);
+}
+
 [data-theme="light"] .historial-tabla th,
 [data-theme="light"] .historial-tabla td {
   color: var(--text);

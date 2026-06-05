@@ -30,6 +30,8 @@
 {% include 'includes/navbar_acciones.html' %}
 
   </header>
+  {% include 'includes/mensajes_flash.html' %}
+  <script src="{% static 'js/mensajes_flash.js' %}" defer></script>
   <a href="{% url 'manual_usuario' %}" class="boton-ayuda-flotante" aria-label="Abrir manual de usuario" title="Manual de usuario">
     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="12" cy="12" r="10"/>

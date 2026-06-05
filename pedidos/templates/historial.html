@@ -21,14 +21,6 @@
         <p class="catalogo-subtitulo">Historial de pedidos de {{ usuario.nombre }} {{ usuario.apellido }}</p>
       </header>
 
-      {% if messages %}
-        <div class="historial-mensajes">
-          {% for message in messages %}
-            <p class="mensaje mensaje--{{ message.tags }}">{{ message }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-
       {% if pedidos %}
         <div class="historial-lista">
           {% for pedido in pedidos %}
