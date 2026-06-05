@@ -60,7 +60,6 @@
 
           <div class="form-field">
             <label for="{{ form.altura.id_for_label }}">{{ form.altura.label }}</label>
-            <p class="field-hint">Incluye la unidad en el valor (ej. 1500 msnm); se mostrará como M.S.N.M.</p>
             {{ form.altura }}
             {% if form.altura.errors %}<p class="field-error">{{ form.altura.errors.0 }}</p>{% endif %}
           </div>
