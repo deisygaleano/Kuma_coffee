@@ -1899,6 +1899,32 @@ body.usuario-modal-abierto {
   border: 1px solid rgba(255, 120, 120, 0.25);
 }
 
+.auth-form__errors--success {
+  color: #8ee6a6;
+  background: rgba(24, 115, 57, 0.28);
+  border-color: rgba(142, 230, 166, 0.35);
+}
+
+.auth-alert {
+  margin: 0 0 1.2rem;
+  padding: 0.95rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 120, 120, 0.25);
+  background: rgba(120, 40, 40, 0.35);
+  color: #f0b4b4;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+}
+
+.auth-alert--success {
+  border-color: rgba(142, 230, 166, 0.42);
+  background: rgba(24, 115, 57, 0.32);
+  color: #9bf0b2;
+}
+
 .auth-submit {
   margin-top: 0.5rem;
   width: 100%;

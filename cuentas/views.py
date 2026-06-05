@@ -128,9 +128,8 @@ def registro(request):
             password=make_password(form.cleaned_data["password"]),
             rol="cliente",
         )
-        request.session["usuario_id"] = usuario.id_usuario
-        messages.success(request, f"Cuenta creada correctamente. Bienvenido, {usuario.nombre}.")
-        return redirect("catalogo:lista")
+        messages.success(request, "Registro exitoso")
+        return redirect("cuentas:login")
 
     return render(request, "registro.html", {"form": form})
 
@@ -142,7 +141,7 @@ def restablecer(request):
         password_hash = make_password(form.cleaned_data["password"])
         usuarios = Usuario.objects.filter(correo__iexact=correo)
         usuarios.update(correo=correo, password=password_hash)
-        messages.success(request, "Contrasena actualizada correctamente. Inicia sesion.")
+        messages.success(request, "Nueva contraseña correcta")
         return redirect("cuentas:login")
 
     return render(request, "restablecer.html", {"form": form})
@@ -170,7 +169,7 @@ def cambiar_password(request):
         else:
             usuario.password = make_password(form.cleaned_data["password_nueva"])
             usuario.save(update_fields=["password"])
-            messages.success(request, "Contrasena actualizada correctamente.")
+            messages.success(request, "Nueva contraseña correcta")
             return redirect("catalogo:lista")
 
     return render(request, "cambiar_password.html", {"form": form})

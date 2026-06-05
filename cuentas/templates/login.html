@@ -21,11 +21,11 @@
       <h1 class="auth-titulo">Iniciar sesion</h1>
 
       {% if messages %}
-        <ul class="auth-form__errors auth-form__errors--global">
-          {% for msg in messages %}
-            <li>{{ msg }}</li>
-          {% endfor %}
-        </ul>
+        {% for msg in messages %}
+          <div class="auth-alert auth-alert--{{ msg.tags }}" role="alert">
+            {{ msg }}
+          </div>
+        {% endfor %}
       {% endif %}
 
       {% if form.non_field_errors %}
