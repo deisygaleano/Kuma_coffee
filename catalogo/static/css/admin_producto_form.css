@@ -43,7 +43,7 @@ body {
 }
 
 .form-title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.9rem;
   color: var(--gold);
   margin-bottom: 2rem;
