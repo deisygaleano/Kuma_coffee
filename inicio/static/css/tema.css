@@ -784,22 +784,9 @@
   color: var(--text);
 }
 
-[data-theme="light"] .historial-linea {
-  border-bottom-color: rgba(var(--gold-rgb), 0.14);
-}
-
-[data-theme="light"] .historial-linea__monto dt {
-  color: var(--muted);
-}
-
-[data-theme="light"] .historial-linea__monto dd,
-[data-theme="light"] .historial-linea__nombre,
-[data-theme="light"] .historial-linea .carrito-fila__nombre--texto {
+[data-theme="light"] .historial-tabla th,
+[data-theme="light"] .historial-tabla td {
   color: var(--text);
-}
-
-[data-theme="light"] .historial-linea__vacio {
-  color: var(--muted);
 }
 
 [data-theme="light"] .catalogo-card__badge {

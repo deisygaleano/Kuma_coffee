@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import F, Prefetch, Sum
+from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -228,20 +228,27 @@ def historial_pedidos(request):
         return redirect("cuentas:login")
 
     usuario = _usuario_actual(request)
-    lineas_confirmadas = Prefetch(
-        "lineas",
-        queryset=LineaPedido.objects.select_related(
-            "producto", "producto__categoria"
-        ).order_by("producto__nombre"),
-    )
-    pedidos = (
+    pedidos_qs = (
         Pedido.objects.filter(usuario=usuario)
         .exclude(estado="borrador")
-        .prefetch_related(lineas_confirmadas)
         .order_by("-fecha_pedido", "-id_pedido")
     )
-    paginador = Paginator(pedidos, 4)
+    paginador = Paginator(pedidos_qs, 4)
     pedidos_pagina = paginador.get_page(request.GET.get("page"))
+
+    if pedidos_pagina.object_list:
+        pedidos_ids = [pedido.id_pedido for pedido in pedidos_pagina.object_list]
+        pedidos_map = {
+            pedido.id_pedido: pedido
+            for pedido in Pedido.objects.filter(id_pedido__in=pedidos_ids).prefetch_related(
+                "lineas__producto", "lineas__producto__categoria"
+            )
+        }
+        pedidos_pagina.object_list = [
+            pedidos_map[pedido_id]
+            for pedido_id in pedidos_ids
+            if pedido_id in pedidos_map
+        ]
     numeros_pagina = _rango_paginacion(pedidos_pagina.number, paginador.num_pages)
     whatsapp_pendiente = request.session.pop("whatsapp_pendiente", None)
     return render(

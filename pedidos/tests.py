@@ -115,9 +115,24 @@ class StockPedidoTests(TestCase):
         self.assertEqual(response.status_code, 302)
         pedido.refresh_from_db()
         self.assertEqual(pedido.estado, "confirmado")
+        self.assertEqual(pedido.lineas.count(), 1)
         inventario = InventarioProducto.objects.get(producto=self.producto)
         self.assertEqual(inventario.stock, 7)
 
+    def test_historial_muestra_productos_tras_confirmar(self):
+        pedido = self._pedido_borrador()
+        LineaPedido.objects.create(
+            pedido=pedido,
+            producto=self.producto,
+            cantidad=2,
+            precio_unitario=10000,
+        )
+
+        self.client.post(reverse("pedidos:confirmar"))
+        response = self.client.get(reverse("pedidos:historial"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Cafe Test")
     def test_descargar_factura_genera_pdf_al_hacer_clic(self):
         pedido = self._pedido_borrador()
         LineaPedido.objects.create(
