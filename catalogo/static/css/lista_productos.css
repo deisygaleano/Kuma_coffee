@@ -11,7 +11,7 @@
       --muted:      rgba(240,230,200,0.55);
     }
 
-    body { background: #0f1114; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #0f1114; color: var(--text); font-family: var(--font-body); }
 
     .gp-wrapper {
       max-width: 1200px;
@@ -29,7 +29,7 @@
       gap: 1rem;
     }
     .gp-header h1 {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: var(--font-display);
       font-size: 2rem;
       color: var(--gold);
     }

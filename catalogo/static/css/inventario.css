@@ -15,7 +15,7 @@
     radial-gradient(circle at 82% 18%, rgba(111, 208, 143, .1), transparent 24rem),
     var(--inv-bg);
   color: var(--inv-text);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 .inventario-body .inv-wrapper {
@@ -55,7 +55,7 @@
 .inventario-body .inv-hero h1 {
   margin: 0;
   color: var(--inv-gold);
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3.1rem);
   font-weight: 800;
   line-height: 1.05;

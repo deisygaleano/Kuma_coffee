@@ -6,8 +6,8 @@
   --color-text-muted: rgba(255, 255, 255, 0.85);
   --color-search-bg: rgba(255, 255, 255, 0.95);
   --color-search-text: #4a3728;
-  /* --font-display: 'Playfair Display', Georgia, serif; */
-  /* --font-body: 'Inter', system-ui, sans-serif; */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
   --header-height: 100px;
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.2);
   --radius-search: 8px;
@@ -39,6 +39,22 @@ body {
   flex-direction: column;
   overflow-x: hidden;
   background-color: black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-body);
 }
 
 .cabecera {
@@ -633,7 +649,7 @@ body {
   background-color: var(--bg);
   color: #f5e6d3;
   padding: 40px 20px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
 }
 
 .footer-container {
@@ -825,7 +841,7 @@ a.icono-logo {
 }
 
 .catalogo-titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-style: italic;
   color: var(--accent);
@@ -1076,7 +1092,7 @@ a.icono-logo {
 }
 
 .producto-detalle__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-style: italic;
   color: #fff;
@@ -1126,7 +1142,7 @@ a.icono-logo {
   font-size: 1.25rem;
   color: var(--accent);
   margin-bottom: 1.25rem;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
 }
@@ -1627,7 +1643,7 @@ body.usuario-modal-abierto {
 }
 
 .usuario-modal__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.35rem;
   font-style: italic;
   font-weight: 400;
@@ -1760,7 +1776,7 @@ body.usuario-modal-abierto {
 }
 
 .auth-titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-style: italic;
   color: var(--accent);
@@ -1995,7 +2011,7 @@ body.usuario-modal-abierto {
 
 .manual-titulo {
   margin: 1rem 0 1rem;
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-display);
   font-size: clamp(2.2rem, 5vw, 4.6rem);
   line-height: 1;
   letter-spacing: 0;
@@ -2064,7 +2080,7 @@ body.usuario-modal-abierto {
 .manual-seccion h2,
 .manual-notas h2 {
   margin: 1rem 0 0.75rem;
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-display);
   font-size: clamp(1.7rem, 3vw, 2.4rem);
   letter-spacing: 0;
 }
@@ -2202,7 +2218,7 @@ body.usuario-modal-abierto {
 }
 
 .catalogo-seccion-estatica__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.35rem;
   font-style: italic;
   font-weight: 400;
@@ -2383,7 +2399,7 @@ body.usuario-modal-abierto {
 }
 
 .slider-titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.4rem, 3vw, 2rem);
@@ -2973,7 +2989,7 @@ body.usuario-modal-abierto {
 }
 
 .sn-hero__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(2.25rem, 5.5vw, 4rem);
   font-style: italic;
   font-weight: 400;
@@ -3000,7 +3016,7 @@ body.usuario-modal-abierto {
 }
 
 .sn-titulo-seccion {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.5vw, 2.4rem);
   font-style: italic;
   font-weight: 400;
@@ -3076,7 +3092,7 @@ body.usuario-modal-abierto {
 .sn-mision__badge-num {
   font-size: 2rem;
   font-weight: 700;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   line-height: 1;
 }
 
@@ -3103,7 +3119,7 @@ body.usuario-modal-abierto {
 
 .sn-cifra__num {
   display: block;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   color: var(--bg);
@@ -3198,7 +3214,7 @@ body.usuario-modal-abierto {
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 0.6rem;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
 }
 
@@ -3274,7 +3290,7 @@ body.usuario-modal-abierto {
 }
 
 .sn-cta__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-style: italic;
   font-weight: 400;
