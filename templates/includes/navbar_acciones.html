@@ -2,7 +2,7 @@
 <div class="cabecera__acciones">
   <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras ({{ carrito_cantidad }} productos)">
     <span class="cabecera__carrito-icon" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
         stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 6h15l-1.5 9h-12z" />
         <circle cx="9" cy="20" r="1" />
@@ -13,7 +13,6 @@
         <span class="cabecera__carrito-badge" aria-hidden="true">{{ carrito_cantidad }}</span>
       {% endif %}
     </span>
-    <span class="cabecera__carrito-texto">Carrito</span>
   </a>
 
   <div class="cabecera__usuario cabecera__usuario--cuenta">

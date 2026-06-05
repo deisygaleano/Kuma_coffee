@@ -591,6 +591,11 @@ body {
     font-size: 1rem;
   }
 
+  .cabecera__carrito-icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
   .texto-logo {
     font-size: 1.2rem;
   }
@@ -1162,41 +1167,35 @@ a.icono-logo {
 .cabecera__carrito {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
   text-decoration: none;
   color: var(--color-text-navegacion);
-  font-size: 0.9rem;
   font-weight: 500;
-  position: relative;
-  padding: 0.35rem 0.5rem;
+  padding: 0.25rem 0.35rem;
   border-radius: 8px;
-  transition: background 0.15s;
+  transition: background 0.15s, opacity 0.2s;
 }
 
 .cabecera__carrito:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
+  opacity: 0.9;
 }
 
 .cabecera__carrito-icon {
+  position: relative;
   display: flex;
   color: var(--accent);
 }
 
-.cabecera__carrito-texto {
-  display: none;
-}
-
-@media (min-width: 600px) {
-  .cabecera__carrito-texto {
-    display: inline;
-  }
+.cabecera__carrito-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .cabecera__carrito-badge {
   position: absolute;
-  top: -2px;
-  right: -4px;
+  top: -4px;
+  right: -6px;
   min-width: 1.15rem;
   height: 1.15rem;
   padding: 0 4px;
