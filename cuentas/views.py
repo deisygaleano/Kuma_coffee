@@ -2,11 +2,13 @@ import base64
 import hashlib
 import secrets
 import urllib.parse
+from pathlib import Path
 
 import requests as http_requests
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -21,6 +23,23 @@ _GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/v2/auth"
 _GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 _GOOGLE_SCOPES = "openid email profile"
 _GOOGLE_FLOW_SESSION_KEY = "google_oauth_flows"
+_TAGS_MENSAJE_LOGIN = frozenset({"auth", "login"})
+
+
+def _limpiar_mensajes(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass
+
+
+def _filtrar_mensajes_para_login(request):
+    storage = messages.get_messages(request)
+    conservados = []
+    for msg in storage:
+        if set(msg.tags.split()) & _TAGS_MENSAJE_LOGIN:
+            conservados.append((msg.level, msg.message, msg.tags))
+    for level, message, tags in conservados:
+        messages.add_message(request, level, message, extra_tags=tags)
 
 
 def _redirect_seguro(request):
@@ -28,6 +47,32 @@ def _redirect_seguro(request):
     if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
         return redirect(next_url)
     return redirect("catalogo:lista")
+
+
+def _es_peticion_ajax(request):
+    return request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+
+def _respuesta_foto(request, usuario, ok, mensaje, status=200):
+    if _es_peticion_ajax(request):
+        foto_url = None
+        if usuario and usuario.foto:
+            foto_url = usuario.foto.url
+        return JsonResponse(
+            {
+                "ok": ok,
+                "mensaje": mensaje,
+                "foto_url": foto_url,
+                "tiene_foto": bool(usuario and usuario.foto),
+            },
+            status=status,
+        )
+
+    if ok:
+        messages.success(request, mensaje)
+    else:
+        messages.error(request, mensaje)
+    return _redirect_seguro(request)
 
 
 def _eliminar_archivo_foto(usuario):
@@ -94,6 +139,9 @@ def _guardar_google_flow(request, state, code_verifier, redirect_uri, next_url="
 
 
 def login(request):
+    if request.method == "GET":
+        _filtrar_mensajes_para_login(request)
+
     form = LoginForm(request.POST or None)
     next_url = request.POST.get("next") or request.GET.get("next") or ""
     if request.method == "POST" and form.is_valid():
@@ -128,7 +176,7 @@ def registro(request):
             password=make_password(form.cleaned_data["password"]),
             rol="cliente",
         )
-        messages.success(request, "Registro exitoso")
+        messages.success(request, "Registro exitoso", extra_tags="login")
         return redirect("cuentas:login")
 
     return render(request, "registro.html", {"form": form})
@@ -141,7 +189,7 @@ def restablecer(request):
         password_hash = make_password(form.cleaned_data["password"])
         usuarios = Usuario.objects.filter(correo__iexact=correo)
         usuarios.update(correo=correo, password=password_hash)
-        messages.success(request, "Nueva contraseña correcta")
+        messages.success(request, "Nueva contraseña correcta", extra_tags="login")
         return redirect("cuentas:login")
 
     return render(request, "restablecer.html", {"form": form})
@@ -150,7 +198,7 @@ def restablecer(request):
 def cambiar_password(request):
     usuario_id = request.session.get("usuario_id")
     if not usuario_id:
-        messages.error(request, "Debes iniciar sesion para cambiar tu contrasena.")
+        messages.error(request, "Debes iniciar sesion para cambiar tu contrasena.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(pk=usuario_id).first()
@@ -179,38 +227,59 @@ def cambiar_password(request):
 def actualizar_foto(request):
     usuario_id = request.session.get("usuario_id")
     if not usuario_id:
-        messages.error(request, "Debes iniciar sesion para actualizar tu foto.")
+        if _es_peticion_ajax(request):
+            return JsonResponse(
+                {"ok": False, "mensaje": "Debes iniciar sesion para actualizar tu foto."},
+                status=401,
+            )
+        messages.error(request, "Debes iniciar sesion para actualizar tu foto.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(pk=usuario_id).first()
     if not usuario:
         request.session.pop("usuario_id", None)
-        messages.error(request, "La sesion no es valida. Inicia sesion de nuevo.")
+        if _es_peticion_ajax(request):
+            return JsonResponse(
+                {"ok": False, "mensaje": "La sesion no es valida. Inicia sesion de nuevo."},
+                status=401,
+            )
+        messages.error(request, "La sesion no es valida. Inicia sesion de nuevo.", extra_tags="auth")
         return redirect("cuentas:login")
 
     if request.POST.get("accion") == "eliminar":
         _eliminar_archivo_foto(usuario)
         usuario.foto = None
         usuario.save(update_fields=["foto"])
-        messages.success(request, "Foto de perfil eliminada.")
-        return _redirect_seguro(request)
+        return _respuesta_foto(request, usuario, True, "Foto de perfil eliminada.")
+
+    if "foto" not in request.FILES:
+        return _respuesta_foto(
+            request,
+            usuario,
+            False,
+            "No se recibio ninguna imagen. Intenta de nuevo.",
+            status=400,
+        )
+
+    usuarios_media = Path(django_settings.MEDIA_ROOT) / "usuarios"
+    usuarios_media.mkdir(parents=True, exist_ok=True)
 
     form = FotoUsuarioForm(request.POST, request.FILES)
     if form.is_valid():
         _eliminar_archivo_foto(usuario)
         usuario.foto = form.cleaned_data["foto"]
-        usuario.save(update_fields=["foto"])
-        messages.success(request, "Foto de perfil actualizada.")
-    else:
-        messages.error(request, form.errors.get("foto", ["No se pudo actualizar la foto."])[0])
+        usuario.save()
+        return _respuesta_foto(request, usuario, True, "Foto de perfil actualizada.")
 
-    return _redirect_seguro(request)
+    error_foto = form.errors.get("foto")
+    mensaje = error_foto[0] if error_foto else "No se pudo actualizar la foto."
+    return _respuesta_foto(request, usuario, False, mensaje, status=400)
 
 
 @require_POST
 def logout(request):
+    _limpiar_mensajes(request)
     request.session.pop("usuario_id", None)
-    messages.success(request, "Sesion cerrada correctamente.")
     return redirect("inicio")
 
 
@@ -249,7 +318,7 @@ def google_callback(request):
         request.session.modified = True
 
     if not flow or not code:
-        messages.error(request, "Sesion OAuth invalida. Intenta de nuevo.")
+        messages.error(request, "Sesion OAuth invalida. Intenta de nuevo.", extra_tags="auth")
         return redirect("cuentas:login")
 
     code_verifier = flow.get("code_verifier")
@@ -279,7 +348,7 @@ def google_callback(request):
             django_settings.GOOGLE_CLIENT_ID,
         )
     except Exception:
-        messages.error(request, "No se pudo completar el inicio de sesion con Google.")
+        messages.error(request, "No se pudo completar el inicio de sesion con Google.", extra_tags="auth")
         return redirect("cuentas:login")
 
     google_sub = id_info.get("sub")
@@ -288,7 +357,7 @@ def google_callback(request):
     apellido = id_info.get("family_name") or None
 
     if not google_sub or not email:
-        messages.error(request, "Google no entrego la informacion necesaria para iniciar sesion.")
+        messages.error(request, "Google no entrego la informacion necesaria para iniciar sesion.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(google_id=google_sub).first()
@@ -296,7 +365,7 @@ def google_callback(request):
         usuario = Usuario.objects.filter(correo__iexact=email).first()
         if usuario:
             if usuario.google_id and usuario.google_id != google_sub:
-                messages.error(request, "Este correo ya esta vinculado a otra cuenta de Google.")
+                messages.error(request, "Este correo ya esta vinculado a otra cuenta de Google.", extra_tags="auth")
                 return redirect("cuentas:login")
             if not usuario.google_id:
                 usuario.google_id = google_sub

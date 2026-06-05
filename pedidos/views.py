@@ -58,7 +58,11 @@ def agregar_al_carrito(request):
     if not request.session.get("usuario_id"):
         next_url = request.POST.get("next") or reverse("catalogo:lista")
         login_url = f"{reverse('cuentas:login')}?{urlencode({'next': next_url})}"
-        messages.error(request, "Para agregar productos al carrito debes iniciar sesion.")
+        messages.error(
+            request,
+            "Para agregar productos al carrito debes iniciar sesion.",
+            extra_tags="auth",
+        )
         return redirect(login_url)
 
     producto_id = request.POST.get("producto_id")
@@ -128,7 +132,7 @@ def eliminar_linea(request, linea_id):
 @require_POST
 def confirmar_pedido(request):
     if not request.session.get("usuario_id"):
-        messages.error(request, "Debes iniciar sesión para confirmar un pedido.")
+        messages.error(request, "Debes iniciar sesión para confirmar un pedido.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = _usuario_actual(request)
@@ -159,7 +163,7 @@ def confirmar_pedido(request):
 
 def historial_pedidos(request):
     if not request.session.get("usuario_id"):
-        messages.error(request, "Debes iniciar sesión para ver tu historial de pedidos.")
+        messages.error(request, "Debes iniciar sesión para ver tu historial de pedidos.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = _usuario_actual(request)

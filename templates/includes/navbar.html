@@ -11,6 +11,9 @@
       <nav class="cabecera__navegacion">
        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
         <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catalogo</a>
+        {% if usuario_es_admin %}
+        <a href="{% url 'catalogo:inventario_productos' %}" class="enlace-navegacion">Inventarios</a>
+        {% endif %}
         <!-- <a href="{% url 'manual_usuario' %}" class="enlace-navegacion enlace-ayuda">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/>

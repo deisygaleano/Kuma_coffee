@@ -20,10 +20,25 @@ class FotoUsuarioForm(forms.Form):
     )
 
     def clean_foto(self):
-        foto = self.cleaned_data["foto"]
-        tipos_permitidos = {"image/jpeg", "image/png", "image/webp"}
+        foto = self.cleaned_data.get("foto")
+        if not foto:
+            raise forms.ValidationError("Debes seleccionar una imagen.")
 
-        if foto.content_type not in tipos_permitidos:
+        extensiones_permitidas = (".jpg", ".jpeg", ".png", ".webp")
+        nombre = (foto.name or "").lower()
+        extension_valida = any(nombre.endswith(ext) for ext in extensiones_permitidas)
+
+        tipos_permitidos = {
+            "image/jpeg",
+            "image/jpg",
+            "image/pjpeg",
+            "image/png",
+            "image/x-png",
+            "image/webp",
+        }
+        tipo = (foto.content_type or "").lower()
+        tipo_valido = not tipo or tipo in tipos_permitidos
+        if not extension_valida and not tipo_valido:
             raise forms.ValidationError("Sube una imagen JPG, PNG o WEBP.")
 
         if foto.size > 2 * 1024 * 1024:

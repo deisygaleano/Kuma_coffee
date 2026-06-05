@@ -249,6 +249,10 @@ def _asegurar_inventario_productos():
 def _es_admin(request):
     if usuario_es_admin(request):
         return True
-    messages.error(request, "Debes iniciar sesion como administrador para acceder a esta seccion.")
+    messages.error(
+        request,
+        "Debes iniciar sesion como administrador para acceder a esta seccion.",
+        extra_tags="auth",
+    )
     return False
 
