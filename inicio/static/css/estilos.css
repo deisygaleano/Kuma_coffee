@@ -737,6 +737,23 @@ body {
   filter: brightness(1.08);
 }
 
+.btn--disabled,
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.btn-primary:disabled:hover {
+  filter: none;
+}
+
+.producto-detalle__sin-stock {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted, #6b5d52);
+}
+
 /* ===== Catálogo (e-commerce) ===== */
 .enlace-navegacion--activo {
   text-decoration: underline;

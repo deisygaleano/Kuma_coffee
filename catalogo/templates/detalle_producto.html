@@ -61,13 +61,19 @@
               <label class="producto-detalle__qty-label" for="qty-detalle">Cantidad</label>
               <div class="cantidad-control">
                 <input type="number" id="qty-detalle" name="cantidad" class="producto-detalle__qty cantidad-control__input" value="1" min="1"
-                  max="99" />
+                  max="{% if producto.stock_actual > 0 %}{{ producto.stock_actual }}{% else %}1{% endif %}"
+                  {% if producto.stock_actual == 0 %}disabled{% endif %} />
                 <div class="cantidad-control__botones">
-                  <button type="button" class="cantidad-control__btn cantidad-control__btn--arriba" data-cantidad-btn="sumar" aria-label="Sumar cantidad">▲</button>
-                  <button type="button" class="cantidad-control__btn cantidad-control__btn--abajo" data-cantidad-btn="restar" aria-label="Restar cantidad">▼</button>
+                  <button type="button" class="cantidad-control__btn cantidad-control__btn--arriba" data-cantidad-btn="sumar" aria-label="Sumar cantidad" {% if producto.stock_actual == 0 %}disabled{% endif %}>▲</button>
+                  <button type="button" class="cantidad-control__btn cantidad-control__btn--abajo" data-cantidad-btn="restar" aria-label="Restar cantidad" {% if producto.stock_actual == 0 %}disabled{% endif %}>▼</button>
                 </div>
               </div>
+              {% if producto.stock_actual == 0 %}
+              <button type="submit" class="btn btn-primary btn--disabled" disabled aria-disabled="true">Agotado</button>
+              <p class="producto-detalle__sin-stock">Este producto no tiene unidades disponibles.</p>
+              {% else %}
               <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+              {% endif %}
             </form>
             <a class="btn btn-ghost" href="{% url 'catalogo:lista' %}">Volver al catálogo</a>
           </div>
