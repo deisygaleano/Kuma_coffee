@@ -1,8 +1,9 @@
 :root {
   --bg-panel: #1a1a1a;
-  --border: rgba(201, 162, 39, .22);
-  --gold: #c9a227;
-  --gold-h: #e0b830;
+  --gold: #a68b2d;
+  --gold-h: #b89635;
+  --gold-rgb: 166, 139, 45;
+  --border: rgba(var(--gold-rgb), .22);
   --text: #f0e6c8;
   --muted: rgba(240, 230, 200, .55);
   --input-bg: #111111;
@@ -140,7 +141,7 @@ body {
 }
 
 .img-zone .btn-seleccionar {
-  background: rgba(201, 162, 39, .12);
+  background: rgba(var(--gold-rgb), .12);
   border: 1px solid var(--gold);
   color: var(--gold);
   padding: .45rem 1.1rem;
@@ -151,7 +152,7 @@ body {
 }
 
 .img-zone .btn-seleccionar:hover {
-  background: rgba(201, 162, 39, .25);
+  background: rgba(var(--gold-rgb), .25);
 }
 
 #preview-container {

@@ -16,13 +16,15 @@ body {
 
 .confirm-panel {
   background: #1a1a1a;
-  border: 1px solid rgba(201, 162, 39, .22);
+  --gold: #a68b2d;
+  --gold-rgb: 166, 139, 45;
+  border: 1px solid rgba(var(--gold-rgb), .22);
   border-radius: 14px;
   padding: 2.5rem 2rem;
 }
 
 .confirm-panel h2 {
-  color: #c9a227;
+  color: var(--gold);
   margin-bottom: .75rem;
   font-size: 1.4rem;
 }
@@ -55,15 +57,15 @@ body {
 .btn-volver {
   padding: .6rem 1.4rem;
   border-radius: 8px;
-  border: 1px solid rgba(201, 162, 39, .3);
+  border: 1px solid rgba(var(--gold-rgb), .3);
   color: rgba(240, 230, 200, .6);
   text-decoration: none;
   font-size: .9rem;
 }
 
 .btn-volver:hover {
-  border-color: #c9a227;
-  color: #c9a227;
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .btn-confirmar {

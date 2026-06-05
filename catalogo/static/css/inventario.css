@@ -2,16 +2,17 @@
   --inv-bg: #0f1114;
   --inv-panel: #181818;
   --inv-panel-2: #202020;
-  --inv-line: rgba(201, 162, 39, .24);
-  --inv-gold: #c9a227;
-  --inv-gold-2: #e0b830;
+  --inv-gold: #a68b2d;
+  --inv-gold-2: #b89635;
+  --inv-gold-rgb: 166, 139, 45;
+  --inv-line: rgba(var(--inv-gold-rgb), .24);
   --inv-text: #fff4d7;
   --inv-muted: rgba(255, 244, 215, .66);
   --inv-green: #6fd08f;
   --inv-yellow: #f1c84b;
   --inv-red: #e06b5f;
   background:
-    radial-gradient(circle at 18% 8%, rgba(201, 162, 39, .16), transparent 28rem),
+    radial-gradient(circle at 18% 8%, rgba(var(--inv-gold-rgb), .16), transparent 28rem),
     radial-gradient(circle at 82% 18%, rgba(111, 208, 143, .1), transparent 24rem),
     var(--inv-bg);
   color: var(--inv-text);
@@ -35,7 +36,7 @@
   border: 1px solid var(--inv-line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, .16), rgba(111, 208, 143, .08)),
+    linear-gradient(135deg, rgba(var(--inv-gold-rgb), .16), rgba(111, 208, 143, .08)),
     linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .015)),
     #161616;
   box-shadow: 0 24px 60px rgba(0, 0, 0, .32);
@@ -99,8 +100,8 @@
 .inventario-body .btn-secundario,
 .inventario-body .btn-limpiar {
   padding: 0 1.05rem;
-  border: 1px solid rgba(201, 162, 39, .35);
-  background: rgba(201, 162, 39, .08);
+  border: 1px solid rgba(var(--inv-gold-rgb), .35);
+  background: rgba(var(--inv-gold-rgb), .08);
   color: var(--inv-gold);
 }
 
@@ -110,7 +111,7 @@
   border: 0;
   background: linear-gradient(180deg, var(--inv-gold-2), var(--inv-gold));
   color: #101010;
-  box-shadow: 0 10px 24px rgba(201, 162, 39, .18);
+  box-shadow: 0 10px 24px rgba(var(--inv-gold-rgb), .18);
 }
 
 .inventario-body .btn-agregar {
@@ -163,9 +164,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(201, 162, 39, .3);
+  border: 1px solid rgba(var(--inv-gold-rgb), .3);
   border-radius: 8px;
-  background: rgba(201, 162, 39, .12);
+  background: rgba(var(--inv-gold-rgb), .12);
   color: var(--inv-gold);
 }
 
@@ -215,7 +216,7 @@
   gap: .65rem;
   min-height: 44px;
   padding: 0 .9rem;
-  border: 1px solid rgba(201, 162, 39, .22);
+  border: 1px solid rgba(var(--inv-gold-rgb), .22);
   border-radius: 8px;
   background: #111;
   color: var(--inv-gold);
@@ -235,7 +236,7 @@
 
 .inventario-body .inv-filtros select {
   padding: 0 .85rem;
-  border: 1px solid rgba(201, 162, 39, .22);
+  border: 1px solid rgba(var(--inv-gold-rgb), .22);
   border-radius: 8px;
   background: #111;
 }
@@ -255,7 +256,7 @@
   gap: 1rem;
   padding: 1.1rem 1.25rem;
   border-bottom: 1px solid var(--inv-line);
-  background: linear-gradient(135deg, rgba(201, 162, 39, .13), rgba(255, 255, 255, .025));
+  background: linear-gradient(135deg, rgba(var(--inv-gold-rgb), .13), rgba(255, 255, 255, .025));
 }
 
 .inventario-body .inv-table-toolbar h2 {
@@ -270,9 +271,9 @@
   align-items: center;
   min-height: 34px;
   padding: 0 .9rem;
-  border: 1px solid rgba(201, 162, 39, .32);
+  border: 1px solid rgba(var(--inv-gold-rgb), .32);
   border-radius: 999px;
-  background: rgba(201, 162, 39, .12);
+  background: rgba(var(--inv-gold-rgb), .12);
   color: var(--inv-gold);
   font-size: .8rem;
   font-weight: 900;
@@ -302,7 +303,7 @@
 
 .inventario-body .inv-table td {
   padding: .65rem .75rem;
-  border-top: 1px solid rgba(201, 162, 39, .16);
+  border-top: 1px solid rgba(var(--inv-gold-rgb), .16);
   color: var(--inv-text);
   vertical-align: middle;
 }
@@ -317,7 +318,7 @@
 }
 
 .inventario-body .inv-table tbody tr:hover {
-  background: rgba(201, 162, 39, .075);
+  background: rgba(var(--inv-gold-rgb), .075);
 }
 
 .inventario-body .inv-producto {
@@ -333,7 +334,7 @@
   width: 44px;
   height: 44px;
   min-height: 44px;
-  border: 1px solid rgba(201, 162, 39, .28);
+  border: 1px solid rgba(var(--inv-gold-rgb), .28);
   border-radius: 8px;
   object-fit: cover;
   background: #111;
@@ -438,7 +439,7 @@
   width: 100%;
   min-height: 40px;
   padding: 0 .75rem;
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(var(--inv-gold-rgb), .25);
   border-radius: 8px;
   outline: none;
   background: #111;
@@ -450,7 +451,7 @@
 
 .inventario-body .inv-campo-numero input:focus {
   border-color: var(--inv-gold);
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, .14);
+  box-shadow: 0 0 0 3px rgba(var(--inv-gold-rgb), .14);
 }
 
 .inventario-body .inv-row-form {

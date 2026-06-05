@@ -2,9 +2,10 @@
       --bg-panel:   #1a1a1a;
       --bg-row:     #222222;
       --bg-row-alt: #1e1e1e;
-      --border:     rgba(201,162,39,0.18);
-      --gold:       #c9a227;
-      --gold-hover: #e0b830;
+      --gold:       #a68b2d;
+      --gold-hover: #b89635;
+      --gold-rgb:   166, 139, 45;
+      --border:     rgba(var(--gold-rgb), 0.18);
       --red:        #c0392b;
       --red-hover:  #e74c3c;
       --text:       #f0e6c8;
@@ -65,7 +66,7 @@
       padding: .58rem 1.15rem;
       border-radius: 8px;
       border: 1px solid rgba(111,208,143,.36);
-      background: linear-gradient(135deg, rgba(66,170,100,.18), rgba(201,162,39,.14));
+      background: linear-gradient(135deg, rgba(66,170,100,.18), rgba(var(--gold-rgb),.14));
       color: #bff2cf;
       font-size: .9rem;
       font-weight: 800;
@@ -76,7 +77,7 @@
 
     .btn-inventario:hover {
       border-color: rgba(111,208,143,.68);
-      background: linear-gradient(135deg, rgba(66,170,100,.26), rgba(201,162,39,.2));
+      background: linear-gradient(135deg, rgba(66,170,100,.26), rgba(var(--gold-rgb),.2));
       transform: translateY(-1px);
     }
 
@@ -106,12 +107,12 @@
     .btn-secundario:hover,
     .btn-limpiar:hover {
       border-color: var(--gold);
-      background: rgba(201,162,39,.08);
+      background: rgba(var(--gold-rgb),.08);
     }
 
     /* ── Mensajes ── */
     .gp-msg {
-      background: rgba(201,162,39,.15);
+      background: rgba(var(--gold-rgb),.15);
       border: 1px solid var(--gold);
       color: var(--gold);
       padding: .75rem 1.25rem;
@@ -138,7 +139,7 @@
       border-collapse: collapse;
     }
     .gp-table thead tr {
-      background: rgba(201,162,39,.08);
+      background: rgba(var(--gold-rgb),.08);
       border-bottom: 2px solid var(--border);
     }
     .gp-table thead th {
@@ -159,7 +160,7 @@
     }
     .gp-table tbody tr:nth-child(odd)  { background: var(--bg-row); }
     .gp-table tbody tr:nth-child(even) { background: var(--bg-row-alt); }
-    .gp-table tbody tr:hover           { background: rgba(201,162,39,.06); }
+    .gp-table tbody tr:hover           { background: rgba(var(--gold-rgb),.06); }
     .gp-table tbody tr:last-child      { border-bottom: none; }
 
     .gp-table td {
@@ -189,8 +190,8 @@
     .texto-tenue { opacity: .4; }
     .badge-extra {
       display: inline-block;
-      background: rgba(201,162,39,.12);
-      border: 1px solid rgba(201,162,39,.3);
+      background: rgba(var(--gold-rgb),.12);
+      border: 1px solid rgba(var(--gold-rgb),.3);
       color: var(--gold);
       border-radius: 20px;
       padding: .15rem .65rem;
@@ -301,7 +302,7 @@
 
     .inv-hero {
       background:
-        linear-gradient(135deg, rgba(201,162,39,.14), rgba(66,170,100,.08)),
+        linear-gradient(135deg, rgba(var(--gold-rgb),.14), rgba(66,170,100,.08)),
         #171717;
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -345,8 +346,8 @@
       align-items: center;
       justify-content: center;
       border-radius: 8px;
-      background: rgba(201,162,39,.12);
-      border: 1px solid rgba(201,162,39,.22);
+      background: rgba(var(--gold-rgb),.12);
+      border: 1px solid rgba(var(--gold-rgb),.22);
       color: var(--gold);
     }
 
@@ -441,7 +442,7 @@
       gap: 1rem;
       padding: 1rem 1.15rem;
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(201,162,39,.1), rgba(255,255,255,.02));
+      background: linear-gradient(135deg, rgba(var(--gold-rgb),.1), rgba(255,255,255,.02));
     }
 
     .inv-table-toolbar .gp-kicker {
@@ -460,8 +461,8 @@
       align-items: center;
       min-height: 32px;
       border-radius: 999px;
-      border: 1px solid rgba(201,162,39,.26);
-      background: rgba(201,162,39,.1);
+      border: 1px solid rgba(var(--gold-rgb),.26);
+      background: rgba(var(--gold-rgb),.1);
       color: var(--gold);
       padding: 0 .85rem;
       font-size: .78rem;
@@ -488,7 +489,7 @@
     }
 
     .inv-table tbody tr:hover {
-      background: rgba(201,162,39,.075);
+      background: rgba(var(--gold-rgb),.075);
     }
 
     .inv-table tbody tr.inv-row {
@@ -508,7 +509,7 @@
       display: table-cell;
       width: 4px;
       padding: 0;
-      background: rgba(201,162,39,.12);
+      background: rgba(var(--gold-rgb),.12);
     }
 
     .inv-table tbody tr.inv-row-disponible::before { background: #42aa64; }
@@ -617,7 +618,7 @@
 
     .inv-campo-numero input:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201,162,39,.12);
+      box-shadow: 0 0 0 3px rgba(var(--gold-rgb),.12);
     }
 
     .inv-row-form {

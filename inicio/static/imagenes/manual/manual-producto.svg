@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" role="img">
   <rect width="760" height="480" rx="28" fill="#17100b"/>
-  <rect x="64" y="56" width="632" height="368" rx="28" fill="#241810" stroke="#c9a227" stroke-opacity=".45"/>
+  <rect x="64" y="56" width="632" height="368" rx="28" fill="#241810" stroke="#a68b2d" stroke-opacity=".45"/>
   <rect x="104" y="104" width="246" height="246" rx="26" fill="#3a2517"/>
-  <path d="M202 180c14-34 56-34 70 0 15 38-15 88-35 116-20-28-50-78-35-116Z" fill="#c9a227"/>
+  <path d="M202 180c14-34 56-34 70 0 15 38-15 88-35 116-20-28-50-78-35-116Z" fill="#a68b2d"/>
   <rect x="398" y="116" width="190" height="20" rx="10" fill="#f4ead2"/>
   <rect x="398" y="160" width="240" height="12" rx="6" fill="#806228"/>
   <rect x="398" y="186" width="186" height="12" rx="6" fill="#806228"/>
-  <rect x="398" y="232" width="126" height="18" rx="9" fill="#c9a227"/>
+  <rect x="398" y="232" width="126" height="18" rx="9" fill="#a68b2d"/>
   <rect x="398" y="286" width="132" height="44" rx="22" fill="#120c08" stroke="#7f6128"/>
-  <rect x="550" y="286" width="104" height="44" rx="22" fill="#c9a227"/>
+  <rect x="550" y="286" width="104" height="44" rx="22" fill="#a68b2d"/>
   <path d="M426 308h76M464 270v76" stroke="#f4ead2" stroke-width="8" stroke-linecap="round" opacity=".65"/>
 </svg>
