@@ -1,4 +1,32 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const stockInput = document.getElementById("id_stock");
+  if (stockInput) {
+    const stockMinimo = parseInt(stockInput.getAttribute("data-stock-inicial") || stockInput.min || "0", 10);
+
+    function ajustarStock() {
+      const valor = parseInt(stockInput.value, 10);
+      if (Number.isNaN(valor) || valor < stockMinimo) {
+        stockInput.value = stockMinimo;
+      }
+    }
+
+    stockInput.addEventListener("change", ajustarStock);
+    stockInput.addEventListener("blur", ajustarStock);
+    stockInput.closest("form")?.addEventListener("submit", function (event) {
+      ajustarStock();
+      const valor = parseInt(stockInput.value, 10);
+      if (valor < stockMinimo) {
+        event.preventDefault();
+        stockInput.setCustomValidity(
+          `El stock no puede ser menor a ${stockMinimo} unidades.`
+        );
+        stockInput.reportValidity();
+      } else {
+        stockInput.setCustomValidity("");
+      }
+    });
+  }
+
   const inputFile = document.getElementById("id_imagen_file");
   const zone = document.getElementById("imgZone");
   const previewBox = document.getElementById("preview-container");

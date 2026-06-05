@@ -60,6 +60,7 @@ class ProductoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._stock_inicial = 0
         if self.instance and self.instance.pk:
             inventario, _ = InventarioProducto.objects.get_or_create(
                 producto=self.instance,
@@ -68,5 +69,16 @@ class ProductoForm(forms.ModelForm):
                     "stock_minimo": self.instance.stock_minimo,
                 },
             )
+            self._stock_inicial = inventario.stock
             self.fields["stock"].initial = inventario.stock
             self.fields["stock_minimo"].initial = inventario.stock_minimo
+            self.fields["stock"].widget.attrs["min"] = inventario.stock
+            self.fields["stock"].widget.attrs["data-stock-inicial"] = inventario.stock
+
+    def clean_stock(self):
+        stock = self.cleaned_data["stock"]
+        if self.instance and self.instance.pk and stock < self._stock_inicial:
+            raise forms.ValidationError(
+                f"No puedes reducir el stock por debajo de {self._stock_inicial} unidades."
+            )
+        return stock
