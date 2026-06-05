@@ -53,6 +53,12 @@ def _recalcular_totales(pedido):
     pedido.save(update_fields=["cantidad", "valor"])
 
 
+def _redirect_tras_rechazo_carrito_admin(request):
+    next_url = request.POST.get("next") or reverse("catalogo:lista")
+    messages.error(request, "Los administradores no pueden agregar productos al carrito.")
+    return redirect(next_url)
+
+
 @require_POST
 def agregar_al_carrito(request):
     if not request.session.get("usuario_id"):
@@ -65,12 +71,15 @@ def agregar_al_carrito(request):
         )
         return redirect(login_url)
 
+    usuario = _usuario_actual(request)
+    if es_admin(usuario):
+        return _redirect_tras_rechazo_carrito_admin(request)
+
     producto_id = request.POST.get("producto_id")
     cantidad = int(request.POST.get("cantidad", 1))
     cantidad = max(1, cantidad)
 
     producto = get_object_or_404(Producto, pk=producto_id)
-    usuario = _usuario_actual(request)
     pedido = _pedido_borrador(usuario)
 
     linea, creada = LineaPedido.objects.get_or_create(

@@ -98,7 +98,11 @@
         </div>
       </div>
       <div class="carrito-estatico-acciones">
+        {% if usuario_es_admin %}
+        <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Volver al catálogo</a>
+        {% else %}
         <a class="btn btn-primary" href="{% url 'catalogo:lista' %}">Agregar más productos</a>
+        {% endif %}
          {% if not usuario_es_admin %}
         <a class="btn btn-ghost" href="{% url 'pedidos:historial' %}">Mis pedidos</a>
           {% endif %}

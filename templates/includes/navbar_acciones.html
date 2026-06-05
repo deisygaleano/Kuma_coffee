@@ -1,5 +1,6 @@
 {% load static %}
 <div class="cabecera__acciones">
+  {% if not usuario_es_admin %}
   <a href="{% url 'pedidos:carrito' %}" class="cabecera__carrito" aria-label="Ver carrito de compras ({{ carrito_cantidad }} productos)">
     <span class="cabecera__carrito-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
@@ -14,6 +15,7 @@
       {% endif %}
     </span>
   </a>
+  {% endif %}
 
   <div class="cabecera__usuario cabecera__usuario--cuenta">
     <button type="button" class="cabecera__usuario-trigger" id="usuario-menu-trigger" aria-expanded="false"
