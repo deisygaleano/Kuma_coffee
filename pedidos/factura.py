@@ -1,7 +1,8 @@
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 from django.conf import settings
-from django.utils import timezone
+from kuma_coffee.zona_horaria import ahora_local
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -109,7 +110,7 @@ def generar_factura_pdf(pedido, usuario):
 
     elementos = _encabezado_factura(titulo, subtitulo)
 
-    fecha = pedido.fecha_pedido or timezone.now()
+    fecha = pedido.fecha_pedido or ahora_local()
     nombre_cliente = f"{usuario.nombre} {usuario.apellido or ''}".strip()
     info = [
         ["Pedido", f"#{pedido.id_pedido}"],
@@ -132,11 +133,28 @@ def generar_factura_pdf(pedido, usuario):
     )
     elementos.extend([tabla_info, Spacer(1, 0.6 * cm)])
 
+    estilo_producto = ParagraphStyle(
+        "ProductoFactura",
+        parent=styles["Normal"],
+        fontSize=10,
+        textColor=colors.HexColor("#3d3428"),
+        leading=12,
+    )
+
     filas = [["Producto", "Cant.", "Precio unit.", "Subtotal"]]
     for linea in lineas:
+        descripcion = (linea.producto.descripcion or "").strip()
+        nombre = escape(linea.producto.nombre)
+        if descripcion:
+            texto_producto = (
+                f"{nombre}<br/><font size='8' color='#6a5c48'>"
+                f"{escape(descripcion)}</font>"
+            )
+        else:
+            texto_producto = nombre
         filas.append(
             [
-                linea.producto.nombre,
+                Paragraph(texto_producto, estilo_producto),
                 str(linea.cantidad),
                 formato_peso(linea.precio_unitario),
                 formato_peso(linea.subtotal),

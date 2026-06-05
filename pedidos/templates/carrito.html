@@ -42,6 +42,9 @@
                   </div>
                   <div>
                     <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
+                    {% if linea.producto.descripcion %}
+                      <p class="carrito-fila__desc">{{ linea.producto.descripcion }}</p>
+                    {% endif %}
                     <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
                   </div>
                 </td>

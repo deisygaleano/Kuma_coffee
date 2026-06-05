@@ -39,34 +39,48 @@
                 </span>
               </div>
 
-              <table class="carrito-tabla historial-tabla">
-                <thead>
-                  <tr>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Precio unitario</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
+              {% if pedido.lineas.all %}
+                <ul class="historial-lineas">
                   {% for linea in pedido.lineas.all %}
-                    <tr class="carrito-fila">
-                      <td class="carrito-fila__producto">
+                    <li class="historial-linea">
+                      <div class="carrito-fila__producto historial-linea__producto">
                         <div class="catalogo-card__media carrito-fila__media">
                           {% include 'includes/producto_imagen.html' with producto=linea.producto img_class="catalogo-card__img" placeholder_class="producto-sin-foto--carrito" lazy=True %}
                         </div>
-                        <div>
-                          <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>
-                          <p class="carrito-fila__cat">{{ linea.producto.categoria.nombre|default:"Sin categoría" }}</p>
+                        <div class="historial-linea__info">
+                          <span class="carrito-fila__nombre carrito-fila__nombre--texto historial-linea__nombre">{{ linea.producto.nombre }}</span>
+                          {% if linea.producto.descripcion %}
+                            <p class="carrito-fila__desc">{{ linea.producto.descripcion }}</p>
+                          {% endif %}
+                          <p class="carrito-fila__cat">
+                            {% if linea.producto.categoria %}
+                              {{ linea.producto.categoria.nombre }}
+                            {% else %}
+                              Sin categoría
+                            {% endif %}
+                          </p>
                         </div>
-                      </td>
-                      <td class="carrito-fila__precio">${{ linea.precio_unitario|peso_co }}</td>
-                      <td class="carrito-fila__qty">{{ linea.cantidad }}</td>
-                      <td class="carrito-fila__sub">${{ linea.subtotal|peso_co }}</td>
-                    </tr>
+                      </div>
+                      <dl class="historial-linea__montos">
+                        <div class="historial-linea__monto">
+                          <dt>Precio unitario</dt>
+                          <dd>${{ linea.precio_unitario|peso_co }}</dd>
+                        </div>
+                        <div class="historial-linea__monto">
+                          <dt>Cantidad</dt>
+                          <dd>{{ linea.cantidad }}</dd>
+                        </div>
+                        <div class="historial-linea__monto historial-linea__monto--subtotal">
+                          <dt>Subtotal</dt>
+                          <dd>${{ linea.subtotal|peso_co }}</dd>
+                        </div>
+                      </dl>
+                    </li>
                   {% endfor %}
-                </tbody>
-              </table>
+                </ul>
+              {% else %}
+                <p class="historial-linea__vacio">Este pedido no tiene productos registrados.</p>
+              {% endif %}
 
               <div class="historial-tarjeta__pie">
                 <div class="carrito-total">

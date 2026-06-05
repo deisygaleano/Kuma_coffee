@@ -1,14 +1,23 @@
 from urllib.parse import quote
 
 from django.conf import settings
-from django.utils import timezone
+from kuma_coffee.zona_horaria import ahora_local
 
 from .factura import formato_peso
 
 
 def _fecha_pedido(pedido):
-    fecha = pedido.fecha_pedido or timezone.now()
+    fecha = pedido.fecha_pedido or ahora_local()
     return fecha.strftime("%d/%m/%Y"), fecha.strftime("%H:%M")
+
+
+def _texto_descripcion(texto, maximo=120):
+    descripcion = (texto or "").strip()
+    if not descripcion:
+        return ""
+    if len(descripcion) > maximo:
+        return f"{descripcion[:maximo].rstrip()}..."
+    return descripcion
 
 
 def _bloque_cliente(usuario):
@@ -38,12 +47,11 @@ def _bloque_productos(lineas_pedido):
         cantidad = linea.cantidad
         unitario = formato_peso(linea.precio_unitario)
         subtotal = formato_peso(linea.subtotal)
-        detalle.extend(
-            [
-                f"{indice}) {nombre}",
-                f"   {cantidad} x {unitario} = *{subtotal}*",
-            ]
-        )
+        descripcion = _texto_descripcion(getattr(linea.producto, "descripcion", ""))
+        detalle.append(f"{indice}) {nombre}")
+        if descripcion:
+            detalle.append(f"   {descripcion}")
+        detalle.append(f"   {cantidad} x {unitario} = *{subtotal}*")
     return "\n".join(detalle)
 
 

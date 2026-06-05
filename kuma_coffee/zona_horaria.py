@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 
 
@@ -7,6 +8,14 @@ def zona_horaria_local():
     configurada = os.environ.get("DJANGO_TIME_ZONE", "").strip()
     if configurada:
         return configurada
+
+    try:
+        tzinfo = datetime.now().astimezone().tzinfo
+        nombre = getattr(tzinfo, "key", None)
+        if nombre:
+            return nombre
+    except (OSError, ValueError, AttributeError):
+        pass
 
     try:
         enlace = Path("/etc/localtime").resolve()
@@ -18,3 +27,13 @@ def zona_horaria_local():
         pass
 
     return "America/Bogota"
+
+
+def ahora_local():
+    """Fecha y hora del sistema donde corre Django."""
+    from django.conf import settings
+    from django.utils import timezone
+
+    if settings.USE_TZ:
+        return timezone.now()
+    return datetime.now()

@@ -1521,6 +1521,13 @@ a.icono-logo {
   text-decoration: underline;
 }
 
+.carrito-fila__desc {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0.15rem 0 0.1rem;
+  line-height: 1.35;
+}
+
 .carrito-fila__cat {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.55);
@@ -2917,7 +2924,7 @@ body.usuario-modal-abierto {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: var(--radius);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .historial-tarjeta__encabezado {
@@ -2969,10 +2976,76 @@ body.usuario-modal-abierto {
   border: 1px solid rgba(220, 53, 69, 0.4);
 }
 
-.historial-tabla {
+.historial-lineas {
+  list-style: none;
   margin: 0;
-  border-radius: 0;
-  border: none;
+  padding: 0;
+}
+
+.historial-linea {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.historial-linea:last-child {
+  border-bottom: none;
+}
+
+.historial-linea__producto {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.historial-linea__info {
+  min-width: 0;
+  flex: 1;
+}
+
+.historial-linea__nombre {
+  display: block;
+  word-break: break-word;
+}
+
+.historial-linea__montos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  margin: 0;
+  flex: 0 1 auto;
+}
+
+.historial-linea__monto {
+  min-width: 6.5rem;
+}
+
+.historial-linea__monto dt {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.historial-linea__monto dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.historial-linea__monto--subtotal dd {
+  font-size: 1.05rem;
+}
+
+.historial-linea__vacio {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
 }
 
 .historial-tarjeta__pie {

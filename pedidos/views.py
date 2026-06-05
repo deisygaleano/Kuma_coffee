@@ -4,12 +4,12 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import F, Sum
+from django.db.models import F, Prefetch, Sum
 from django.db.models.functions import Coalesce
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils import timezone
+from kuma_coffee.zona_horaria import ahora_local
 from django.views.decorators.http import require_GET, require_POST
 
 from catalogo.inventario import StockInsuficienteError, descontar_stock_lineas, stock_disponible
@@ -199,7 +199,7 @@ def confirmar_pedido(request):
         with transaction.atomic():
             descontar_stock_lineas(lineas)
             pedido.estado = "confirmado"
-            pedido.fecha_pedido = timezone.now()
+            pedido.fecha_pedido = ahora_local()
             pedido.save(update_fields=["estado", "fecha_pedido"])
     except StockInsuficienteError as exc:
         messages.error(
@@ -228,12 +228,17 @@ def historial_pedidos(request):
         return redirect("cuentas:login")
 
     usuario = _usuario_actual(request)
+    lineas_confirmadas = Prefetch(
+        "lineas",
+        queryset=LineaPedido.objects.select_related(
+            "producto", "producto__categoria"
+        ).order_by("producto__nombre"),
+    )
     pedidos = (
-        Pedido.objects
-        .filter(usuario=usuario)
+        Pedido.objects.filter(usuario=usuario)
         .exclude(estado="borrador")
-        .prefetch_related("lineas__producto", "lineas__producto__categoria")
-        .order_by("-fecha_pedido")
+        .prefetch_related(lineas_confirmadas)
+        .order_by("-fecha_pedido", "-id_pedido")
     )
     paginador = Paginator(pedidos, 4)
     pedidos_pagina = paginador.get_page(request.GET.get("page"))

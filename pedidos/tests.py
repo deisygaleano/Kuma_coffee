@@ -18,7 +18,10 @@ class MensajeWhatsAppTests(SimpleTestCase):
             correo="ana@test.com",
             telefono="3001234567",
         )
-        producto = SimpleNamespace(nombre="Café Especial")
+        producto = SimpleNamespace(
+            nombre="Café Especial",
+            descripcion="Grano de origen único con notas cítricas.",
+        )
         linea = SimpleNamespace(
             producto=producto,
             cantidad=2,
@@ -39,6 +42,7 @@ class MensajeWhatsAppTests(SimpleTestCase):
         self.assertIn("CLIENTE", mensaje)
         self.assertIn("PRODUCTOS", mensaje)
         self.assertIn("Café Especial", mensaje)
+        self.assertIn("notas cítricas", mensaje)
         self.assertIn("$30.000", mensaje)
         self.assertIn("TOTAL ESTIMADO:", mensaje)
         self.assertIn("Quedo atento", mensaje)
