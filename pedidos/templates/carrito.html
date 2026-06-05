@@ -37,12 +37,7 @@
               <tr class="carrito-fila">
                 <td class="carrito-fila__producto">
                  <div class="catalogo-card__media carrito-fila__media">
-                    <img
-                      src="{% if linea.producto.imagen %}{% get_media_prefix %}{{ linea.producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
-                      alt="{{ linea.producto.nombre }}"
-                      class="catalogo-card__img"
-                      loading="lazy"
-                    />
+                    {% include 'includes/producto_imagen.html' with producto=linea.producto img_class="catalogo-card__img" placeholder_class="producto-sin-foto--carrito" lazy=True %}
                   </div>
                   <div>
                     <span class="carrito-fila__nombre carrito-fila__nombre--texto">{{ linea.producto.nombre }}</span>

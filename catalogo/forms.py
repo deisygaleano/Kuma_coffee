@@ -13,7 +13,7 @@ class ProductoForm(forms.ModelForm):
     stock_minimo = forms.IntegerField(
         min_value=0,
         initial=5,
-        label="Stock minimo",
+        label="Stock mínimo",
         widget=forms.NumberInput(attrs={"class": "admin-input", "min": 0}),
     )
     imagen_file = forms.FileField(
@@ -31,7 +31,6 @@ class ProductoForm(forms.ModelForm):
             "altura",
             "tostion",
             "descripcion",
-            "slug",
         ]
         widgets = {
             "nombre": forms.TextInput(attrs={"class": "admin-input"}),
@@ -43,19 +42,17 @@ class ProductoForm(forms.ModelForm):
                 attrs={
                     "class": "admin-input admin-input--textarea",
                     "rows": 7,
-                    "placeholder": "Escribe una descripcion amplia del producto...",
+                    "placeholder": "Escribe una descripción amplia del producto...",
                 }
             ),
-            "slug": forms.TextInput(attrs={"class": "admin-input"}),
         }
         labels = {
             "nombre": "Nombre",
             "precio": "Precio",
-            "categoria": "Categoria",
+            "categoria": "Categoría",
             "altura": "Altura",
-            "tostion": "Tostion",
-            "descripcion": "Descripcion",
-            "slug": "Slug (URL)",
+            "tostion": "Tostión",
+            "descripcion": "Descripción",
         }
 
     def __init__(self, *args, **kwargs):

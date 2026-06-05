@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "auth-password-toggle";
-    button.setAttribute("aria-label", "Mostrar contrasena");
-    button.setAttribute("title", "Mostrar contrasena");
+    button.setAttribute("aria-label", "Mostrar contraseña");
+    button.setAttribute("title", "Mostrar contraseña");
     button.innerHTML = `
       <svg class="auth-password-toggle__icon auth-password-toggle__icon--show" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M2.1 12s3.3-6 9.9-6 9.9 6 9.9 6-3.3 6-9.9 6-9.9-6-9.9-6Z"></path>
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const isPassword = input.type === "password";
       input.type = isPassword ? "text" : "password";
       button.classList.toggle("is-visible", isPassword);
-      button.setAttribute("aria-label", isPassword ? "Ocultar contrasena" : "Mostrar contrasena");
-      button.setAttribute("title", isPassword ? "Ocultar contrasena" : "Mostrar contrasena");
+      button.setAttribute("aria-label", isPassword ? "Ocultar contraseña" : "Mostrar contraseña");
+      button.setAttribute("title", isPassword ? "Ocultar contraseña" : "Mostrar contraseña");
     });
 
     wrapper.appendChild(button);

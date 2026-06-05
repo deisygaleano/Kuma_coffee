@@ -61,7 +61,7 @@ class LoginForm(AuthBaseForm):
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
     password = forms.CharField(
-        label="Contrasena",
+        label="Contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
     )
@@ -78,18 +78,18 @@ class RegistroForm(AuthBaseForm):
     nombre = forms.CharField(label="Nombre", min_length=2, max_length=32)
     apellido = forms.CharField(label="Apellido", min_length=2, max_length=32, required=False)
     correo = forms.EmailField(
-        label="Correo electronico",
+        label="Correo electrónico",
         max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
-    telefono = forms.CharField(label="Telefono", max_length=20, required=False)
+    telefono = forms.CharField(label="Teléfono", max_length=20, required=False)
     password = forms.CharField(
-        label="Contrasena",
+        label="Contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
     password_confirm = forms.CharField(
-        label="Confirmar contrasena",
+        label="Confirmar contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
@@ -113,7 +113,7 @@ class RegistroForm(AuthBaseForm):
     def clean_telefono(self):
         telefono = self.cleaned_data["telefono"].strip()
         if telefono and not re.fullmatch(r"\+?\d{7,20}", telefono):
-            raise forms.ValidationError("Ingresa un telefono valido entre 7 y 20 digitos.")
+            raise forms.ValidationError("Ingresa un teléfono válido entre 7 y 20 dígitos.")
         return telefono
 
     def clean(self):
@@ -122,7 +122,7 @@ class RegistroForm(AuthBaseForm):
         password_confirm = cleaned_data.get("password_confirm")
 
         if password and password_confirm and password != password_confirm:
-            self.add_error("password_confirm", "Las contrasenas no coinciden.")
+            self.add_error("password_confirm", "Las contraseñas no coinciden.")
 
         if password:
             try:
@@ -135,17 +135,17 @@ class RegistroForm(AuthBaseForm):
 
 class RestablecerPasswordForm(AuthBaseForm):
     correo = forms.EmailField(
-        label="Correo electronico",
+        label="Correo electrónico",
         max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
     password = forms.CharField(
-        label="Nueva contrasena",
+        label="Nueva contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
     password_confirm = forms.CharField(
-        label="Confirmar nueva contrasena",
+        label="Confirmar nueva contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
@@ -166,7 +166,7 @@ class RestablecerPasswordForm(AuthBaseForm):
         password_confirm = cleaned_data.get("password_confirm")
 
         if password and password_confirm and password != password_confirm:
-            self.add_error("password_confirm", "Las contrasenas no coinciden.")
+            self.add_error("password_confirm", "Las contraseñas no coinciden.")
 
         if password:
             try:
@@ -178,17 +178,17 @@ class RestablecerPasswordForm(AuthBaseForm):
 
 class CambiarPasswordForm(AuthBaseForm):
     password_actual = forms.CharField(
-        label="Contrasena actual",
+        label="Contraseña actual",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
     )
     password_nueva = forms.CharField(
-        label="Nueva contrasena",
+        label="Nueva contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
     password_nueva_confirm = forms.CharField(
-        label="Confirmar nueva contrasena",
+        label="Confirmar nueva contraseña",
         max_length=128,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
@@ -198,7 +198,7 @@ class CambiarPasswordForm(AuthBaseForm):
         super().__init__(*args, **kwargs)
         self.fields["password_actual"].required = require_current_password
         if not require_current_password:
-            self.fields["password_actual"].help_text = "No necesitas contrasena actual para configurar tu primera contrasena."
+            self.fields["password_actual"].help_text = "No necesitas contraseña actual para configurar tu primera contraseña."
         self._aplicar_clase()
 
     def clean(self):
@@ -207,7 +207,7 @@ class CambiarPasswordForm(AuthBaseForm):
         password_nueva_confirm = cleaned_data.get("password_nueva_confirm")
 
         if password_nueva and password_nueva_confirm and password_nueva != password_nueva_confirm:
-            self.add_error("password_nueva_confirm", "Las contrasenas no coinciden.")
+            self.add_error("password_nueva_confirm", "Las contraseñas no coinciden.")
 
         if password_nueva:
             try:

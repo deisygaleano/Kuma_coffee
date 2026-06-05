@@ -329,23 +329,19 @@
 }
 
 .inventario-body .inv-producto img,
-.inventario-body .inv-sin-img {
+.inventario-body .inv-producto .producto-sin-foto {
   width: 44px;
   height: 44px;
+  min-height: 44px;
   border: 1px solid rgba(201, 162, 39, .28);
   border-radius: 8px;
   object-fit: cover;
   background: #111;
 }
 
-.inventario-body .inv-sin-img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--inv-muted);
-  font-size: .68rem;
-  font-weight: 800;
-  text-align: center;
+.inventario-body .inv-producto .producto-sin-foto svg {
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 .inventario-body .inv-producto strong {

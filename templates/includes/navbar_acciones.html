@@ -147,16 +147,16 @@
                 <rect x="3" y="11" width="18" height="11" rx="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              Cambiar contrasena
+              Cambiar contraseña
             </a>
           </nav>
           <form method="post" action="{% url 'cuentas:logout' %}" class="usuario-modal__logout">
             {% csrf_token %}
-            <button type="submit" class="btn btn-ghost usuario-modal__btn-salir">Cerrar sesion</button>
+            <button type="submit" class="btn btn-ghost usuario-modal__btn-salir">Cerrar sesión</button>
           </form>
         {% else %}
           <h2 id="usuario-modal-titulo" class="usuario-modal__titulo">Cuenta</h2>
-          <p class="usuario-modal__hint">Inicia sesion o crea una cuenta para guardar tus preferencias.</p>
+          <p class="usuario-modal__hint">Inicia sesión o crea una cuenta para guardar tus preferencias.</p>
           <nav class="usuario-modal__nav" aria-label="Acceso a cuenta">
             <a href="{% url 'cuentas:login' %}" class="btn btn-primary usuario-modal__link-btn">Acceder</a>
             <a href="{% url 'cuentas:registro' %}" class="btn btn-ghost usuario-modal__link-btn">Registrarse</a>

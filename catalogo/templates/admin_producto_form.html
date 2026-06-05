@@ -14,7 +14,7 @@
 
   <main class="form-wrapper">
     <nav class="breadcrumb">
-      <a href="{% url 'catalogo:lista_productos' %}">Gestion de Productos</a>
+      <a href="{% url 'catalogo:lista_productos' %}">Gestión de productos</a>
       <span>/</span>
       <span>{{ accion }} producto</span>
     </nav>
@@ -59,13 +59,8 @@
           </div>
 
           <div class="form-field">
-            <label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
-            {{ form.slug }}
-            {% if form.slug.errors %}<p class="field-error">{{ form.slug.errors.0 }}</p>{% endif %}
-          </div>
-
-          <div class="form-field">
             <label for="{{ form.altura.id_for_label }}">{{ form.altura.label }}</label>
+            <p class="field-hint">Incluye la unidad en el valor (ej. 1500 msnm); se mostrará como M.S.N.M.</p>
             {{ form.altura }}
             {% if form.altura.errors %}<p class="field-error">{{ form.altura.errors.0 }}</p>{% endif %}
           </div>

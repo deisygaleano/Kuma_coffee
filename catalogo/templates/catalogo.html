@@ -92,12 +92,7 @@
                   <li class="catalogo-card">
                     <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                       <div class="catalogo-card__media">
-                        <img
-                          src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
-                          alt="{{ producto.nombre }}"
-                          class="catalogo-card__img"
-                          loading="lazy"
-                        />
+                        {% include 'includes/producto_imagen.html' with producto=producto img_class="catalogo-card__img" placeholder_class="producto-sin-foto--card" lazy=True %}
                       </div>
                       <div class="catalogo-card__body">
                         <p class="catalogo-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>
@@ -135,12 +130,7 @@
                     <li class="catalogo-card">
                       <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                         <div class="catalogo-card__media">
-                          <img
-                            src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
-                            alt="{{ producto.nombre }}"
-                            class="catalogo-card__img"
-                            loading="lazy"
-                          />
+                          {% include 'includes/producto_imagen.html' with producto=producto img_class="catalogo-card__img" placeholder_class="producto-sin-foto--card" lazy=True %}
                         </div>
                         <div class="catalogo-card__body">
                           <p class="catalogo-card__cat">{{ categoria.nombre }}</p>
@@ -173,12 +163,7 @@
                   <li class="catalogo-card">
                     <a class="catalogo-card__link" href="{% url 'catalogo:detalle' producto.id_producto %}">
                       <div class="catalogo-card__media">
-                        <img
-                          src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
-                          alt="{{ producto.nombre }}"
-                          class="catalogo-card__img"
-                          loading="lazy"
-                        />
+                        {% include 'includes/producto_imagen.html' with producto=producto img_class="catalogo-card__img" placeholder_class="producto-sin-foto--card" lazy=True %}
                       </div>
                       <div class="catalogo-card__body">
                         <p class="catalogo-card__cat">Sin categoría</p>

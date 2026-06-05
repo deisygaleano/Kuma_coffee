@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Restablecer contrasena - Kuma Coffee</title>
+  <title>Restablecer contraseña - Kuma Coffee</title>
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   {% include 'includes/fuentes.html' %}
 </head>
@@ -14,7 +14,7 @@
       <div class="auth-logo">
         <img src="{% static 'imagenes/logoproyecto.png' %}" alt="Kuma Coffee" class="auth-logo-img">
       </div>
-      <h1 class="auth-titulo">Restablecer contrasena</h1>
+      <h1 class="auth-titulo">Restablecer contraseña</h1>
 
       {% if form.non_field_errors %}
         <ul class="auth-form__errors auth-form__errors--global">
@@ -24,7 +24,7 @@
         </ul>
       {% endif %}
 
-      <form method="post" class="auth-form" aria-label="Restablecer contrasena">
+      <form method="post" class="auth-form" aria-label="Restablecer contraseña">
         {% csrf_token %}
         <div class="auth-field">
           <label class="auth-label" for="{{ form.correo.id_for_label }}">{{ form.correo.label }}</label>
@@ -34,7 +34,7 @@
         <div class="auth-field">
           <label class="auth-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
           {{ form.password }}
-          <p class="auth-help">Minimo 8 caracteres con mayusculas, minusculas, numeros y caracteres especiales.</p>
+          <p class="auth-help">Mínimo 8 caracteres con mayúsculas, minúsculas, números y caracteres especiales.</p>
           {{ form.password.errors }}
         </div>
         <div class="auth-field">
@@ -42,11 +42,11 @@
           {{ form.password_confirm }}
           {{ form.password_confirm.errors }}
         </div>
-        <button type="submit" class="btn btn-primary auth-submit">Actualizar contrasena</button>
+        <button type="submit" class="btn btn-primary auth-submit">Actualizar contraseña</button>
       </form>
 
       <p class="auth-footer-text">
-        <a href="{% url 'cuentas:login' %}">Volver al inicio de sesion</a>
+        <a href="{% url 'cuentas:login' %}">Volver al inicio de sesión</a>
       </p>
     </div>
   </main>

@@ -1104,6 +1104,51 @@ a.icono-logo {
   object-fit: cover;
 }
 
+.producto-sin-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.38);
+  background: #1a1d22;
+  box-sizing: border-box;
+}
+
+.producto-sin-foto--card,
+.producto-sin-foto--carrito {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.producto-sin-foto--detalle {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.producto-sin-foto--slider {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 12rem;
+}
+
+.producto-sin-foto--thumb {
+  width: 52px;
+  height: 52px;
+  min-height: 52px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.producto-sin-foto svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.producto-sin-foto--thumb svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
 .producto-detalle__placeholder {
   aspect-ratio: 1;
   background: linear-gradient(135deg, #3d2914 0%, #6f4e37 45%, #2a1810 100%);

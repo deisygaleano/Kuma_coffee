@@ -10,7 +10,7 @@
       
       <nav class="cabecera__navegacion">
        <a href="{% url 'inicio' %}" class="enlace-navegacion">Inicio</a>
-        <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catalogo</a>
+        <a href="{% url 'catalogo:lista' %}" class="enlace-navegacion">Catálogo</a>
         {% if usuario_es_admin %}
         <a href="{% url 'catalogo:inventario_productos' %}" class="enlace-navegacion">Inventario</a>
         {% endif %}

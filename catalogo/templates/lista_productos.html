@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catalogo — Kuma Coffee</title>
+  <title>Catálogo — Kuma Coffee</title>
   {% load static kuma_filters %}
   <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
   <link rel="stylesheet" href="{% static 'css/lista_productos.css' %}" />
@@ -16,7 +16,7 @@
 
   <main class="gp-wrapper">
     <div class="gp-header">
-      <h1>Gestion de Productos</h1>
+      <h1>Gestión de productos</h1>
       <div class="gp-actions">
         {% if usuario_es_admin %}
           <a href="{% url 'catalogo:inventario_productos' %}" class="btn-inventario">
@@ -55,10 +55,10 @@
             <th>Producto</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Categoria</th>
+            <th>Categoría</th>
             <th class="col-extras">Altura</th>
             <th class="col-extras">Tostion</th>
-            <th class="col-desc">Descripcion</th>
+            <th class="col-desc">Descripción</th>
             <th class="col-acciones">Acciones</th>
           </tr>
         </thead>
@@ -66,11 +66,7 @@
           {% for p in productos %}
           <tr>
             <td class="col-img">
-              {% if p.imagen %}
-                <img src="{% get_media_prefix %}{{ p.imagen }}" alt="{{ p.nombre }}" />
-              {% else %}
-                <div class="sin-img">Sin foto</div>
-              {% endif %}
+              {% include 'includes/producto_imagen.html' with producto=p img_class="" placeholder_class="producto-sin-foto--thumb" %}
             </td>
             <td class="td-nombre">{{ p.nombre }}</td>
             <td class="td-precio">${{ p.precio|peso_co }}</td>
@@ -81,7 +77,7 @@
               {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="texto-tenue">—</span>{% endif %}
             </td>
             <td class="td-extras col-extras">
-              {% if p.altura %}<span class="badge-extra">{{ p.altura.metros }}</span>{% else %}—{% endif %}
+              {% if p.altura %}<span class="badge-extra">{{ p.altura.metros_formateado }}</span>{% else %}—{% endif %}
             </td>
             <td class="td-extras col-extras">
               {% if p.tostion %}<span class="badge-extra">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
@@ -125,7 +121,7 @@
   <div class="modal-overlay" id="modalEliminar">
     <div class="modal-box">
       <h3>¿Eliminar producto?</h3>
-      <p id="modalTexto">Esta accion no se puede deshacer.</p>
+      <p id="modalTexto">Esta acción no se puede deshacer.</p>
       <div class="modal-actions">
         <button class="modal-cancel" type="button" data-cerrar-modal>Cancelar</button>
         <form id="formEliminar" method="post" class="modal-form">

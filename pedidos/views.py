@@ -68,7 +68,7 @@ def agregar_al_carrito(request):
         login_url = f"{reverse('cuentas:login')}?{urlencode({'next': next_url})}"
         messages.error(
             request,
-            "Para agregar productos al carrito debes iniciar sesion.",
+            "Para agregar productos al carrito debes iniciar sesión.",
             extra_tags="auth",
         )
         return redirect(login_url)

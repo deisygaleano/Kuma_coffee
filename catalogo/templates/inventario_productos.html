@@ -26,7 +26,7 @@
         <a href="{% url 'catalogo:lista' %}" class="btn-secundario">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
                viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-          Catalogo
+          Catálogo
         </a>
         <a href="{% url 'catalogo:crear_producto' %}" class="btn-agregar">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -77,7 +77,7 @@
       <div class="inv-search">
         <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
              viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="search" name="q" value="{{ busqueda }}" placeholder="Buscar producto o categoria" />
+        <input type="search" name="q" value="{{ busqueda }}" placeholder="Buscar producto o categoría (mín. 3 caracteres)" />
       </div>
       <select name="estado">
         <option value="">Todos los estados</option>
@@ -85,7 +85,6 @@
         <option value="bajo" {% if estado == "bajo" %}selected{% endif %}>Stock bajo</option>
         <option value="agotado" {% if estado == "agotado" %}selected{% endif %}>Agotado</option>
       </select>
-      <button type="submit" class="btn-filtrar">Filtrar</button>
       {% if busqueda or estado %}
         <a href="{% url 'catalogo:inventario_productos' %}" class="btn-limpiar">Limpiar</a>
       {% endif %}
@@ -104,15 +103,15 @@
         <thead>
           <tr>
             <th>Producto</th>
-            <th style="text-align:center">Categoria</th>
+            <th style="text-align:center">Categoría</th>
             <th style="text-align:center">Estado</th>
             <th style="text-align:center">Stock</th>
             <th style="text-align:center">Stock minimo</th>
             <th style="text-align:center" class="col-extras">Altura</th>
             <th style="text-align:center" class="col-extras">Tostion</th>
-            <th class="col-desc">Descripcion</th>
+            <th class="col-desc">Descripción</th>
             <th style="text-align:center">Actualizado</th>
-            <th class="col-acciones">Accion</th>
+            <th class="col-acciones">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -120,11 +119,7 @@
           <tr class="inv-row inv-row-{{ p.estado_inventario }}">
             <td>
               <div class="inv-producto">
-                {% if p.imagen %}
-                  <img src="{% get_media_prefix %}{{ p.imagen }}" alt="{{ p.nombre }}" />
-                {% else %}
-                  <div class="inv-sin-img">Sin foto</div>
-                {% endif %}
+                {% include 'includes/producto_imagen.html' with producto=p img_class="" placeholder_class="producto-sin-foto--thumb" %}
                 <div>
                   <strong>{{ p.nombre }}</strong>
                   <span>${{ p.precio|peso_co }}</span>
@@ -132,7 +127,7 @@
               </div>
             </td>
             <td class="td-cat">
-              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="muted">Sin categoria</span>{% endif %}
+              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="muted">Sin categoría</span>{% endif %}
             </td>
             <td>
               <span class="inv-estado inv-estado-{{ p.estado_inventario }}">
@@ -148,7 +143,7 @@
               <td class="td-stock" style="text-align:center">{{ p.stock_actual }}</td>
               <td class="td-stock" style="text-align:center">{{ p.stock_minimo_actual }}</td>
               <td class="td-extras col-extras" style="text-align:center">
-                {% if p.altura %}<span class="inv-texto-tabla">{{ p.altura.metros }}</span>{% else %}—{% endif %}
+                {% if p.altura %}<span class="inv-texto-tabla">{{ p.altura.metros_formateado }}</span>{% else %}—{% endif %}
               </td>
               <td class="td-extras col-extras" style="text-align:center">
                 {% if p.tostion %}<span class="inv-texto-tabla">{{ p.tostion.tipo }}</span>{% else %}—{% endif %}
@@ -194,7 +189,7 @@
   <div class="modal-overlay" id="modalEliminar">
     <div class="modal-box">
       <h3>¿Eliminar producto?</h3>
-      <p id="modalTexto">Esta accion no se puede deshacer.</p>
+      <p id="modalTexto">Esta acción no se puede deshacer.</p>
       <div class="modal-actions">
         <button class="modal-cancel" type="button" data-cerrar-modal>Cancelar</button>
         <form id="formEliminar" method="post" class="modal-form">
@@ -208,6 +203,7 @@
   </div>
 
   {% include 'includes/footer.html' %}
+  <script src="{% static 'js/inventario_busqueda.js' %}" defer></script>
   <script src="{% static 'js/lista_productos.js' %}" defer></script>
 
 </body>

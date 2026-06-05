@@ -117,12 +117,7 @@
           <li class="slider-item">
             <div class="slider-card">
               <div class="slider-card__media">
-                <img
-                  src="{% if producto.imagen %}{% get_media_prefix %}{{ producto.imagen }}{% else %}{% static 'imagenes/bolsa1.png' %}{% endif %}"
-                  alt="{{ producto.nombre }}"
-                  class="slider-card__img"
-                  loading="lazy"
-                />
+                {% include 'includes/producto_imagen.html' with producto=producto img_class="slider-card__img" placeholder_class="producto-sin-foto--slider" lazy=True %}
               </div>
               <div class="slider-card__body">
                 <p class="slider-card__cat">{{ producto.categoria.nombre|default:"Sin categoría" }}</p>

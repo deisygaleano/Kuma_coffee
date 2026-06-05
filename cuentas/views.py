@@ -160,7 +160,7 @@ def login(request):
                 return redirect(next_url)
             return redirect("catalogo:lista")
 
-        messages.error(request, "Credenciales invalidas.")
+        messages.error(request, "Credenciales inválidas.")
 
     return render(request, "login.html", {"form": form, "next": next_url})
 
@@ -198,7 +198,7 @@ def restablecer(request):
 def cambiar_password(request):
     usuario_id = request.session.get("usuario_id")
     if not usuario_id:
-        messages.error(request, "Debes iniciar sesion para cambiar tu contrasena.", extra_tags="auth")
+        messages.error(request, "Debes iniciar sesión para cambiar tu contraseña.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(pk=usuario_id).first()
@@ -213,7 +213,7 @@ def cambiar_password(request):
     )
     if request.method == "POST" and form.is_valid():
         if require_current_password and not check_password(form.cleaned_data["password_actual"], usuario.password):
-            form.add_error("password_actual", "La contrasena actual es incorrecta.")
+            form.add_error("password_actual", "La contraseña actual es incorrecta.")
         else:
             usuario.password = make_password(form.cleaned_data["password_nueva"])
             usuario.save(update_fields=["password"])
@@ -229,10 +229,10 @@ def actualizar_foto(request):
     if not usuario_id:
         if _es_peticion_ajax(request):
             return JsonResponse(
-                {"ok": False, "mensaje": "Debes iniciar sesion para actualizar tu foto."},
+                {"ok": False, "mensaje": "Debes iniciar sesión para actualizar tu foto."},
                 status=401,
             )
-        messages.error(request, "Debes iniciar sesion para actualizar tu foto.", extra_tags="auth")
+        messages.error(request, "Debes iniciar sesión para actualizar tu foto.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(pk=usuario_id).first()
@@ -240,10 +240,10 @@ def actualizar_foto(request):
         request.session.pop("usuario_id", None)
         if _es_peticion_ajax(request):
             return JsonResponse(
-                {"ok": False, "mensaje": "La sesion no es valida. Inicia sesion de nuevo."},
+                {"ok": False, "mensaje": "La sesión no es válida. Inicia sesión de nuevo."},
                 status=401,
             )
-        messages.error(request, "La sesion no es valida. Inicia sesion de nuevo.", extra_tags="auth")
+        messages.error(request, "La sesión no es válida. Inicia sesión de nuevo.", extra_tags="auth")
         return redirect("cuentas:login")
 
     if request.POST.get("accion") == "eliminar":
@@ -257,7 +257,7 @@ def actualizar_foto(request):
             request,
             usuario,
             False,
-            "No se recibio ninguna imagen. Intenta de nuevo.",
+            "No se recibió ninguna imagen. Intenta de nuevo.",
             status=400,
         )
 
@@ -318,7 +318,7 @@ def google_callback(request):
         request.session.modified = True
 
     if not flow or not code:
-        messages.error(request, "Sesion OAuth invalida. Intenta de nuevo.", extra_tags="auth")
+        messages.error(request, "Sesión OAuth inválida. Intenta de nuevo.", extra_tags="auth")
         return redirect("cuentas:login")
 
     code_verifier = flow.get("code_verifier")
@@ -348,7 +348,7 @@ def google_callback(request):
             django_settings.GOOGLE_CLIENT_ID,
         )
     except Exception:
-        messages.error(request, "No se pudo completar el inicio de sesion con Google.", extra_tags="auth")
+        messages.error(request, "No se pudo completar el inicio de sesión con Google.", extra_tags="auth")
         return redirect("cuentas:login")
 
     google_sub = id_info.get("sub")
@@ -357,7 +357,7 @@ def google_callback(request):
     apellido = id_info.get("family_name") or None
 
     if not google_sub or not email:
-        messages.error(request, "Google no entrego la informacion necesaria para iniciar sesion.", extra_tags="auth")
+        messages.error(request, "Google no entregó la información necesaria para iniciar sesión.", extra_tags="auth")
         return redirect("cuentas:login")
 
     usuario = Usuario.objects.filter(google_id=google_sub).first()
@@ -365,7 +365,7 @@ def google_callback(request):
         usuario = Usuario.objects.filter(correo__iexact=email).first()
         if usuario:
             if usuario.google_id and usuario.google_id != google_sub:
-                messages.error(request, "Este correo ya esta vinculado a otra cuenta de Google.", extra_tags="auth")
+                messages.error(request, "Este correo ya está vinculado a otra cuenta de Google.", extra_tags="auth")
                 return redirect("cuentas:login")
             if not usuario.google_id:
                 usuario.google_id = google_sub

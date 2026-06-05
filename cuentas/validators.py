@@ -7,10 +7,10 @@ from django.utils.translation import gettext as _
 class StrongPasswordValidator:
     def validate(self, password, user=None):
         requirements = [
-            (r"[A-Z]", _("La contrasena debe incluir al menos una letra mayuscula.")),
-            (r"[a-z]", _("La contrasena debe incluir al menos una letra minuscula.")),
-            (r"\d", _("La contrasena debe incluir al menos un numero.")),
-            (r"[^A-Za-z0-9]", _("La contrasena debe incluir al menos un caracter especial.")),
+            (r"[A-Z]", _("La contraseña debe incluir al menos una letra mayúscula.")),
+            (r"[a-z]", _("La contraseña debe incluir al menos una letra minúscula.")),
+            (r"\d", _("La contraseña debe incluir al menos un número.")),
+            (r"[^A-Za-z0-9]", _("La contraseña debe incluir al menos un carácter especial.")),
         ]
 
         errors = [
@@ -23,5 +23,5 @@ class StrongPasswordValidator:
 
     def get_help_text(self):
         return _(
-            "Tu contrasena debe combinar mayusculas, minusculas, numeros y caracteres especiales."
+            "Tu contraseña debe combinar mayúsculas, minúsculas, números y caracteres especiales."
         )

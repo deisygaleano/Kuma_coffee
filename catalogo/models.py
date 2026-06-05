@@ -1,4 +1,10 @@
+import re
+
 from django.db import models
+
+_UNIDAD_ALTURA_RE = re.compile(
+    r"(?i)\b(m\.?\s*s\.?\s*n\.?\s*m\.?|msnm|msnv|metros\s+sobre\s+(el\s+)?nivel\s+del\s+mar)\b"
+)
 class Categoria(models.Model):
     id_categoria = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=32, unique=True)
@@ -20,7 +26,13 @@ class Altura(models.Model):
         ordering = ["metros"]
 
     def __str__(self):
-        return self.metros or ""
+        return self.metros_formateado
+
+    @property
+    def metros_formateado(self):
+        if not self.metros:
+            return ""
+        return _UNIDAD_ALTURA_RE.sub("M.S.N.M", self.metros.strip())
 
 
 class Tostion(models.Model):
@@ -60,7 +72,6 @@ class Producto(models.Model):
     stock = models.PositiveIntegerField(default=0)
     stock_minimo = models.PositiveIntegerField(default=5)
     imagen = models.CharField(max_length=255, blank=True, null=True)
-    slug = models.SlugField(max_length=60, unique=True, blank=True, null=True)
     categoria = models.ForeignKey(
         Categoria,
         models.SET_NULL,

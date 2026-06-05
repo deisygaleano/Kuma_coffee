@@ -3,12 +3,18 @@ import uuid
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ProductoForm
 from pathlib import Path
 
 from cuentas.auth_utils import usuario_es_admin
 from .models import InventarioProducto, Producto, Categoria
+
+
+def _ordenar_productos_alfabetico(productos):
+    return sorted(productos, key=lambda producto: producto.nombre.casefold())
+
 
 def lista(request):
     busqueda = request.GET.get("q", "").strip()
@@ -111,7 +117,7 @@ def inventario_productos(request):
             stock = int(request.POST.get("stock", 0))
             stock_minimo = int(request.POST.get("stock_minimo", 0))
         except (TypeError, ValueError):
-            messages.error(request, "Ingresa valores numericos validos para el inventario.")
+            messages.error(request, "Ingresa valores numéricos válidos para el inventario.")
             return redirect("catalogo:inventario_productos")
 
         if stock < 0 or stock_minimo < 0:
@@ -120,7 +126,11 @@ def inventario_productos(request):
 
         InventarioProducto.objects.update_or_create(
             producto=producto,
-            defaults={"stock": stock, "stock_minimo": stock_minimo},
+            defaults={
+                "stock": stock,
+                "stock_minimo": stock_minimo,
+                "fecha_actualizacion": timezone.now(),
+            },
         )
         messages.success(request, f'Inventario de "{producto.nombre}" actualizado.')
         return redirect("catalogo:inventario_productos")
@@ -130,14 +140,16 @@ def inventario_productos(request):
     busqueda = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "").strip()
 
+    if busqueda and len(busqueda) < 3:
+        busqueda = ""
+
     if busqueda:
         productos = productos.filter(
             Q(nombre__icontains=busqueda)
             | Q(categoria__nombre__icontains=busqueda)
-            | Q(slug__icontains=busqueda)
         )
 
-    productos = list(productos)
+    productos = _ordenar_productos_alfabetico(list(productos))
     if estado:
         productos = [p for p in productos if p.estado_inventario == estado]
 
@@ -229,17 +241,20 @@ def _guardar_inventario_desde_form(producto, form):
         defaults={
             "stock": form.cleaned_data["stock"],
             "stock_minimo": form.cleaned_data["stock_minimo"],
+            "fecha_actualizacion": timezone.now(),
         },
     )
 
 
 def _asegurar_inventario_productos():
     productos_sin_inventario = Producto.objects.filter(inventario__isnull=True)
+    ahora = timezone.now()
     inventarios = [
         InventarioProducto(
             producto=producto,
             stock=producto.stock,
             stock_minimo=producto.stock_minimo,
+            fecha_actualizacion=ahora,
         )
         for producto in productos_sin_inventario
     ]
@@ -251,7 +266,7 @@ def _es_admin(request):
         return True
     messages.error(
         request,
-        "Debes iniciar sesion como administrador para acceder a esta seccion.",
+        "Debes iniciar sesión como administrador para acceder a esta sección.",
         extra_tags="auth",
     )
     return False
