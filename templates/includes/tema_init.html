@@ -1,0 +1,9 @@
+<script>
+(function () {
+  try {
+    if (localStorage.getItem("kuma-tema") === "claro") {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  } catch (e) {}
+})();
+</script>
