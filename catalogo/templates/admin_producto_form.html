@@ -40,6 +40,9 @@
           <div class="form-field">
             <label for="{{ form.stock.id_for_label }}">{{ form.stock.label }}</label>
             {{ form.stock }}
+            {% if producto %}
+            <p class="field-hint">Solo puedes aumentar el stock. Mínimo actual: {{ producto.stock_actual }} unidades.</p>
+            {% endif %}
             {% if form.stock.errors %}<p class="field-error">{{ form.stock.errors.0 }}</p>{% endif %}
           </div>
 

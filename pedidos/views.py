@@ -2,6 +2,7 @@ from urllib.parse import quote, urlencode
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
@@ -9,6 +10,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from catalogo.inventario import StockInsuficienteError, descontar_stock_lineas, stock_disponible
 from catalogo.models import Producto
 from cuentas.models import Usuario
 from cuentas.auth_utils import es_admin
@@ -79,8 +81,26 @@ def agregar_al_carrito(request):
     cantidad = int(request.POST.get("cantidad", 1))
     cantidad = max(1, cantidad)
 
-    producto = get_object_or_404(Producto, pk=producto_id)
+    producto = get_object_or_404(
+        Producto.objects.select_related("inventario"),
+        pk=producto_id,
+    )
+    disponible = stock_disponible(producto)
+    if disponible == 0:
+        messages.error(request, f"«{producto.nombre}» está agotado y no se puede añadir al carrito.")
+        next_url = request.POST.get("next") or reverse("catalogo:lista")
+        return redirect(next_url)
+
     pedido = _pedido_borrador(usuario)
+
+    linea_existente = LineaPedido.objects.filter(pedido=pedido, producto=producto).first()
+    cantidad_en_carrito = linea_existente.cantidad if linea_existente else 0
+    if cantidad_en_carrito + cantidad > disponible:
+        messages.error(
+            request,
+            f"Solo hay {disponible} unidad(es) disponible(s) de «{producto.nombre}».",
+        )
+        return redirect("pedidos:carrito")
 
     linea, creada = LineaPedido.objects.get_or_create(
         pedido=pedido,
@@ -102,7 +122,9 @@ def agregar_al_carrito(request):
 def carrito(request):
     usuario = _usuario_actual(request)
     pedido = _pedido_borrador(usuario)
-    lineas = pedido.lineas.select_related("producto", "producto__categoria")
+    lineas = pedido.lineas.select_related(
+        "producto", "producto__categoria", "producto__inventario"
+    )
     _recalcular_totales(pedido)
     whatsapp_url=_construir_url_whatsapp (lineas,pedido,usuario)
     return render(
@@ -119,10 +141,21 @@ def carrito(request):
 def actualizar_cantidad(request, linea_id):
     usuario = _usuario_actual(request)
     pedido = _pedido_borrador(usuario)
-    linea = get_object_or_404(LineaPedido, pk=linea_id, pedido=pedido)
+    linea = get_object_or_404(
+        LineaPedido.objects.select_related("producto", "producto__inventario"),
+        pk=linea_id,
+        pedido=pedido,
+    )
     nueva_cantidad = int(request.POST.get("cantidad", 1))
     if nueva_cantidad < 1:
         nueva_cantidad = 1
+    disponible = stock_disponible(linea.producto)
+    if nueva_cantidad > disponible:
+        messages.error(
+            request,
+            f"Solo hay {disponible} unidad(es) disponible(s) de «{linea.producto.nombre}».",
+        )
+        return redirect("pedidos:carrito")
     linea.cantidad = nueva_cantidad
     linea.save(update_fields=["cantidad"])
     _recalcular_totales(pedido)
@@ -155,12 +188,24 @@ def confirmar_pedido(request):
         messages.error(request, "Tu carrito está vacío.")
         return redirect("pedidos:carrito")
 
-    lineas = pedido.lineas.select_related("producto")
+    lineas = list(
+        pedido.lineas.select_related("producto", "producto__inventario")
+    )
     whatsapp_url = _construir_url_whatsapp(lineas, pedido, usuario)
 
-    pedido.estado = "confirmado"
-    pedido.fecha_pedido = timezone.now()
-    pedido.save(update_fields=["estado", "fecha_pedido"])
+    try:
+        with transaction.atomic():
+            descontar_stock_lineas(lineas)
+            pedido.estado = "confirmado"
+            pedido.fecha_pedido = timezone.now()
+            pedido.save(update_fields=["estado", "fecha_pedido"])
+    except StockInsuficienteError as exc:
+        messages.error(
+            request,
+            f"No hay stock suficiente de «{exc.producto.nombre}». "
+            f"Disponible: {exc.disponible}, solicitado: {exc.solicitado}.",
+        )
+        return redirect("pedidos:carrito")
 
     messages.success(request, f"¡Pedido #{pedido.id_pedido} confirmado! Puedes verlo en tu historial.")
 

@@ -59,6 +59,7 @@
                         name="cantidad"
                         value="{{ linea.cantidad }}"
                         min="1"
+                        max="{{ linea.producto.stock_actual }}"
                         class="carrito-input-cantidad cantidad-control__input"
                         aria-label="Cantidad de {{ linea.producto.nombre }}"
                       />

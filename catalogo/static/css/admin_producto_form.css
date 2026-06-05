@@ -194,6 +194,12 @@ body {
   margin-top: .4rem;
 }
 
+.field-hint {
+  color: var(--muted);
+  font-size: .8rem;
+  margin-top: .35rem;
+}
+
 .field-error {
   color: #e74c3c;
   font-size: .8rem;
