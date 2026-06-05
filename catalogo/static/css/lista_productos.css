@@ -39,6 +39,7 @@
       gap: .45rem;
       background: var(--gold);
       color: #0f1114;
+      font-family: var(--font-body);
       font-weight: 700;
       font-size: .9rem;
       padding: .6rem 1.3rem;
@@ -87,6 +88,7 @@
       justify-content: center;
       min-height: 38px;
       border-radius: 8px;
+      font-family: var(--font-body);
       font-size: .9rem;
       font-weight: 700;
       text-decoration: none;
@@ -209,6 +211,14 @@
 
     /* Acciones */
     .col-acciones { text-align: center; white-space: nowrap; }
+    .btn-editar, .btn-eliminar,
+    .btn-inventario,
+    .btn-eliminar-confirmar,
+    .modal-cancel,
+    .btn-guardar-mini {
+      font-family: var(--font-body);
+    }
+
     .btn-editar, .btn-eliminar {
       display: inline-flex;
       align-items: center;

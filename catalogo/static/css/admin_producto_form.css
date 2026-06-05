@@ -209,6 +209,13 @@ body {
   border-top: 1px solid var(--border);
 }
 
+.btn-cancel,
+.btn-guardar,
+.img-zone .btn-seleccionar,
+#preview-container .btn-cambiar {
+  font-family: var(--font-body);
+}
+
 .btn-cancel {
   background: transparent;
   border: 1px solid var(--border);

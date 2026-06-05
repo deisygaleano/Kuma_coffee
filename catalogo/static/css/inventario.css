@@ -89,6 +89,7 @@
   gap: .45rem;
   min-height: 44px;
   border-radius: 8px;
+  font-family: var(--font-body);
   font-size: .93rem;
   font-weight: 900;
   text-decoration: none;
@@ -470,6 +471,13 @@
 .inventario-body .col-acciones {
   text-align: center;
   white-space: nowrap;
+}
+
+.inventario-body .btn-editar,
+.inventario-body .btn-eliminar,
+.inventario-body .btn-eliminar-confirmar,
+.inventario-body .modal-cancel {
+  font-family: var(--font-body);
 }
 
 .inventario-body .btn-editar,

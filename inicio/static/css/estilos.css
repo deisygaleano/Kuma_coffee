@@ -29,6 +29,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  font-family: var(--font-body);
 }
 
 body {
@@ -46,14 +47,45 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.texto-logo,
+.catalogo-titulo,
+.inicio__titulo,
+.auth-titulo,
+.form-title,
+.slider-titulo,
+.manual-titulo,
+.sn-hero__titulo,
+.sn-titulo-seccion,
+.sn-cta__titulo,
+.producto-detalle__titulo,
+.catalogo-relacionados__titulo,
+.usuario-modal__titulo,
+.inv-hero h1,
+.gp-header h1 {
   font-family: var(--font-display);
 }
 
 button,
 input,
 select,
-textarea {
+textarea,
+.btn,
+a[class*="btn"],
+[class^="btn-"],
+[class*=" btn-"],
+.modal-cancel,
+.cabecera__usuario-trigger,
+.cabecera__carrito,
+.enlace-navegacion,
+.enlace-admin,
+.catalogo-busqueda-btn,
+.admin-input,
+.admin-select,
+.auth-input,
+.cantidad-control__input,
+.cantidad-control__btn,
+.carrito-input-cantidad {
   font-family: var(--font-body);
 }
 
@@ -736,7 +768,7 @@ textarea {
   font-size: 0.95rem;
   border: none;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-body);
   transition: background 0.15s, transform 0.1s;
 }
 
@@ -788,7 +820,7 @@ a.icono-logo {
   background: rgba(0, 0, 0, 0.35);
   color: #fff;
   font-size: 0.95rem;
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
 .catalogo-busqueda-input::placeholder {
@@ -1328,7 +1360,7 @@ a.icono-logo {
   background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.78);
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: 0.52rem;
   font-weight: 800;
   line-height: 1;
@@ -1482,7 +1514,7 @@ a.icono-logo {
   border-radius: var(--radius);
   font-size: 0.85rem;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-weight: 500;
   transition: background 0.15s;
 }
@@ -1550,7 +1582,7 @@ a.icono-logo {
   padding: 0.25rem 0.35rem;
   border-radius: 10px;
   color: inherit;
-  font-family: inherit;
+  font-family: var(--font-body);
   transition: background 0.15s;
 }
 
@@ -1633,7 +1665,7 @@ body.usuario-modal-abierto {
   font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-body);
   transition: background 0.15s, color 0.15s;
 }
 
@@ -1820,7 +1852,7 @@ body.usuario-modal-abierto {
   background: rgba(0, 0, 0, 0.35);
   color: #fff;
   font-size: 1rem;
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
 .auth-password-wrap {
@@ -2339,7 +2371,7 @@ body.usuario-modal-abierto {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.95rem;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;

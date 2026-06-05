@@ -47,6 +47,11 @@ body {
   margin: 0;
 }
 
+.btn-volver,
+.btn-confirmar {
+  font-family: var(--font-body);
+}
+
 .btn-volver {
   padding: .6rem 1.4rem;
   border-radius: 8px;
