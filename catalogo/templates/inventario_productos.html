@@ -94,47 +94,46 @@
         <span class="inv-toolbar-count">{{ resumen.total_productos }} productos</span>
       </div>
       {% if productos %}
-      <table class="gp-table inv-table">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th style="text-align:center">Categoría</th>
-            <th style="text-align:center">Estado</th>
-            <th style="text-align:center">Stock</th>
-            <th style="text-align:center">Stock minimo</th>
-            <th style="text-align:center" class="col-extras">Altura</th>
-            <th style="text-align:center" class="col-extras">Tostion</th>
-            <th class="col-desc">Descripción</th>
-            <th style="text-align:center">Actualizado</th>
-            <th class="col-acciones">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for p in productos %}
-          <tr class="inv-row inv-row-{{ p.estado_inventario }}">
-            <td>
-              <div class="inv-producto">
-                {% include 'includes/producto_imagen.html' with producto=p img_class="" placeholder_class="producto-sin-foto--thumb" %}
-                <div>
-                  <strong>{{ p.nombre }}</strong>
-                  <span>${{ p.precio|peso_co }}</span>
+
+      <!-- Vista escritorio: tabla -->
+      <div class="inv-tabla-wrap">
+        <table class="gp-table inv-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th style="text-align:center">Categoría</th>
+              <th style="text-align:center">Estado</th>
+              <th style="text-align:center">Stock</th>
+              <th style="text-align:center">Stock minimo</th>
+              <th style="text-align:center" class="col-extras">Altura</th>
+              <th style="text-align:center" class="col-extras">Tostion</th>
+              <th class="col-desc">Descripción</th>
+              <th style="text-align:center">Actualizado</th>
+              <th class="col-acciones">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in productos %}
+            <tr class="inv-row inv-row-{{ p.estado_inventario }}">
+              <td>
+                <div class="inv-producto">
+                  {% include 'includes/producto_imagen.html' with producto=p img_class="" placeholder_class="producto-sin-foto--thumb" %}
+                  <div>
+                    <strong>{{ p.nombre }}</strong>
+                    <span>${{ p.precio|peso_co }}</span>
+                  </div>
                 </div>
-              </div>
-            </td>
-            <td class="td-cat">
-              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="muted">Sin categoría</span>{% endif %}
-            </td>
-            <td>
-              <span class="inv-estado inv-estado-{{ p.estado_inventario }}">
-                {% if p.estado_inventario == "agotado" %}
-                  Agotado
-                {% elif p.estado_inventario == "bajo" %}
-                  Stock bajo
-                {% else %}
-                  Disponible
-                {% endif %}
-              </span>
-            </td>
+              </td>
+              <td class="td-cat">
+                {% if p.categoria %}{{ p.categoria.nombre }}{% else %}<span class="muted">Sin categoría</span>{% endif %}
+              </td>
+              <td>
+                <span class="inv-estado inv-estado-{{ p.estado_inventario }}">
+                  {% if p.estado_inventario == "agotado" %}Agotado
+                  {% elif p.estado_inventario == "bajo" %}Stock bajo
+                  {% else %}Disponible{% endif %}
+                </span>
+              </td>
               <td class="td-stock" style="text-align:center">{{ p.stock_actual }}</td>
               <td class="td-stock" style="text-align:center">{{ p.stock_minimo_actual }}</td>
               <td class="td-extras col-extras" style="text-align:center">
@@ -145,11 +144,8 @@
               </td>
               <td class="td-desc col-desc" title="{{ p.descripcion }}">{{ p.descripcion|default:"—" }}</td>
               <td class="inv-fecha" style="text-align:center">
-                {% if p.inventario %}
-                  {{ p.inventario.fecha_actualizacion|date:"d/m/Y H:i" }}
-                {% else %}
-                  <span class="muted">Pendiente</span>
-                {% endif %}
+                {% if p.inventario %}{{ p.inventario.fecha_actualizacion|date:"d/m/Y H:i" }}
+                {% else %}<span class="muted">Pendiente</span>{% endif %}
               </td>
               <td class="col-acciones">
                 <a href="{% url 'catalogo:editar_producto' p.id_producto %}" class="btn-editar" title="Editar">
@@ -166,10 +162,87 @@
                     <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                 </button>
               </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vista móvil: tarjetas -->
+      <div class="inv-cards">
+        {% for p in productos %}
+        <article class="inv-card inv-card--{{ p.estado_inventario }}">
+          <div class="inv-card__head">
+            <div class="inv-card__producto">
+              {% include 'includes/producto_imagen.html' with producto=p img_class="inv-card__img" placeholder_class="producto-sin-foto--thumb" %}
+              <div>
+                <strong class="inv-card__nombre">{{ p.nombre }}</strong>
+                <span class="inv-card__precio">${{ p.precio|peso_co }}</span>
+              </div>
+            </div>
+            <span class="inv-estado inv-estado-{{ p.estado_inventario }}">
+              {% if p.estado_inventario == "agotado" %}Agotado
+              {% elif p.estado_inventario == "bajo" %}Stock bajo
+              {% else %}Disponible{% endif %}
+            </span>
+          </div>
+          <div class="inv-card__body">
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Categoría</span>
+              <span>{% if p.categoria %}{{ p.categoria.nombre }}{% else %}—{% endif %}</span>
+            </div>
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Stock actual</span>
+              <span>{{ p.stock_actual }}</span>
+            </div>
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Stock mínimo</span>
+              <span>{{ p.stock_minimo_actual }}</span>
+            </div>
+            {% if p.altura %}
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Altura</span>
+              <span>{{ p.altura.metros_formateado }}</span>
+            </div>
+            {% endif %}
+            {% if p.tostion %}
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Tostión</span>
+              <span>{{ p.tostion.tipo }}</span>
+            </div>
+            {% endif %}
+            {% if p.descripcion %}
+            <div class="inv-card__fila inv-card__fila--desc">
+              <span class="inv-card__label">Descripción</span>
+              <span>{{ p.descripcion }}</span>
+            </div>
+            {% endif %}
+            <div class="inv-card__fila">
+              <span class="inv-card__label">Actualizado</span>
+              <span>{% if p.inventario %}{{ p.inventario.fecha_actualizacion|date:"d/m/Y H:i" }}{% else %}Pendiente{% endif %}</span>
+            </div>
+          </div>
+          <div class="inv-card__foot">
+            <a href="{% url 'catalogo:editar_producto' p.id_producto %}" class="btn-editar inv-card__btn" title="Editar">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                   viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Editar
+            </a>
+            <button type="button" class="btn-eliminar inv-card__btn" title="Eliminar"
+                    data-eliminar-producto
+                    data-pk="{{ p.id_producto }}"
+                    data-nombre="{{ p.nombre }}">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                   viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              Eliminar
+            </button>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
       {% else %}
       <div class="gp-empty">
         <svg width="56" height="56" fill="none" stroke="#a68b2d" stroke-width="1.5" viewBox="0 0 24 24">

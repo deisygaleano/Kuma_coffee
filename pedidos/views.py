@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import F, Sum
+from django.db.models import F, Q, Sum, Count
 from django.db.models.functions import Coalesce
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -309,3 +309,91 @@ def _rango_paginacion(actual, total):
     return rango
 
 
+def historial_admin(request):
+    usuario = _usuario_actual(request)
+    if not es_admin(usuario):
+        messages.error(request, "Acceso restringido a administradores.")
+        return redirect("inicio")
+
+    q = request.GET.get("q", "").strip()
+    estado_filtro = request.GET.get("estado", "").strip()
+
+    pedidos_qs = (
+        Pedido.objects.exclude(estado="borrador")
+        .select_related("usuario")
+        .order_by("-fecha_pedido", "-id_pedido")
+    )
+
+    if q:
+        pedidos_qs = pedidos_qs.filter(
+            Q(usuario__nombre__icontains=q)
+            | Q(usuario__apellido__icontains=q)
+            | Q(usuario__correo__icontains=q)
+            | Q(id_pedido__icontains=q)
+        )
+
+    if estado_filtro:
+        pedidos_qs = pedidos_qs.filter(estado=estado_filtro)
+
+    resumen = Pedido.objects.exclude(estado="borrador").aggregate(
+        total_pedidos=Count("id_pedido"),
+        total_ventas=Coalesce(Sum("valor"), 0),
+        clientes_unicos=Count("usuario", distinct=True),
+    )
+
+    paginador = Paginator(pedidos_qs, 10)
+    pedidos_pagina = paginador.get_page(request.GET.get("page"))
+
+    if pedidos_pagina.object_list:
+        pedidos_ids = [p.id_pedido for p in pedidos_pagina.object_list]
+        pedidos_map = {
+            p.id_pedido: p
+            for p in Pedido.objects.filter(id_pedido__in=pedidos_ids).prefetch_related(
+                "lineas__producto", "lineas__producto__categoria"
+            ).select_related("usuario")
+        }
+        pedidos_pagina.object_list = [
+            pedidos_map[pid] for pid in pedidos_ids if pid in pedidos_map
+        ]
+
+    numeros_pagina = _rango_paginacion(pedidos_pagina.number, paginador.num_pages)
+
+    return render(
+        request,
+        "historial_admin.html",
+        {
+            "pedidos": pedidos_pagina,
+            "page_obj": pedidos_pagina,
+            "numeros_pagina": numeros_pagina,
+            "resumen": resumen,
+            "q": q,
+            "estado_filtro": estado_filtro,
+        },
+    )
+
+
+@require_GET
+def factura_admin(request, pk):
+    usuario = _usuario_actual(request)
+    if not es_admin(usuario):
+        messages.error(request, "Acceso restringido a administradores.")
+        return redirect("inicio")
+
+    pedido = get_object_or_404(
+        Pedido.objects.prefetch_related("lineas__producto").select_related("usuario"),
+        pk=pk,
+    )
+    if pedido.estado == "borrador":
+        raise Http404
+
+    try:
+        ruta = generar_factura_pdf(pedido, pedido.usuario)
+    except Exception as exc:
+        raise Http404 from exc
+
+    return FileResponse(
+        ruta.open("rb"),
+        as_attachment=True,
+        filename=f"factura_pedido_{pedido.id_pedido}.pdf",
+        content_type="application/pdf",
+    )

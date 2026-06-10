@@ -4696,3 +4696,679 @@ body.usuario-modal-abierto {
 [data-theme="light"] .manual-descripcion {
   color: rgba(0,0,0,0.6);
 }
+
+/* ===================================================
+   HISTORIAL ADMIN — responde al tema claro/oscuro
+   =================================================== */
+
+.ha-body {
+  --ha-bg: #111213;
+  --ha-panel: #1c1c1e;
+  --ha-border: rgba(255, 255, 255, .1);
+  --ha-gold: #c4a84a;
+  --ha-gold-light: rgba(196, 168, 74, .15);
+  --ha-text: #f5f0e8;
+  --ha-muted: rgba(245, 240, 232, .55);
+  --ha-green: #6fd08f;
+  --ha-red: #e06b5f;
+  --ha-blue: #60a5fa;
+  background: var(--ha-bg);
+  color: var(--ha-text);
+  font-family: var(--font-body);
+}
+
+.ha-wrapper {
+  width: min(1280px, calc(100% - 32px));
+  margin: 130px auto 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Hero */
+.ha-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background: var(--ha-panel);
+  border: 1px solid var(--ha-border);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+
+.ha-kicker {
+  display: block;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ha-gold);
+  margin-bottom: .35rem;
+}
+
+.ha-titulo {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 800;
+  color: var(--ha-text);
+  line-height: 1.1;
+}
+
+.ha-subtitulo {
+  margin: .55rem 0 0;
+  color: var(--ha-muted);
+  font-size: .97rem;
+}
+
+.ha-hero__acciones {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Botones */
+.ha-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 42px;
+  padding: 0 1.1rem;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background .15s, box-shadow .15s;
+}
+
+.ha-btn--pri {
+  background: var(--ha-gold);
+  color: #fff;
+}
+
+.ha-btn--pri:hover {
+  background: #705819;
+  box-shadow: 0 4px 12px rgba(138,111,40,.3);
+}
+
+.ha-btn--sec {
+  background: var(--ha-panel);
+  color: var(--ha-text);
+  border: 1.5px solid var(--ha-border);
+}
+
+.ha-btn--sec:hover {
+  background: var(--ha-gold-light);
+  border-color: var(--ha-gold);
+}
+
+.ha-btn--ghost {
+  background: transparent;
+  color: var(--ha-muted);
+  border: 1.5px solid var(--ha-border);
+}
+
+.ha-btn--ghost:hover {
+  background: var(--ha-gold-light);
+  color: var(--ha-gold);
+}
+
+.ha-btn--sm {
+  min-height: 36px;
+  padding: 0 .85rem;
+  font-size: .84rem;
+}
+
+/* Estadísticas */
+.ha-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.ha-stat {
+  background: var(--ha-panel);
+  border: 1px solid var(--ha-border);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,.12);
+}
+
+.ha-stat__icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--ha-gold-light);
+  color: var(--ha-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ha-stat__label {
+  display: block;
+  font-size: .78rem;
+  color: var(--ha-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.ha-stat__valor {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--ha-text);
+  margin-top: .1rem;
+}
+
+/* Filtros */
+.ha-filtros {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  background: var(--ha-panel);
+  border: 1px solid var(--ha-border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.ha-filtros__busqueda {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  background: var(--ha-bg);
+  border: 1.5px solid var(--ha-border);
+  border-radius: 8px;
+  padding: 0 .9rem;
+  color: var(--ha-muted);
+}
+
+.ha-filtros__busqueda:focus-within {
+  border-color: var(--ha-gold);
+  background: var(--ha-panel);
+}
+
+.ha-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: .65rem 0;
+  font-family: var(--font-body);
+  font-size: .93rem;
+  color: var(--ha-text);
+  outline: none;
+}
+
+.ha-input::placeholder {
+  color: var(--ha-muted);
+}
+
+.ha-select {
+  min-width: 180px;
+  height: 44px;
+  border: 1.5px solid var(--ha-border);
+  border-radius: 8px;
+  background: var(--ha-bg);
+  color: var(--ha-text);
+  font-family: var(--font-body);
+  font-size: .93rem;
+  padding: 0 .9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.ha-select:focus {
+  border-color: var(--ha-gold);
+  background: var(--ha-panel);
+}
+
+/* Panel tabla */
+.ha-panel {
+  background: var(--ha-panel);
+  border: 1px solid var(--ha-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+}
+
+.ha-panel__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--ha-border);
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.ha-panel__titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ha-text);
+}
+
+.ha-panel__contador {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--ha-gold);
+  background: var(--ha-gold-light);
+  padding: .25rem .75rem;
+  border-radius: 20px;
+}
+
+/* Tabla */
+.ha-tabla-wrap {
+  overflow-x: auto;
+}
+
+.ha-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+.ha-tabla thead th {
+  background: var(--ha-bg);
+  padding: .85rem 1rem;
+  text-align: left;
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ha-muted);
+  border-bottom: 1px solid var(--ha-border);
+  white-space: nowrap;
+}
+
+.ha-tabla tbody tr {
+  border-bottom: 1px solid var(--ha-border);
+  transition: background .12s;
+}
+
+.ha-tabla tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ha-tabla tbody tr:hover {
+  background: var(--ha-bg);
+}
+
+.ha-tabla td {
+  padding: .9rem 1rem;
+  vertical-align: top;
+}
+
+.ha-badge-id {
+  display: inline-block;
+  padding: .25rem .65rem;
+  border-radius: 6px;
+  background: var(--ha-gold-light);
+  color: var(--ha-gold);
+  font-weight: 800;
+  font-size: .85rem;
+}
+
+.ha-cliente__nombre {
+  display: block;
+  font-weight: 700;
+  color: var(--ha-text);
+}
+
+.ha-cliente__correo,
+.ha-cliente__tel {
+  display: block;
+  font-size: .8rem;
+  color: var(--ha-muted);
+}
+
+.ha-ver-productos {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  background: var(--ha-bg);
+  border: 1.5px solid var(--ha-border);
+  border-radius: 6px;
+  padding: .3rem .7rem;
+  font-family: var(--font-body);
+  font-size: .83rem;
+  font-weight: 700;
+  color: var(--ha-text);
+  cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+
+.ha-ver-productos:hover {
+  background: var(--ha-gold-light);
+  border-color: var(--ha-gold);
+  color: var(--ha-gold);
+}
+
+.ha-ver-productos svg {
+  transition: transform .2s;
+}
+
+.ha-detalle-productos {
+  margin-top: .6rem;
+}
+
+.ha-productos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.ha-productos-lista li {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .83rem;
+}
+
+.ha-prod__nombre {
+  flex: 1;
+  color: var(--ha-text);
+}
+
+.ha-prod__cant {
+  color: var(--ha-muted);
+  font-size: .78rem;
+}
+
+.ha-prod__sub {
+  font-weight: 700;
+  color: var(--ha-gold);
+  white-space: nowrap;
+}
+
+.ha-fila__total {
+  font-weight: 800;
+  color: var(--ha-text);
+  white-space: nowrap;
+}
+
+.ha-fecha__dia {
+  display: block;
+  font-weight: 600;
+  font-size: .88rem;
+}
+
+.ha-fecha__hora {
+  display: block;
+  font-size: .78rem;
+  color: var(--ha-muted);
+}
+
+.ha-muted {
+  color: var(--ha-muted);
+}
+
+/* Estados */
+.ha-estado {
+  display: inline-block;
+  padding: .28rem .7rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.ha-estado--confirmado {
+  background: #d1fae5;
+  color: var(--ha-green);
+}
+
+.ha-estado--cancelado {
+  background: #fee2e2;
+  color: var(--ha-red);
+}
+
+.ha-estado--entregado {
+  background: #dbeafe;
+  color: var(--ha-blue);
+}
+
+/* Botón factura */
+.ha-btn-factura {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--ha-gold-light);
+  color: var(--ha-gold);
+  border: 1.5px solid rgba(138,111,40,.3);
+  border-radius: 8px;
+  padding: .4rem .85rem;
+  font-family: var(--font-body);
+  font-size: .83rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .12s, box-shadow .12s;
+}
+
+.ha-btn-factura:hover {
+  background: var(--ha-gold);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(138,111,40,.3);
+}
+
+/* Paginación */
+.ha-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 1.25rem;
+  border-top: 1px solid var(--ha-border);
+  flex-wrap: wrap;
+}
+
+.ha-pag__enlace,
+.ha-pag__num {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .45rem .9rem;
+  border-radius: 8px;
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ha-text);
+  border: 1.5px solid var(--ha-border);
+  background: var(--ha-panel);
+  transition: background .12s, border-color .12s;
+}
+
+.ha-pag__enlace:hover,
+.ha-pag__num:hover {
+  background: var(--ha-gold-light);
+  border-color: var(--ha-gold);
+  color: var(--ha-gold);
+}
+
+.ha-pag__num--act {
+  background: var(--ha-gold);
+  color: #fff;
+  border-color: var(--ha-gold);
+}
+
+.ha-pag__num--act:hover {
+  background: var(--ha-gold);
+  color: #fff;
+}
+
+.ha-pag__enlace--dis {
+  color: var(--ha-muted);
+  cursor: default;
+  opacity: .5;
+}
+
+.ha-pag__enlace--dis:hover {
+  background: var(--ha-panel);
+  border-color: var(--ha-border);
+  color: var(--ha-muted);
+}
+
+.ha-pag__puntos {
+  padding: .45rem .5rem;
+  color: var(--ha-muted);
+  font-weight: 700;
+}
+
+/* Vacío */
+.ha-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 4rem 2rem;
+  color: var(--ha-muted);
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* ── Tarjetas móvil ── */
+.ha-cards {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.ha-card {
+  border: 1px solid var(--ha-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ha-panel);
+}
+
+.ha-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .85rem 1rem;
+  background: var(--ha-bg);
+  border-bottom: 1px solid var(--ha-border);
+}
+
+.ha-card__body {
+  padding: 1rem;
+}
+
+.ha-card__cliente {
+  margin: 0 0 .75rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  font-size: .88rem;
+}
+
+.ha-card__cliente strong {
+  color: var(--ha-text);
+}
+
+.ha-card__cliente span {
+  color: var(--ha-muted);
+  font-size: .81rem;
+}
+
+.ha-productos-lista--card li {
+  padding: .3rem 0;
+  border-bottom: 1px solid var(--ha-border);
+}
+
+.ha-productos-lista--card li:last-child {
+  border-bottom: none;
+}
+
+.ha-card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .85rem 1rem;
+  border-top: 1px solid var(--ha-border);
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.ha-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.ha-card__total {
+  font-size: 1.1rem;
+  color: var(--ha-text);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .ha-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ha-tabla-wrap {
+    display: none;
+  }
+
+  .ha-cards {
+    display: flex;
+  }
+
+  .ha-wrapper {
+    margin-top: 110px;
+  }
+
+  .ha-hero {
+    padding: 1.25rem 1.1rem;
+  }
+
+  .ha-filtros {
+    padding: .85rem 1rem;
+  }
+
+  .ha-filtros__busqueda {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .ha-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* estados: fondo suave en oscuro */
+.ha-estado--confirmado {
+  background: rgba(111, 208, 143, .15);
+  color: var(--ha-green);
+}
+
+.ha-estado--cancelado {
+  background: rgba(224, 107, 95, .15);
+  color: var(--ha-red);
+}
+
+.ha-estado--entregado {
+  background: rgba(96, 165, 250, .15);
+  color: var(--ha-blue);
+}

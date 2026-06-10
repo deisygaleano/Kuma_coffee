@@ -972,3 +972,56 @@
 [data-theme="light"] .lista_productos .gp-kicker {
   color: var(--text-soft);
 }
+
+/* ── Historial Admin: tema claro ── */
+[data-theme="light"] .ha-body {
+  --ha-bg: var(--cream-page);
+  --ha-panel: var(--cream-raised);
+  --ha-border: rgba(var(--gold-rgb), 0.22);
+  --ha-gold: var(--gold);
+  --ha-gold-light: rgba(var(--gold-rgb), 0.12);
+  --ha-text: var(--text-on-accent);
+  --ha-muted: var(--muted);
+  --ha-green: #2d6b42;
+  --ha-red: #8f3a32;
+  --ha-blue: #2563ae;
+  background: var(--ha-bg);
+  color: var(--ha-text);
+}
+
+[data-theme="light"] .ha-estado--confirmado {
+  background: rgba(66, 130, 90, 0.14);
+  color: var(--ha-green);
+}
+
+[data-theme="light"] .ha-estado--cancelado {
+  background: rgba(176, 78, 68, 0.14);
+  color: var(--ha-red);
+}
+
+[data-theme="light"] .ha-estado--entregado {
+  background: rgba(37, 99, 174, 0.12);
+  color: var(--ha-blue);
+}
+
+[data-theme="light"] .ha-select {
+  background: var(--cream-input);
+  color: var(--text-on-accent);
+  border-color: rgba(var(--gold-rgb), 0.28);
+}
+
+[data-theme="light"] .ha-btn--sec {
+  background: var(--cream-input);
+  color: var(--text-on-accent);
+  border-color: rgba(var(--gold-rgb), 0.3);
+}
+
+[data-theme="light"] .ha-btn--ghost {
+  color: var(--muted);
+  border-color: rgba(var(--gold-rgb), 0.28);
+}
+
+[data-theme="light"] .ha-btn--ghost:hover {
+  background: rgba(var(--gold-rgb), 0.1);
+  color: var(--gold);
+}

@@ -10,4 +10,6 @@ urlpatterns = [
     path('confirmar/', views.confirmar_pedido, name="confirmar"),
     path('historial/', views.historial_pedidos, name="historial"),
     path('factura/<int:pk>/', views.descargar_factura, name="factura"),
+    path('admin/historial/', views.historial_admin, name="historial_admin"),
+    path('admin/factura/<int:pk>/', views.factura_admin, name="factura_admin"),
 ]

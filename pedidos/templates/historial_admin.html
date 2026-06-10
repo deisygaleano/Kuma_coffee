@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  {% include 'includes/tema_init.html' %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historial de pedidos — Kuma Coffee</title>
+  {% load static kuma_filters %}
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+  {% include 'includes/fuentes.html' %}
+</head>
+
+<body class="ha-body">
+  {% include 'includes/navbar.html' %}
+
+  <main class="ha-wrapper">
+
+    <!-- ── Encabezado ── -->
+    <header class="ha-hero">
+      <div class="ha-hero__text">
+        <p class="ha-kicker">Panel de administración</p>
+        <h1 class="ha-titulo">Historial de pedidos</h1>
+        <p class="ha-subtitulo">Consulta, filtra y descarga facturas de todos los pedidos realizados.</p>
+      </div>
+      <div class="ha-hero__acciones">
+        <a href="{% url 'catalogo:inventario_productos' %}" class="ha-btn ha-btn--sec">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Inventario
+        </a>
+      </div>
+    </header>
+
+    <!-- ── Estadísticas ── -->
+    <section class="ha-stats" aria-label="Resumen de pedidos">
+      <article class="ha-stat">
+        <div class="ha-stat__icono">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1" ry="1"/>
+          </svg>
+        </div>
+        <div class="ha-stat__info">
+          <span class="ha-stat__label">Total pedidos</span>
+          <strong class="ha-stat__valor">{{ resumen.total_pedidos }}</strong>
+        </div>
+      </article>
+      <article class="ha-stat">
+        <div class="ha-stat__icono">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="ha-stat__info">
+          <span class="ha-stat__label">Total ventas</span>
+          <strong class="ha-stat__valor">${{ resumen.total_ventas|peso_co }}</strong>
+        </div>
+      </article>
+      <article class="ha-stat">
+        <div class="ha-stat__icono">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="ha-stat__info">
+          <span class="ha-stat__label">Clientes</span>
+          <strong class="ha-stat__valor">{{ resumen.clientes_unicos }}</strong>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── Filtros ── -->
+    <form class="ha-filtros" method="get" autocomplete="off">
+      <div class="ha-filtros__busqueda">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="search"
+          name="q"
+          value="{{ q }}"
+          placeholder="Buscar por cliente, correo o # pedido"
+          class="ha-input"
+        />
+      </div>
+      <select name="estado" class="ha-select">
+        <option value="">Todos los estados</option>
+        <option value="confirmado" {% if estado_filtro == "confirmado" %}selected{% endif %}>Confirmado</option>
+        <option value="cancelado" {% if estado_filtro == "cancelado" %}selected{% endif %}>Cancelado</option>
+        <option value="entregado" {% if estado_filtro == "entregado" %}selected{% endif %}>Entregado</option>
+      </select>
+      <button type="submit" class="ha-btn ha-btn--pri">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        Buscar
+      </button>
+      {% if q or estado_filtro %}
+        <a href="{% url 'pedidos:historial_admin' %}" class="ha-btn ha-btn--ghost">Limpiar</a>
+      {% endif %}
+    </form>
+
+    <!-- ── Panel tabla ── -->
+    <div class="ha-panel">
+      <div class="ha-panel__cabecera">
+        <div>
+          <p class="ha-kicker">Tabla de pedidos</p>
+          <h2 class="ha-panel__titulo">Pedidos registrados</h2>
+        </div>
+        <span class="ha-panel__contador">{{ page_obj.paginator.count }} pedido{{ page_obj.paginator.count|pluralize }}</span>
+      </div>
+
+      {% if pedidos %}
+
+        <!-- Vista escritorio: tabla -->
+        <div class="ha-tabla-wrap">
+          <table class="ha-tabla">
+            <thead>
+              <tr>
+                <th scope="col"># Pedido</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Contacto</th>
+                <th scope="col">Productos</th>
+                <th scope="col">Total</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Factura</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pedido in pedidos %}
+                <tr class="ha-fila" data-pedido-id="{{ pedido.id_pedido }}">
+                  <td class="ha-fila__id">
+                    <span class="ha-badge-id">#{{ pedido.id_pedido }}</span>
+                  </td>
+                  <td class="ha-fila__cliente">
+                    <span class="ha-cliente__nombre">{{ pedido.usuario.nombre }} {{ pedido.usuario.apellido|default:"" }}</span>
+                  </td>
+                  <td class="ha-fila__contacto">
+                    <span class="ha-cliente__correo">{{ pedido.usuario.correo }}</span>
+                    {% if pedido.usuario.telefono %}
+                      <span class="ha-cliente__tel">{{ pedido.usuario.telefono }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="ha-fila__productos">
+                    <button type="button" class="ha-ver-productos" data-target="detalle-{{ pedido.id_pedido }}">
+                      {{ pedido.lineas.count }} ítem{{ pedido.lineas.count|pluralize }}
+                      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </button>
+                    <div class="ha-detalle-productos" id="detalle-{{ pedido.id_pedido }}" hidden>
+                      <ul class="ha-productos-lista">
+                        {% for linea in pedido.lineas.all %}
+                          <li>
+                            <span class="ha-prod__nombre">{{ linea.producto.nombre }}</span>
+                            <span class="ha-prod__cant">× {{ linea.cantidad }}</span>
+                            <span class="ha-prod__sub">${{ linea.subtotal|peso_co }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </td>
+                  <td class="ha-fila__total">${{ pedido.valor|peso_co }}</td>
+                  <td class="ha-fila__fecha">
+                    {% if pedido.fecha_pedido %}
+                      <span class="ha-fecha__dia">{{ pedido.fecha_pedido|date:"d/m/Y" }}</span>
+                      <span class="ha-fecha__hora">{{ pedido.fecha_pedido|time:"H:i" }}</span>
+                    {% else %}
+                      <span class="ha-muted">—</span>
+                    {% endif %}
+                  </td>
+                  <td class="ha-fila__estado">
+                    <span class="ha-estado ha-estado--{{ pedido.estado }}">{{ pedido.estado|title }}</span>
+                  </td>
+                  <td class="ha-fila__accion">
+                    <a href="{% url 'pedidos:factura_admin' pedido.id_pedido %}" class="ha-btn-factura" title="Descargar factura PDF" aria-label="Descargar factura del pedido #{{ pedido.id_pedido }}">
+                      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      PDF
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Vista móvil: tarjetas -->
+        <div class="ha-cards">
+          {% for pedido in pedidos %}
+            <article class="ha-card">
+              <div class="ha-card__head">
+                <span class="ha-badge-id">#{{ pedido.id_pedido }}</span>
+                <span class="ha-estado ha-estado--{{ pedido.estado }}">{{ pedido.estado|title }}</span>
+              </div>
+              <div class="ha-card__body">
+                <p class="ha-card__cliente">
+                  <strong>{{ pedido.usuario.nombre }} {{ pedido.usuario.apellido|default:"" }}</strong>
+                  <span>{{ pedido.usuario.correo }}</span>
+                  {% if pedido.usuario.telefono %}<span>{{ pedido.usuario.telefono }}</span>{% endif %}
+                </p>
+                <ul class="ha-productos-lista ha-productos-lista--card">
+                  {% for linea in pedido.lineas.all %}
+                    <li>
+                      <span class="ha-prod__nombre">{{ linea.producto.nombre }}</span>
+                      <span class="ha-prod__cant">× {{ linea.cantidad }}</span>
+                      <span class="ha-prod__sub">${{ linea.subtotal|peso_co }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="ha-card__foot">
+                <div class="ha-card__meta">
+                  {% if pedido.fecha_pedido %}
+                    <span class="ha-fecha__dia">{{ pedido.fecha_pedido|date:"d/m/Y" }}</span>
+                    <span class="ha-fecha__hora">{{ pedido.fecha_pedido|time:"H:i" }}</span>
+                  {% endif %}
+                  <strong class="ha-card__total">${{ pedido.valor|peso_co }}</strong>
+                </div>
+                <a href="{% url 'pedidos:factura_admin' pedido.id_pedido %}" class="ha-btn ha-btn--pri ha-btn--sm">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Descargar PDF
+                </a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <!-- Paginación -->
+        {% if page_obj.has_other_pages %}
+          <nav class="ha-paginacion" aria-label="Paginación de pedidos">
+            {% if page_obj.has_previous %}
+              <a class="ha-pag__enlace" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if estado_filtro %}&estado={{ estado_filtro }}{% endif %}">
+                <span aria-hidden="true">&lsaquo;</span> Anterior
+              </a>
+            {% else %}
+              <span class="ha-pag__enlace ha-pag__enlace--dis">&lsaquo; Anterior</span>
+            {% endif %}
+
+            <div class="ha-pag__nums">
+              {% for numero in numeros_pagina %}
+                {% if numero %}
+                  {% if numero == page_obj.number %}
+                    <span class="ha-pag__num ha-pag__num--act" aria-current="page">{{ numero }}</span>
+                  {% else %}
+                    <a class="ha-pag__num" href="?page={{ numero }}{% if q %}&q={{ q }}{% endif %}{% if estado_filtro %}&estado={{ estado_filtro }}{% endif %}">{{ numero }}</a>
+                  {% endif %}
+                {% else %}
+                  <span class="ha-pag__puntos">…</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+              <a class="ha-pag__enlace" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if estado_filtro %}&estado={{ estado_filtro }}{% endif %}">
+                Siguiente <span aria-hidden="true">&rsaquo;</span>
+              </a>
+            {% else %}
+              <span class="ha-pag__enlace ha-pag__enlace--dis">Siguiente &rsaquo;</span>
+            {% endif %}
+          </nav>
+        {% endif %}
+
+      {% else %}
+        <div class="ha-vacio">
+          <svg width="56" height="56" fill="none" stroke="#a68b2d" stroke-width="1.2" viewBox="0 0 24 24">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1" ry="1"/>
+          </svg>
+          <p>No se encontraron pedidos{% if q or estado_filtro %} con los filtros aplicados{% endif %}.</p>
+          {% if q or estado_filtro %}
+            <a href="{% url 'pedidos:historial_admin' %}" class="ha-btn ha-btn--pri">Ver todos los pedidos</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  <script>
+    document.querySelectorAll('.ha-ver-productos').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var target = document.getElementById(btn.dataset.target);
+        var abierto = !target.hidden;
+        target.hidden = abierto;
+        btn.setAttribute('aria-expanded', !abierto);
+        btn.querySelector('svg').style.transform = abierto ? '' : 'rotate(180deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>
