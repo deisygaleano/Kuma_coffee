@@ -656,7 +656,7 @@ body {
   }
 }
 .footer {
-  background-color: var(--bg);
+  background-color: var(--color-header-opacity);
   color: #f5e6d3;
   padding: 40px 20px;
   font-family: var(--font-body);
