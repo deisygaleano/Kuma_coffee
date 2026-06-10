@@ -24,4 +24,5 @@ def cuenta_usuario(request):
         "usuario_actual": usuario,
         "usuario_iniciales": _iniciales_usuario(usuario),
         "usuario_es_admin": es_admin(usuario),
+        "mostrar_tutorial": usuario is not None and not usuario.tutorial_visto,
     }

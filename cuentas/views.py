@@ -238,8 +238,8 @@ def cambiar_password(request):
         else:
             usuario.password = make_password(form.cleaned_data["password_nueva"])
             usuario.save(update_fields=["password"])
-            messages.success(request, "Nueva contraseña correcta")
-            return redirect("catalogo:lista")
+            messages.success(request, "Contraseña actualizada correctamente.")
+            return redirect("cuentas:cambiar_password")
 
     return render(request, "cambiar_password.html", {"form": form})
 
@@ -295,6 +295,14 @@ def actualizar_foto(request):
     error_foto = form.errors.get("foto")
     mensaje = error_foto[0] if error_foto else "No se pudo actualizar la foto."
     return _respuesta_foto(request, usuario, False, mensaje, status=400)
+
+
+@require_POST
+def marcar_tutorial_visto(request):
+    usuario_id = request.session.get("usuario_id")
+    if usuario_id:
+        Usuario.objects.filter(pk=usuario_id).update(tutorial_visto=True)
+    return JsonResponse({"ok": True})
 
 
 @require_POST

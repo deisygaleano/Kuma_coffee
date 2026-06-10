@@ -25,7 +25,7 @@ def ruta_factura_pedido(pedido_id):
 
 
 def ruta_logo_proyecto():
-    return Path(settings.MEDIA_ROOT).parent / "inicio" / "static" / "imagenes" / "logoproyecto.png"
+    return Path(settings.MEDIA_ROOT).parent / "inicio" / "static" / "imagenes" / "logoAplicacion.png"
 
 
 def _encabezado_factura(titulo, subtitulo):

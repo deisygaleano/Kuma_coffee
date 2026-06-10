@@ -10,6 +10,7 @@ class Usuario(models.Model):
     rol = models.CharField(max_length=20, default="cliente")
     google_id= models.CharField(max_length=128, blank=True, null=True,unique=True)
     foto = models.FileField(upload_to="usuarios/", blank=True, null=True)
+    tutorial_visto = models.BooleanField(default=False)
 
 
     class Meta:

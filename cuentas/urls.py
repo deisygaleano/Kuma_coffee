@@ -11,5 +11,6 @@ urlpatterns = [
     path('cambiar-password', views.cambiar_password, name="cambiar_password"),
     path('actualizar-foto', views.actualizar_foto, name="actualizar_foto"),
     path('google/login', views.google_login, name="google_login"),
-    path('google/callback', views.google_callback, name="google_callback"),   
+    path('google/callback', views.google_callback, name="google_callback"),
+    path('tutorial-visto', views.marcar_tutorial_visto, name="tutorial_visto"),
 ]

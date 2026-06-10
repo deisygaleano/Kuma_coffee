@@ -1,146 +1,602 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-
-<head>
-  {% include 'includes/tema_init.html' %}
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual de usuario - Kuma Coffee</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
-  {% include 'includes/fuentes.html' %}
-</head>
-
-<body>
-  {% include 'includes/navbar.html' %}
-  <br><br>
- <h1 style="text-align: center;">Próximamente guía de ayuda</h1>
-  <main class="manual-pagina">
-    <!-- <section class="manual-hero">
-      <div class="manual-hero__contenido">
-        <span class="manual-badge">Centro de ayuda</span>
-        <h1 class="manual-titulo">Manual de usuario Kuma Coffee</h1>
-        <p class="manual-descripcion">
-          Guia breve para registrarse, iniciar sesion, consultar productos, comprar, revisar pedidos y administrar el catalogo.
-        </p>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-portada.svg' %}" alt="Vista general del sistema Kuma Coffee" class="manual-hero__img" />
-    </section>
-
-    <section class="manual-indice" aria-label="Indice del manual">
-      <a href="#cuenta">Cuenta</a>
-      <a href="#catalogo">Catalogo</a>
-      <a href="#compra">Compra</a>
-      <a href="#pedidos">Pedidos</a>
-      <a href="#perfil">Perfil</a>
-      <a href="#admin">Administrador</a>
-    </section>
-
-    <section class="manual-seccion" id="cuenta">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Paso 1</span>
-        <h2>Crear cuenta o iniciar sesion</h2>
-        <p>Desde el icono de usuario puedes acceder con correo y contrasena o usar Google. Si ya tienes una cuenta con el mismo correo, Google se vincula a ese usuario.</p>
-        <ol class="manual-lista">
-          <li>Presiona el icono de usuario en la cabecera.</li>
-          <li>Selecciona Acceder o Registrarse.</li>
-          <li>Completa los campos requeridos y confirma la accion.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-cuenta.svg' %}" alt="Pantalla de acceso y registro" class="manual-imagen" />
-    </section>
-
-    <section class="manual-seccion manual-seccion--invertida" id="catalogo">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Paso 2</span>
-        <h2>Explorar el catalogo</h2>
-        <p>En Catalogo puedes revisar productos disponibles, buscar por nombre o descripcion y filtrar por categoria.</p>
-        <ol class="manual-lista">
-          <li>Entra a Catalogo desde el menu principal.</li>
-          <li>Usa la barra de busqueda o selecciona una categoria.</li>
-          <li>Abre un producto para consultar su detalle.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-catalogo.svg' %}" alt="Catalogo con buscador, categorias y productos" class="manual-imagen" />
-    </section>
-
-    <section class="manual-seccion" id="compra">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Paso 3</span>
-        <h2>Agregar productos al carrito</h2>
-        <p>En el detalle del producto puedes revisar precio, disponibilidad y seleccionar la cantidad antes de agregarlo al carrito.</p>
-        <ol class="manual-lista">
-          <li>Abre el producto que deseas comprar.</li>
-          <li>Elige la cantidad disponible.</li>
-          <li>Presiona Agregar al carrito.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-producto.svg' %}" alt="Detalle de producto y control de cantidad" class="manual-imagen" />
-    </section>
-
-    <section class="manual-seccion manual-seccion--invertida" id="pedidos">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Paso 4</span>
-        <h2>Confirmar compra y consultar pedidos</h2>
-        <p>El carrito resume los productos elegidos. Desde alli puedes ajustar cantidades, finalizar el pedido y luego consultar el historial.</p>
-        <ol class="manual-lista">
-          <li>Abre Carrito desde la cabecera.</li>
-          <li>Verifica productos, cantidades y total.</li>
-          <li>Finaliza el pedido y revisa Mis Pedidos desde tu perfil.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-carrito.svg' %}" alt="Carrito de compras e historial de pedidos" class="manual-imagen" />
-    </section>
-
-    <section class="manual-seccion" id="perfil">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Paso 5</span>
-        <h2>Gestionar perfil y contrasena</h2>
-        <p>El menu de usuario permite actualizar la foto de perfil, ver datos de la cuenta, cambiar contrasena y cerrar sesion.</p>
-        <ol class="manual-lista">
-          <li>Abre el menu de usuario.</li>
-          <li>Agrega o cambia tu foto si lo deseas.</li>
-          <li>Usa Cambiar contrasena para actualizar tus credenciales.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-perfil.svg' %}" alt="Menu de usuario con datos de perfil" class="manual-imagen" />
-    </section>
-
-    <section class="manual-seccion manual-seccion--invertida" id="admin">
-      <div class="manual-seccion__texto">
-        <span class="manual-paso">Administrador</span>
-        <h2>Administrar productos e inventario</h2>
-        <p>Los usuarios administradores tienen acceso a opciones para crear, editar y eliminar productos, ademas de controlar el inventario.</p>
-        <ol class="manual-lista">
-          <li>Inicia sesion con una cuenta administradora.</li>
-          <li>Presiona Admin en la cabecera.</li>
-          <li>Gestiona productos, imagenes, precios, categorias y stock.</li>
-        </ol>
-      </div>
-      <img src="{% static 'imagenes/manual/manual-admin.svg' %}" alt="Panel de administracion de productos" class="manual-imagen" />
-    </section>
-
-    <section class="manual-notas">
-      <h2>Recomendaciones de uso</h2>
-      <div class="manual-notas__grid">
-        <article>
-          <h3>Contrasenas seguras</h3>
-          <p>Usa minimo 8 caracteres con mayusculas, minusculas, numeros y caracteres especiales.</p>
-        </article>
-        <article>
-          <h3>Sesion con Google</h3>
-          <p>Si tu correo ya existe, puedes iniciar sesion con Google y se usara la misma cuenta.</p>
-        </article>
-        <article>
-          <h3>Carrito</h3>
-          <p>Antes de finalizar, revisa cantidades y disponibilidad para evitar cambios inesperados.</p>
-        </article>
-      </div>
-    </section> -->
-    <h1>Próximamente guía de ayuda</h1>
-  </main>
-
-  {% include 'includes/footer.html' %}
-</body>
-
+    <head>
+        {% include 'includes/tema_init.html' %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Centro de ayuda - Kuma Coffee</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+        {% include 'includes/fuentes.html' %}
+    </head>
+    <body>
+        {% include 'includes/navbar.html' %}
+        <main class="ayuda-pagina">
+            <!-- Hero -->
+            <section class="ayuda-hero">
+                <div class="ayuda-hero__contenido">
+                    <span class="manual-badge">Centro de ayuda</span>
+                    <h1 class="ayuda-hero__titulo">¿En qué podemos ayudarte?</h1>
+                    <p class="ayuda-hero__desc">Guía rápida sobre tu cuenta, el catálogo, el carrito y tus pedidos en Kuma Coffee.</p>
+                    <nav class="ayuda-pills" aria-label="Secciones del manual">
+                        <a href="#cuenta" class="ayuda-pill">Cuenta</a>
+                        <a href="#catalogo" class="ayuda-pill">Catálogo</a>
+                        <a href="#carrito" class="ayuda-pill">Carrito</a>
+                        <a href="#pedidos" class="ayuda-pill">Pedidos</a>
+                        <a href="#perfil" class="ayuda-pill">Perfil</a>
+                        <a href="#faq" class="ayuda-pill">Preguntas frecuentes</a>
+                    </nav>
+                </div>
+            </section>
+            <!-- Tarjetas rápidas -->
+            <section class="ayuda-tarjetas" aria-label="Accesos rápidos">
+                <a href="#cuenta" class="ayuda-tarjeta">
+                    <span class="ayuda-tarjeta__icono">
+                        <svg width="28"
+                             height="28"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </span>
+                    <span class="ayuda-tarjeta__texto">
+                        <strong>Crear cuenta</strong>
+                        <small>Regístrate o inicia sesión</small>
+                    </span>
+                </a>
+                <a href="#catalogo" class="ayuda-tarjeta">
+                    <span class="ayuda-tarjeta__icono">
+                        <svg width="28"
+                             height="28"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true">
+                            <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+                        </svg>
+                    </span>
+                    <span class="ayuda-tarjeta__texto">
+                        <strong>Explorar catálogo</strong>
+                        <small>Busca y filtra productos</small>
+                    </span>
+                </a>
+                <a href="#carrito" class="ayuda-tarjeta">
+                    <span class="ayuda-tarjeta__icono">
+                        <svg width="28"
+                             height="28"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true">
+                            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                    </span>
+                    <span class="ayuda-tarjeta__texto">
+                        <strong>Agregar al carrito</strong>
+                        <small>Selecciona y compra</small>
+                    </span>
+                </a>
+                <a href="#pedidos" class="ayuda-tarjeta">
+                    <span class="ayuda-tarjeta__icono">
+                        <svg width="28"
+                             height="28"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             viewBox="0 0 24 24"
+                             aria-hidden="true">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </span>
+                    <span class="ayuda-tarjeta__texto">
+                        <strong>Mis pedidos</strong>
+                        <small>Revisa tu historial</small>
+                    </span>
+                </a>
+            </section>
+            <!-- Sección 1: Cuenta -->
+            <section class="ayuda-seccion" id="cuenta">
+                <div class="ayuda-seccion__inner">
+                    <div class="ayuda-seccion__texto">
+                        <span class="manual-paso">Paso 1</span>
+                        <h2>Crear cuenta o iniciar sesión</h2>
+                        <p>Necesitas una cuenta para agregar productos al carrito y confirmar pedidos. Puedes registrarte con correo o entrar con tu cuenta de Google.</p>
+                        <div class="ayuda-tabs" role="tablist">
+                            <button class="ayuda-tab ayuda-tab--activo"
+                                    role="tab"
+                                    aria-selected="true"
+                                    data-tab="login">Iniciar sesión</button>
+                            <button class="ayuda-tab"
+                                    role="tab"
+                                    aria-selected="false"
+                                    data-tab="registro">Crear cuenta</button>
+                        </div>
+                        <div class="ayuda-tab-panel" data-panel="login">
+                            <ol class="manual-lista">
+                                <li>Presiona el ícono de usuario en la barra superior.</li>
+                                <li>Haz clic en <strong>Acceder</strong>.</li>
+                                <li>Ingresa tu correo y contraseña, luego pulsa <strong>Iniciar sesión</strong>.</li>
+                                <li>También puedes usar el botón <strong>Iniciar sesión con Google</strong>.</li>
+                            </ol>
+                        </div>
+                        <div class="ayuda-tab-panel" data-panel="registro" hidden>
+                            <ol class="manual-lista">
+                                <li>Presiona el ícono de usuario en la barra superior.</li>
+                                <li>Haz clic en <strong>Registrarse</strong>.</li>
+                                <li>Completa nombre, correo, teléfono y contraseña.</li>
+                                <li>La contraseña debe tener al menos 8 caracteres con mayúsculas, minúsculas y un número.</li>
+                            </ol>
+                        </div>
+                        <div class="ayuda-tip">
+                            <svg width="16"
+                                 height="16"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" />
+                            </svg>
+                            Si ya tienes cuenta con ese correo, Google se vincula automáticamente a ella.
+                        </div>
+                    </div>
+                    <div class="ayuda-seccion__imagen">
+                        <div class="ayuda-browser">
+                            <div class="ayuda-browser__barra">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="ayuda-browser__contenido" data-img-login>
+                                <img src="{% static 'imagenes/manual/login.png' %}"
+                                     alt="Pantalla de inicio de sesión de Kuma Coffee"
+                                     loading="lazy" />
+                            </div>
+                        </div>
+                        <div class="ayuda-browser ayuda-browser--alt"
+                             data-img-registro
+                             style="display:none">
+                            <div class="ayuda-browser__barra">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="ayuda-browser__contenido">
+                                <img src="{% static 'imagenes/manual/registro.png' %}"
+                                     alt="Formulario de registro de Kuma Coffee"
+                                     loading="lazy" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Sección 2: Catálogo -->
+            <section class="ayuda-seccion ayuda-seccion--invertida" id="catalogo">
+                <div class="ayuda-seccion__inner">
+                    <div class="ayuda-seccion__imagen">
+                        <div class="ayuda-browser">
+                            <div class="ayuda-browser__barra"><span></span><span></span><span></span><span class="ayuda-browser__url">kuma.coffee/catalogo</span></div>
+                            <div class="ayuda-browser__contenido">
+                                <img src="{% static 'imagenes/manual/catalogo.png' %}"
+                                     alt="Catálogo de productos Kuma Coffee con buscador y categorías"
+                                     loading="lazy" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ayuda-seccion__texto">
+                        <span class="manual-paso">Paso 2</span>
+                        <h2>Explorar el catálogo</h2>
+                        <p>El catálogo muestra todos los productos disponibles. Puedes filtrar por categoría o buscar por nombre para encontrar exactamente lo que buscas.</p>
+                        <ol class="manual-lista">
+                            <li>Entra a <strong>Catálogo</strong> desde el menú principal.</li>
+                            <li>Usa la <strong>barra de búsqueda</strong> para buscar por nombre o descripción.</li>
+                            <li>Filtra por categoría en el panel izquierdo (Grano entero, Molido, Edición especial…).</li>
+                            <li>Haz clic en <strong>Ver producto</strong> para ver el detalle, precio y disponibilidad.</li>
+                        </ol>
+                        <div class="ayuda-tip">
+                            <svg width="16"
+                                 height="16"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" />
+                            </svg>
+                            Los productos con etiqueta <strong>AGOTADO</strong> o <strong>STOCK BAJO</strong> no pueden agregarse al carrito.
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Sección 3: Carrito -->
+            <section class="ayuda-seccion" id="carrito">
+                <div class="ayuda-seccion__inner">
+                    <div class="ayuda-seccion__texto">
+                        <span class="manual-paso">Paso 3</span>
+                        <h2>Agregar al carrito y comprar</h2>
+                        <p>Desde el detalle de cada producto puedes seleccionar la cantidad y agregarlo. El ícono del carrito en la barra superior muestra cuántos productos tienes.</p>
+                        <ol class="manual-lista">
+                            <li>En el detalle del producto, elige la <strong>cantidad</strong> con los botones + / −.</li>
+                            <li>Presiona <strong>Agregar al carrito</strong>.</li>
+                            <li>Haz clic en el <strong>ícono del carrito</strong> (arriba a la derecha) para revisar tu selección.</li>
+                            <li>En el carrito puedes ajustar cantidades o eliminar ítems.</li>
+                            <li>Cuando estés listo, presiona <strong>Confirmar pedido</strong>.</li>
+                        </ol>
+                        <div class="ayuda-tip">
+                            <svg width="16"
+                                 height="16"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" />
+                            </svg>
+                            Debes haber iniciado sesión para confirmar un pedido.
+                        </div>
+                    </div>
+                    <div class="ayuda-seccion__imagen">
+                        <div class="ayuda-browser">
+                            <div class="ayuda-browser__barra"><span></span><span></span><span></span><span class="ayuda-browser__url">kuma.coffee/pedidos</span></div>
+                            <div class="ayuda-browser__contenido">
+                                <img src="{% static 'imagenes/manual/carrito.png' %}"
+                                     alt="Carrito de compras con tabla de productos y total"
+                                     loading="lazy" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Sección 4: Pedidos -->
+            <section class="ayuda-seccion ayuda-seccion--invertida" id="pedidos">
+                <div class="ayuda-seccion__inner">
+                    <div class="ayuda-seccion__imagen">
+                        <div class="ayuda-browser">
+                            <div class="ayuda-browser__barra"><span></span><span></span><span></span><span class="ayuda-browser__url">kuma.coffee/pedidos/historial</span></div>
+                            <div class="ayuda-browser__contenido">
+                                <img src="{% static 'imagenes/manual/historial.png' %}"
+                                     alt="Historial de pedidos del usuario"
+                                     loading="lazy" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ayuda-seccion__texto">
+                        <span class="manual-paso">Paso 4</span>
+                        <h2>Consultar tus pedidos</h2>
+                        <p>Después de confirmar una compra, puedes ver el detalle completo de cada pedido y descargar la factura en PDF.</p>
+                        <ol class="manual-lista">
+                            <li>Haz clic en tu nombre en la barra superior para abrir el menú.</li>
+                            <li>Selecciona <strong>Mis Pedidos</strong>.</li>
+                            <li>Verás el historial con fecha, productos y total de cada pedido.</li>
+                            <li>Usa el botón <strong>Descargar factura</strong> para guardar el comprobante en PDF.</li>
+                        </ol>
+                        <div class="ayuda-tip">
+                            <svg width="16"
+                                 height="16"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v4M12 16h.01" />
+                            </svg>
+                            También recibirás un mensaje de WhatsApp con el resumen de tu compra.
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Sección 5: Perfil -->
+            <section class="ayuda-seccion" id="perfil">
+                <div class="ayuda-seccion__inner">
+                    <div class="ayuda-seccion__texto">
+                        <span class="manual-paso">Paso 5</span>
+                        <h2>Gestionar tu perfil</h2>
+                        <p>Desde el menú de usuario puedes actualizar tu foto de perfil, cambiar la contraseña y ver los datos de tu cuenta en cualquier momento.</p>
+                        <div class="ayuda-perfil-acciones">
+                            <div class="ayuda-accion-card">
+                                <svg width="22"
+                                     height="22"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                    <circle cx="12" cy="13" r="4" />
+                                </svg>
+                                <div>
+                                    <strong>Foto de perfil</strong>
+                                    <p>Haz clic en el avatar para subir o cambiar tu foto (JPEG, PNG, WebP).</p>
+                                </div>
+                            </div>
+                            <div class="ayuda-accion-card">
+                                <svg width="22"
+                                     height="22"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                <div>
+                                    <strong>Cambiar contraseña</strong>
+                                    <p>Ve al menú de usuario → <strong>Cambiar contraseña</strong>. Ingresa la actual y la nueva.</p>
+                                </div>
+                            </div>
+                            <div class="ayuda-accion-card">
+                                <svg width="22"
+                                     height="22"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" y1="12" x2="9" y2="12" />
+                                </svg>
+                                <div>
+                                    <strong>Cerrar sesión</strong>
+                                    <p>Ve al menú de usuario y usa el botón <strong>Cerrar sesión</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ayuda-seccion__imagen">
+                        <div class="ayuda-perfil-mockup">
+                            <div class="ayuda-perfil-mockup__header">Menú de usuario</div>
+                            <div class="ayuda-perfil-mockup__avatar">C</div>
+                            <div class="ayuda-perfil-mockup__nombre">Cliente Invitado</div>
+                            <div class="ayuda-perfil-mockup__correo">cliente@correo.com</div>
+                            <hr class="ayuda-perfil-mockup__divisor" />
+                            <div class="ayuda-perfil-mockup__item">
+                                <svg width="15"
+                                     height="15"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24">
+                                    <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                                    <rect x="9" y="3" width="6" height="4" rx="1" />
+                                </svg>
+                                Mis Pedidos
+                            </div>
+                            <div class="ayuda-perfil-mockup__item">
+                                <svg width="15"
+                                     height="15"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                Cambiar contraseña
+                            </div>
+                            <div class="ayuda-perfil-mockup__item ayuda-perfil-mockup__item--salir">Cerrar sesión</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FAQ -->
+            <section class="ayuda-faq" id="faq">
+                <div class="ayuda-faq__inner">
+                    <h2 class="ayuda-faq__titulo">Preguntas frecuentes</h2>
+                    <div class="ayuda-faq__lista" id="faq-lista">
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Puedo ver el catálogo sin crear una cuenta?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">Sí. Puedes explorar todos los productos, ver precios y disponibilidad sin iniciar sesión. Solo necesitas una cuenta para agregar productos al carrito y confirmar pedidos.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Cómo recupero mi contraseña si la olvidé?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">En la pantalla de inicio de sesión, haz clic en <strong>¿Olvidaste tu contraseña?</strong>. Ingresa tu correo y sigue las instrucciones para establecer una nueva contraseña.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Puedo iniciar sesión con Google?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">Sí. En la pantalla de inicio de sesión usa el botón <strong>Iniciar sesión con Google</strong>. Si ya tienes una cuenta con ese mismo correo, Google se vinculará a ella automáticamente.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Qué significa que un producto esté "Agotado"?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">Cuando un producto está <strong>Agotado</strong>, no hay unidades disponibles en ese momento y no puede agregarse al carrito. Los productos con <strong>Stock bajo</strong> aún pueden comprarse pero su disponibilidad es limitada.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Cómo confirmo un pedido?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">Agrega los productos que quieres al carrito, luego haz clic en el ícono del carrito en la barra superior. Revisa el resumen y pulsa <strong>Confirmar pedido</strong>. Recibirás un mensaje de WhatsApp con el comprobante.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Dónde veo la factura de mi compra?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">En <strong>Mis Pedidos</strong> (menú de usuario → Mis Pedidos) encontrarás el historial completo. Cada pedido tiene un botón para descargar la factura en formato PDF.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Puedo cambiar la cantidad de un producto en el carrito?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">Sí. Dentro del carrito puedes usar los controles + / − para ajustar la cantidad de cada producto, o el botón de eliminar para quitarlo de la lista.</div>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="faq-pregunta">
+                                ¿Cómo cambio el tema de la página (claro/oscuro)?
+                                <svg class="faq-chevron"
+                                     width="18"
+                                     height="18"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2.5"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </summary>
+                            <div class="faq-respuesta">En la barra superior hay un ícono de sol/luna. Haz clic en él para alternar entre el tema oscuro y claro. Tu preferencia se guarda automáticamente en el navegador.</div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+            <!-- Contacto -->
+            <section class="ayuda-contacto">
+                <div class="ayuda-contacto__inner">
+                    <h2>¿Necesitas más ayuda?</h2>
+                    <p>Si no encontraste la respuesta que buscabas, contáctanos directamente.</p>
+                    <div class="ayuda-contacto__canales">
+                        <a href="https://wa.me/573137093748"
+                           class="ayuda-canal ayuda-canal--whatsapp"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <svg width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="currentColor"
+                                 aria-hidden="true">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                            </svg>
+                            Escribir por WhatsApp
+                        </a>
+                        <a href="mailto:tgaleano882@gmail.com"
+                           class="ayuda-canal ayuda-canal--email">
+                            <svg width="24"
+                                 height="24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            tgaleano882@gmail.com
+                        </a>
+                        <a href="tel:3137093748" class="ayuda-canal ayuda-canal--telefono">
+                            <svg width="24"
+                                 height="24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.61 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.7 16a2 2 0 0 1 .3.92z" />
+                            </svg>
+                            313 709 3748
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        {% include 'includes/footer.html' %}
+        <script>
+    // Tabs en la sección de cuenta
+    document.querySelectorAll('.ayuda-tab').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tab = this.dataset.tab;
+        document.querySelectorAll('.ayuda-tab').forEach(b => {
+          b.classList.toggle('ayuda-tab--activo', b.dataset.tab === tab);
+          b.setAttribute('aria-selected', b.dataset.tab === tab);
+        });
+        document.querySelectorAll('.ayuda-tab-panel').forEach(p => {
+          p.hidden = p.dataset.panel !== tab;
+        });
+        // Cambiar imagen
+        const imgLogin = document.querySelector('[data-img-login]');
+        const imgReg = document.querySelector('[data-img-registro]');
+        if (imgLogin && imgReg) {
+          imgLogin.closest('.ayuda-browser').style.display = tab === 'login' ? '' : 'none';
+          imgReg.closest('.ayuda-browser').style.display = tab === 'registro' ? '' : 'none';
+        }
+      });
+    });
+        </script>
+    </body>
 </html>
