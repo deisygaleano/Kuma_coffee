@@ -142,6 +142,7 @@ def generar_factura_pdf(pedido, usuario):
     )
 
     filas = [["Producto", "Cant.", "Precio unit.", "Subtotal"]]
+    total = 0
     for linea in lineas:
         descripcion = (linea.producto.descripcion or "").strip()
         nombre = escape(linea.producto.nombre)
@@ -152,15 +153,17 @@ def generar_factura_pdf(pedido, usuario):
             )
         else:
             texto_producto = nombre
+        subtotal = linea.subtotal
+        total += subtotal
         filas.append(
             [
                 Paragraph(texto_producto, estilo_producto),
                 str(linea.cantidad),
                 formato_peso(linea.precio_unitario),
-                formato_peso(linea.subtotal),
+                formato_peso(subtotal),
             ]
         )
-    filas.append(["", "", "Total", formato_peso(pedido.valor)])
+    filas.append(["", "", "Total", formato_peso(total)])
 
     tabla_productos = Table(
         filas,
