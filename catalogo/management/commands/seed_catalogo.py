@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from catalogo.models import Altura, Categoria, InventarioProducto, Producto, Tostion
+from cuentas.models import Usuario
 
 CATEGORIAS = [
     {"id_categoria": 1, "nombre": "Grano entero", "slug": "grano-entero"},
@@ -86,6 +87,18 @@ ADMIN_USER = {
     "password_hash": "pbkdf2_sha256$1200000$uW1XoSjT9t9zu3h2TNDZMr$lJrFtrfl0onAY7n3F3Sr8KAaR5PVAOrBvL8Cl3+yS3s=",
 }
 
+# Cuenta admin del sitio (tabla `usuario`, usada por /cuentas/login/), no
+# confundir con ADMIN_USER de arriba (auth_user, panel /admin/ de Django).
+ADMIN_USUARIO = {
+    "id_usuario": 5,
+    "nombre": "Admin",
+    "apellido": "Kuma",
+    "telefono": "3001234567",
+    "correo": "admin@kuma.com",
+    "password_hash": "pbkdf2_sha256$1200000$nvB2JSWgdafOAjRD5EoAF9$xqXbsB/lbGppCdZLxR4NvANjLuxeuqwmwYn4JKK34Ao=",
+    "rol": "admin",
+}
+
 
 class Command(BaseCommand):
     help = "Carga el catálogo (categorías, alturas, tostiones, productos, inventario) y el admin original en una base de datos nueva."
@@ -148,5 +161,19 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 f"Usuario admin '{ADMIN_USER['username']}' {accion} (usa la misma contraseña de tu entorno local)."
+            )
+        )
+
+        pk = ADMIN_USUARIO.pop("id_usuario")
+        password_hash = ADMIN_USUARIO.pop("password_hash")
+        usuario, creado = Usuario.objects.update_or_create(
+            id_usuario=pk, defaults=ADMIN_USUARIO
+        )
+        usuario.password = password_hash
+        usuario.save()
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Usuario del sitio '{ADMIN_USUARIO['correo']}' (rol admin) "
+                f"{'creado' if creado else 'actualizado'} para /cuentas/login/."
             )
         )
