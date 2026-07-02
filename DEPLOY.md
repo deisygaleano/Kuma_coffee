@@ -1,23 +1,21 @@
 # Guía de despliegue en PythonAnywhere
 
-## 1. Sube el proyecto a un repositorio remoto (GitHub)
+## 1. Repositorio en GitHub
 
-Si aún no lo tienes en GitHub, créalo y haz push (sin subir `.env`, ya está en `.gitignore`):
-
-```bash
-git remote add origin <tu-repo>
-git push -u origin main
-```
+El proyecto ya está en: `https://github.com/deisygaleano/Kuma_coffee` (público).
 
 ## 2. Crea la cuenta y el entorno en PythonAnywhere
 
 1. Regístrate gratis en pythonanywhere.com.
 2. Abre una consola **Bash** desde el Dashboard.
-3. Clona el repo:
+3. Clona el repo (al ser público no pide usuario/contraseña):
    ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git kuma_coffee
+   git clone https://github.com/deisygaleano/Kuma_coffee.git kuma_coffee
    cd kuma_coffee
    ```
+   Si en algún momento el repo pasa a privado, necesitarás un Personal Access Token
+   (github.com/settings/tokens) como contraseña — GitHub ya no acepta la contraseña
+   normal de tu cuenta para operaciones de git por HTTPS.
 4. Crea el entorno virtual (usa la versión de Python 3.12/3.13 disponible):
    ```bash
    python3.12 -m venv venv
