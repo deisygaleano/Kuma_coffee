@@ -1,125 +1,148 @@
-# Guía de despliegue en PythonAnywhere
+# Guía de despliegue en una VPS con Docker
 
-## 1. Repositorio en GitHub
+Esta guía es genérica: aplica igual en DigitalOcean, Hetzner, Oracle Cloud,
+Vultr, Linode o cualquier VPS con Ubuntu 22.04/24.04. Solo cambia cómo
+contratas/creas el servidor; una vez tienes acceso por SSH, los pasos son
+idénticos.
 
-El proyecto ya está en: `https://github.com/deisygaleano/Kuma_coffee` (público).
+## 0. Requisitos antes de empezar
 
-## 2. Crea la cuenta y el entorno en PythonAnywhere
+- Una VPS con Ubuntu 22.04 o 24.04, con al menos 1 vCPU / 1 GB RAM (suficiente
+  para este proyecto de bajo tráfico).
+- Acceso SSH a la VPS.
+- Un dominio (o subdominio gratis de [DuckDNS](https://www.duckdns.org/))
+  apuntando con un registro **A** a la IP pública de la VPS. Necesario para
+  que Google OAuth funcione (exige HTTPS) y para que Caddy pueda emitir el
+  certificado TLS automáticamente.
 
-1. Regístrate gratis en pythonanywhere.com.
-2. Abre una consola **Bash** desde el Dashboard.
-3. Clona el repo (al ser público no pide usuario/contraseña):
-   ```bash
-   git clone https://github.com/deisygaleano/Kuma_coffee.git kuma_coffee
-   cd kuma_coffee
-   ```
-   Si en algún momento el repo pasa a privado, necesitarás un Personal Access Token
-   (github.com/settings/tokens) como contraseña — GitHub ya no acepta la contraseña
-   normal de tu cuenta para operaciones de git por HTTPS.
-4. Crea el entorno virtual (usa la versión de Python 3.12/3.13 disponible):
-   ```bash
-   python3.12 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
+## 1. Instala Docker en la VPS
 
-## 3. Base de datos MySQL
-
-1. Pestaña **Databases** → crea tu base de datos MySQL gratuita (te da una sola).
-2. Anota el host (`tu_usuario.mysql.pythonanywhere-services.com`) y define una contraseña de MySQL.
-3. **Importante**: en el plan free, PythonAnywhere exige que el nombre de la base tenga el prefijo de tu usuario, ej: `tu_usuario$kuma_coffee`.
-
-## 4. Configura el `.env` en el servidor
-
-Crea el archivo directamente en el servidor (nunca lo subas por git):
+Conéctate por SSH y ejecuta:
 
 ```bash
-nano /home/tu_usuario/kuma_coffee/.env
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
 ```
 
-Contenido:
+Cierra sesión y vuelve a entrar por SSH para que el cambio de grupo aplique.
+Verifica:
+
+```bash
+docker --version
+docker compose version
+```
+
+## 2. Abre el firewall
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
+```
+
+## 3. Clona el proyecto
+
+```bash
+git clone https://github.com/deisygaleano/Kuma_coffee.git kuma_coffee
+cd kuma_coffee
+```
+
+## 4. Configura el `.env`
+
+```bash
+nano .env
+```
+
+Contenido (nota que `DB_HOST` debe ser `db`, el nombre del servicio de
+MySQL en `docker-compose.yml`, no `localhost`):
 
 ```
 DJANGO_SECRET_KEY=<genera una nueva, ver abajo>
 DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=tu_usuario.pythonanywhere.com
-DJANGO_CSRF_TRUSTED_ORIGINS=https://tu_usuario.pythonanywhere.com
+DJANGO_ALLOWED_HOSTS=tu-dominio.com
+DJANGO_CSRF_TRUSTED_ORIGINS=https://tu-dominio.com
 
-DB_NAME=tu_usuario$kuma_coffee
-DB_USER=tu_usuario
-DB_PASSWORD=<tu password de MySQL>
-DB_HOST=tu_usuario.mysql.pythonanywhere-services.com
+DB_NAME=kuma_coffee
+DB_USER=kuma_user
+DB_PASSWORD=<una clave fuerte>
+DB_HOST=db
 DB_PORT=3306
+DB_ROOT_PASSWORD=<otra clave fuerte, distinta>
 
 GOOGLE_CLIENT_ID=<tu client id de Google>
 GOOGLE_CLIENT_SECRET=<tu client secret de Google>
-GOOGLE_REDIRECT_URI=https://tu_usuario.pythonanywhere.com/cuentas/google/callback
+GOOGLE_REDIRECT_URI=https://tu-dominio.com/cuentas/google/callback
 ```
 
-Para generar una `SECRET_KEY` nueva:
+Genera una `SECRET_KEY` nueva:
 
 ```bash
-python -c "import secrets; print(secrets.token_urlsafe(50))"
+python3 -c "import secrets; print(secrets.token_urlsafe(50))"
 ```
 
-## 5. Actualiza Google Cloud Console
+## 5. Configura el dominio en `Caddyfile`
 
-En [console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials), agrega como **URI de redirección autorizado**:
-
-`https://tu_usuario.pythonanywhere.com/cuentas/google/callback`
-
-Este paso es obligatorio independientemente de si rotas o no el client secret; sin él, Google rechaza el login en producción con `redirect_uri_mismatch`.
-
-Si el client secret quedó expuesto en el historial de git (commiteado en texto plano en algún momento), conviene rotarlo desde esta misma pantalla, sobre todo si el repositorio es o será público.
-
-## 6. Migraciones, estáticos y superusuario
+Edita `Caddyfile` y reemplaza `tu-dominio.duckdns.org` por tu dominio real:
 
 ```bash
-python manage.py migrate
-python manage.py collectstatic --noinput
-python manage.py createsuperuser
+nano Caddyfile
 ```
 
-## 7. Configura la Web App
+```
+tu-dominio.com {
+    encode gzip
 
-1. Pestaña **Web** → **Add a new web app** → elige **Manual configuration** (no "Django" preconfigurado, porque ya tenemos nuestro propio proyecto) → selecciona la misma versión de Python del venv.
-2. En **Virtualenv**, indica la ruta: `/home/tu_usuario/kuma_coffee/venv`
-3. En **Code** → **WSGI configuration file**, edítalo y reemplaza el contenido por algo como:
+    handle_path /media/* {
+        root * /srv/media
+        file_server
+    }
 
-   ```python
-   import os
-   import sys
+    reverse_proxy web:8000
+}
+```
 
-   path = '/home/tu_usuario/kuma_coffee'
-   if path not in sys.path:
-       sys.path.insert(0, path)
+Caddy obtiene y renueva el certificado TLS de Let's Encrypt automáticamente,
+no requiere configuración adicional.
 
-   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kuma_coffee.settings')
+## 6. Actualiza Google Cloud Console
 
-   from django.core.wsgi import get_wsgi_application
-   application = get_wsgi_application()
-   ```
+En [console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials),
+agrega como **URI de redirección autorizado**:
 
-   (nuestro `settings.py` ya carga el `.env` automáticamente con `load_dotenv`, así que no hace falta declarar variables aquí).
-4. En **Static files**, agrega dos mapeos:
-   - URL `/static/` → Directory `/home/tu_usuario/kuma_coffee/staticfiles`
-   - URL `/media/` → Directory `/home/tu_usuario/kuma_coffee/media`
-5. Click en **Reload** (botón verde grande arriba).
+`https://tu-dominio.com/cuentas/google/callback`
 
-## 8. Verifica el tráfico saliente para Google OAuth
+## 7. Levanta los contenedores
 
-El plan free restringe peticiones salientes a una whitelist. Antes de probar el login con Google:
+```bash
+docker compose up -d --build
+```
 
-- Ve a **Account** → **"Whitelisted sites"** y confirma si `accounts.google.com`, `oauth2.googleapis.com` y `www.googleapis.com` están permitidos.
-- Si no lo están, puedes pedir que los agreguen (a veces lo permiten para dominios de Google) o considerar el plan pago "Hacker" (~$5/mes) que elimina la restricción.
+Esto construye la imagen de Django, levanta MySQL, corre las migraciones
+automáticamente (parte del comando de arranque del servicio `web`) y expone
+todo detrás de Caddy con HTTPS.
+
+Verifica que los tres servicios estén corriendo:
+
+```bash
+docker compose ps
+```
+
+## 8. Crea el superusuario
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
 
 ## 9. Prueba
 
-Visita `https://tu_usuario.pythonanywhere.com` y revisa:
+Visita `https://tu-dominio.com` y revisa:
 
-- Que cargue el home con estilos (confirma que whitenoise/estáticos funcionan).
+- Que cargue el home con estilos (estáticos servidos por whitenoise dentro
+  del contenedor `web`).
 - Login normal y login con Google.
-- Subida de imágenes de productos (confirma que `/media/` funciona).
+- Subida de imágenes de productos (`/media/`, servido por Caddy desde el
+  volumen compartido).
 - Panel de administración en `/admin/`.
 
 ## 10. Actualizaciones futuras
@@ -129,10 +152,16 @@ Cada vez que hagas cambios:
 ```bash
 cd ~/kuma_coffee
 git pull
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py collectstatic --noinput
+docker compose up -d --build
 ```
 
-Luego pestaña **Web** → **Reload**.
+Las migraciones se aplican automáticamente al reiniciar el servicio `web`.
+
+## 11. Comandos útiles
+
+```bash
+docker compose logs -f web        # logs de Django/gunicorn
+docker compose logs -f caddy       # logs de Caddy (útil para problemas de TLS)
+docker compose exec web python manage.py <comando>   # cualquier comando de manage.py
+docker compose down                # detener todo (los datos persisten en volúmenes)
+```
