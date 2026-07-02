@@ -13,22 +13,40 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+
 from kuma_coffee.zona_horaria import zona_horaria_local
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-22uh)$(+23*0ygb5a6gh8hu7n=jk5z=8t8%l*kziqa7z*y@vt*'
+# El valor por defecto solo sirve para desarrollo local; en producción SIEMPRE
+# se debe definir DJANGO_SECRET_KEY como variable de entorno.
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-22uh)$(+23*0ygb5a6gh8hu7n=jk5z=8t8%l*kziqa7z*y@vt*",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+    if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 
 # Application definition
@@ -48,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,11 +105,11 @@ WSGI_APPLICATION = 'kuma_coffee.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kuma_coffee',
-        'USER': 'root',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'NAME': os.environ.get('DB_NAME', 'kuma_coffee'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
 
@@ -133,18 +152,29 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 # Número de WhatsApp del negocio (formato internacional sin + ni espacios)
 KUMA_WHATSAPP = "573137093748"
 
-GOOGLE_OAUTH_CLIENT_ID = "817212507228-0teg21qvcr2km36nfkfch8if42hb0on3.apps.googleusercontent.com"
-GOOGLE_OAUTH_CLIENT_SECRET = "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"
 # ── Google OAuth 2.0 ──────────────────────────────────────────────────────────
 # Obtén estas credenciales en: https://console.cloud.google.com/apis/credentials
-# En producción usa variables de entorno en lugar de hardcodear los valores.
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", GOOGLE_OAUTH_CLIENT_ID)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", GOOGLE_OAUTH_CLIENT_SECRET)
+# Deben definirse como variables de entorno (ver .env.example). El secreto que
+# antes estaba aquí hardcodeado quedó expuesto en el historial de git y debe
+# rotarse en Google Cloud Console.
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 GOOGLE_REDIRECT_URI = os.environ.get(
     "GOOGLE_REDIRECT_URI",
     "http://localhost:8000/cuentas/google/callback",
@@ -153,4 +183,17 @@ GOOGLE_REDIRECT_URI = os.environ.get(
 # Permite OAuth sobre HTTP en desarrollo (no usar en producción)
 if DEBUG:
     os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
-    
+
+# ── Endurecimiento para producción ───────────────────────────────────────────
+# Se activa automáticamente cuando DEBUG=False. Si el servidor queda detrás de
+# un proxy que ya termina TLS (PythonAnywhere, nginx, etc.), SECURE_SSL_REDIRECT
+# puede desactivarse con DJANGO_SECURE_SSL_REDIRECT=False si el proxy causa loops.
+if not DEBUG:
+    SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "True") == "True"
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 7
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
