@@ -11,43 +11,38 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.SeparateDatabaseAndState(
-            database_operations=[],
-            state_operations=[
-                migrations.CreateModel(
-                    name='Altura',
-                    fields=[
-                        ('id_altura', models.AutoField(primary_key=True, serialize=False)),
-                        ('metros', models.CharField(blank=True, max_length=12, null=True)),
-                        ('descripcion', models.CharField(blank=True, max_length=50, null=True)),
-                    ],
-                    options={
-                        'db_table': 'altura',
-                        'ordering': ['metros'],
-                    },
-                ),
-                migrations.CreateModel(
-                    name='Tostion',
-                    fields=[
-                        ('id_tostion', models.AutoField(primary_key=True, serialize=False)),
-                        ('tipo', models.CharField(max_length=20)),
-                        ('descripcion', models.CharField(blank=True, max_length=100, null=True)),
-                    ],
-                    options={
-                        'db_table': 'tostion',
-                        'ordering': ['tipo'],
-                    },
-                ),
-                migrations.AlterField(
-                    model_name='producto',
-                    name='altura',
-                    field=models.ForeignKey(blank=True, db_column='id_altura', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='productos', to='catalogo.altura'),
-                ),
-                migrations.AlterField(
-                    model_name='producto',
-                    name='tostion',
-                    field=models.ForeignKey(blank=True, db_column='id_tostion', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='productos', to='catalogo.tostion'),
-                ),
+        migrations.CreateModel(
+            name='Altura',
+            fields=[
+                ('id_altura', models.AutoField(primary_key=True, serialize=False)),
+                ('metros', models.CharField(blank=True, max_length=12, null=True)),
+                ('descripcion', models.CharField(blank=True, max_length=50, null=True)),
             ],
+            options={
+                'db_table': 'altura',
+                'ordering': ['metros'],
+            },
+        ),
+        migrations.CreateModel(
+            name='Tostion',
+            fields=[
+                ('id_tostion', models.AutoField(primary_key=True, serialize=False)),
+                ('tipo', models.CharField(max_length=20)),
+                ('descripcion', models.CharField(blank=True, max_length=100, null=True)),
+            ],
+            options={
+                'db_table': 'tostion',
+                'ordering': ['tipo'],
+            },
+        ),
+        migrations.AlterField(
+            model_name='producto',
+            name='altura',
+            field=models.ForeignKey(blank=True, db_column='id_altura', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='productos', to='catalogo.altura'),
+        ),
+        migrations.AlterField(
+            model_name='producto',
+            name='tostion',
+            field=models.ForeignKey(blank=True, db_column='id_tostion', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='productos', to='catalogo.tostion'),
         ),
     ]
