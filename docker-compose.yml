@@ -17,6 +17,7 @@ services:
 
   web:
     build: .
+    container_name: kuma_coffee_web
     restart: unless-stopped
     env_file: .env
     environment:
@@ -26,26 +27,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - default
+      - caddy_net
     command: >
       sh -c "python manage.py migrate --noinput &&
              gunicorn kuma_coffee.wsgi:application --bind 0.0.0.0:8000 --workers 3"
 
-  caddy:
-    image: caddy:2
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - media_data:/srv/media:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - web
+networks:
+  caddy_net:
+    external: true
 
 volumes:
   mysql_data:
   media_data:
-  caddy_data:
-  caddy_config:
