@@ -216,6 +216,9 @@ copiada la privada al secret (ya no las necesitas localmente).
 A partir de aquí, cada push a `main` dispara el despliegue automáticamente;
 puedes ver el progreso y los logs en la pestaña **Actions** del repositorio.
 
+> Probado y funcionando: despliegue automático verificado en producción el
+> 2026-07-04.
+
 ### Restaurar un backup si algo sale mal
 
 ```bash
