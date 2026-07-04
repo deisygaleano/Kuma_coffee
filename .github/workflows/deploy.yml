@@ -1,0 +1,22 @@
+name: Deploy a producción
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar en el servidor por SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd ~/kuma_coffee
+            git pull origin main
+            chmod +x scripts/deploy.sh
+            ./scripts/deploy.sh # el script vuelve a hacer git pull para dejar todo actualizado

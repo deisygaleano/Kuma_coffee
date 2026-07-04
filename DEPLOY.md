@@ -165,3 +165,62 @@ docker compose logs -f caddy       # logs de Caddy (útil para problemas de TLS)
 docker compose exec web python manage.py <comando>   # cualquier comando de manage.py
 docker compose down                # detener todo (los datos persisten en volúmenes)
 ```
+
+## 12. Despliegue automático con GitHub Actions
+
+Cada push a `main` puede desplegarse solo, sin entrar por SSH manualmente.
+El workflow está en `.github/workflows/deploy.yml` y usa el script
+`scripts/deploy.sh`, que además:
+
+- Hace un backup (`mysqldump`) de la base de datos **antes** de reconstruir
+  los contenedores, guardado en `~/kuma_coffee_backups/` en el servidor
+  (conserva los últimos 10).
+- Nunca usa `docker compose down -v` ni borra volúmenes: los datos de MySQL
+  y las imágenes de productos viven en volúmenes con nombre
+  (`mysql_data`, `media_data`) que persisten entre despliegues.
+- Verifica, tras el `docker compose up -d --build`, que los contenedores
+  `web` y `db` sigan corriendo. Si alguno murió (por ejemplo, por una
+  migración rota), el workflow falla y muestra los últimos logs, en vez de
+  dejar el sitio caído en silencio.
+
+### Configuración inicial (una sola vez)
+
+**1. Genera un par de llaves SSH dedicado para el despliegue** (no reutilices
+tu llave personal de GitHub/SSH):
+
+```bash
+ssh-keygen -t ed25519 -f ./deploy_key -N "" -C "github-actions-deploy"
+```
+
+Esto crea `deploy_key` (privada) y `deploy_key.pub` (pública) en tu carpeta
+actual.
+
+**2. Autoriza la llave pública en el servidor:**
+
+```bash
+cat deploy_key.pub | ssh root@<ip-del-servidor> "cat >> ~/.ssh/authorized_keys"
+```
+
+**3. Crea estos secrets en GitHub** (`Settings > Secrets and variables >
+Actions > New repository secret`):
+
+| Secret | Valor |
+|---|---|
+| `DEPLOY_HOST` | IP o dominio del servidor (ej. `167.233.158.241`) |
+| `DEPLOY_USER` | `root` |
+| `DEPLOY_SSH_KEY` | Contenido completo de `deploy_key` (la llave **privada**) |
+
+**4. Borra `deploy_key` y `deploy_key.pub` de tu computador** una vez
+copiada la privada al secret (ya no las necesitas localmente).
+
+A partir de aquí, cada push a `main` dispara el despliegue automáticamente;
+puedes ver el progreso y los logs en la pestaña **Actions** del repositorio.
+
+### Restaurar un backup si algo sale mal
+
+```bash
+ssh root@<ip-del-servidor>
+cd ~/kuma_coffee
+ls ~/kuma_coffee_backups/                # elige el backup a restaurar
+docker compose exec -T db mysql -u root -p"$(grep DB_ROOT_PASSWORD .env | cut -d= -f2)" "$(grep DB_NAME .env | cut -d= -f2)" < ~/kuma_coffee_backups/backup_XXXXXXXX_XXXXXX.sql
+```
