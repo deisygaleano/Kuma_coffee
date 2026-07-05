@@ -174,7 +174,7 @@ El workflow está en `.github/workflows/deploy.yml` y usa el script
 
 - Hace un backup (`mysqldump`) de la base de datos **antes** de reconstruir
   los contenedores, guardado en `~/kuma_coffee_backups/` en el servidor
-  (conserva los últimos 10).
+  (conserva los últimos 2).
 - Nunca usa `docker compose down -v` ni borra volúmenes: los datos de MySQL
   y las imágenes de productos viven en volúmenes con nombre
   (`mysql_data`, `media_data`) que persisten entre despliegues.
